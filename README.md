@@ -1,16 +1,8 @@
-# FFC Pay Batch Verifier
+# Payment Hub Gateway
 
-Verify integrity of payment batch files before downstream processing.
+Payment file inbound integration service from Managed Gateway
 
-This service is part of the [Strategic Payment Service](https://github.com/DEFRA/ffc-pay-core). 
-Specifically for supporting integration of Siti Agri payment files with the wider payment pipeline.
-
-## Trigger
-
-Trigger file activation pre-requisites:
-- must be uploaded to `batch` container
-- must be uploaded to virtual directory `inbound`
-- must match the file mask of a payment batch's control file, `batch/inbound/CTL_PENDING_{name}.dat`
+This service is part of the [Payment Hub](https://github.com/DEFRA/ffc-pay-core).
 
 ## Validation
 
@@ -22,15 +14,13 @@ There are four files that make up a payment batch.  All four are required before
 | --- | --- | --- |
 | Payment batch file | Contains a collection of payment requests | `PENDING_{name}.dat` |
 
-- payment batch file, `PENDING_{name}.dat`
-- control file, `CTL_PENDING_{name}.dat`
-- checksum file, `PENDING_{name}.txt`
-- checksum control file, `CTL_PENDING_{name}.txt`
-
-The service will ensure all related required files are also present before then validating the `sha256` hash in the checksum file against the batch content.
+- payment batch file, `{name}.dat`
+- control file, `CTL_{name}.dat`
+- checksum file, `{name}.txt`
+- checksum control file, `CTL_{name}.txt`
 
 
-On successful validation, `PENDING_` is dropped from all filenames and all but the payment batch file are moved to the `archive` virtual directory.
+On successful validation, `PENDING_` is added to all filenames and all but the payment batch file are moved to the `inbound` virtual directory.
 
 ## Prerequisites
 
