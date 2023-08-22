@@ -1,6 +1,6 @@
 {
   "name": "ffc-pay-gateway",
-  "version": "1.0.0",
+  "version": "1.1.0",
   "description": "Managed Gateway integration",
   "homepage": "https://github.com/DEFRA/ffc-pay-gateway",
   "main": "app/index.js",
