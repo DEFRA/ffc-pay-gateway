@@ -1,0 +1,38 @@
+environment: development
+environmentCode:
+name: ffc-pay-gateway
+namespace: ffc-pay
+workstream: ffc-pay
+image: ffc-pay-gateway
+
+labels: {}
+
+appInsights:
+  key:
+
+containerConfigMap:
+  name: ffc-pay-gateway-config-map
+
+containerSecret:
+  name: ffc-pay-gateway-container-secret
+  type: Opaque
+
+deployment: {}
+
+container:
+  requestMemory: 100Mi
+  requestCpu: 60m
+  limitMemory: 200Mi
+  limitCpu: 200m
+  azureStorageAccountName: ffcpay
+  azureStorageConnectionString: dummy
+  azureStorageUseConnectionString: false
+  azureStorageCreateContainers: false
+  pollingInterval: 10000
+  pollingActive: true
+
+aadPodIdentity: true
+
+azureIdentity:
+  clientID: not-a-real-clientID
+  resourceID: not-a-real-resourceID

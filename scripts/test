@@ -3,7 +3,7 @@
 set -e
 projectRoot="$(a="/$0"; a=${a%/*}; a=${a:-.}; a=${a#/}/; cd "$a/.." || return; pwd)"
 
-service="ffc-template-node"
+service="ffc-pay-gateway"
 
 show_help() {
   echo "
@@ -51,7 +51,7 @@ compose() {
 (
   cd "${projectRoot}"
 
-  # Create test output folder
+  # Create test folder
   mkdir -p test-output
 
   # Guarantee clean environment
@@ -64,7 +64,7 @@ compose() {
   if [ "${debug}" = "true" ]; then
     compose run --service-ports ${service} ${command}
   else
-    compose run --rm ${service} ${command}
+    compose run ${service} ${command}
   fi
 
   # Clean up

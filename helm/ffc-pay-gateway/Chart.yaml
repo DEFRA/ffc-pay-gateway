@@ -1,0 +1,9 @@
+apiVersion: v2
+description: Validate payment batches
+name: ffc-pay-gateway
+# this version is automatically updated in the build pipline
+version: 1.0.0
+dependencies:
+- name: ffc-helm-library
+  version: 3.4.0
+  repository: https://raw.githubusercontent.com/defra/ffc-helm-repository/master/

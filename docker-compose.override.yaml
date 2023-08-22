@@ -2,14 +2,26 @@
 # to provide dependencies and expose ports for local testing
 
 services:
-  ffc-template-node:
+  ffc-pay-gateway:
     build:
       target: development
-    image: ffc-template-node-development
-    container_name: ffc-template-node-development
+    depends_on:
+      - ffc-pay-batch-azurite
+    image: ffc-pay-gateway-development
+    container_name: ffc-pay-gateway-development
     ports:
-      - "3000:3000"
-      - "9229:9229"
+      - "9420:9229"
     volumes:
       - ./app:/home/node/app
       - ./package.json:/home/node/package.json
+    environment:
+      AZURE_STORAGE_CONNECTION_STRING: DefaultEndpointsProtocol=http;AccountName=devstoreaccount1;AccountKey=Eby8vdM02xNOcqFlqUwJPLlmEtlCDXJ1OUzFT50uSRZ6IFsuFq2UVErCz4I6tq/K1SZFPTOtr/KBHBeksoGMGw==;BlobEndpoint=http://ffc-pay-batch-azurite:10000/devstoreaccount1;
+
+  ffc-pay-batch-azurite:
+    volumes:
+      - azurite_data:/data
+    ports:
+      - "10040:10000"
+
+volumes:
+  azurite_data:

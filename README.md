@@ -1,35 +1,36 @@
-# FFC Template Node
+# FFC Pay Batch Verifier
 
-Template to support rapid delivery of microservices for FFC Platform. It contains the configuration needed to deploy a simple Hapi Node server to the Azure Kubernetes Platform.
+Verify integrity of payment batch files before downstream processing.
 
-## Usage
+This service is part of the [Strategic Payment Service](https://github.com/DEFRA/ffc-pay-core). 
+Specifically for supporting integration of Siti Agri payment files with the wider payment pipeline.
 
-Create a new repository from this template and run `./rename.js` specifying the new name of the project and the description to use e.g.
-```
-./rename.js ffc-demo-web "Web frontend for demo workstream"
-```
+## Trigger
 
-The script will update the following:
+Trigger file activation pre-requisites:
+- must be uploaded to `batch` container
+- must be uploaded to virtual directory `inbound`
+- must match the file mask of a payment batch's control file, `batch/inbound/CTL_PENDING_{name}.dat`
 
-* `package.json`: update `name`, `description`, `homepage`
-* `docker-compose.yaml`: update the service name, `image` and `container_name`
-* `docker-compose.test.yaml`: update the service name, `image` and `container_name`
-* `docker-compose.override.yaml`: update the service name, `image` and `container_name`
-* Rename `helm/ffc-template-node`
-* `helm/ffc-template-node/Chart.yaml`: update `description` and `name`
-* `helm/ffc-template-node/values.yaml`: update  `name`, `namespace`, `workstream`, `image`, `containerConfigMap.name`
-* `helm/ffc-template-node/templates/_container.yaml`: update the template name
-* `helm/ffc-template-node/templates/cluster-ip-service.yaml`: update the template name and list parameter of include
-* `helm/ffc-template-node/templates/config-map.yaml`: update the template name and list parameter of include
-* `helm/ffc-template-node/templates/deployment.yaml`: update the template name, list parameter of deployment and container includes
+## Validation
 
-### Notes on automated rename
+There are four files that make up a payment batch.  All four are required before the batch can be validated.
 
-* The Helm chart deployment values in `helm/ffc-template-node/values.yaml` may need updating depending on the resource needs of your microservice
-* The rename is a one-way operation i.e. currently it doesn't allow the name being changed from to be specified
-* There is some validation on the input to try and ensure the rename is successful, however, it is unlikely to stand up to malicious entry
-* Once the rename has been performed the script can be removed from the repo
-* Should the rename go awry the changes can be reverted via `git clean -df && git checkout -- .`
+### Required files
+
+| File | Description | Mask |
+| --- | --- | --- |
+| Payment batch file | Contains a collection of payment requests | `PENDING_{name}.dat` |
+
+- payment batch file, `PENDING_{name}.dat`
+- control file, `CTL_PENDING_{name}.dat`
+- checksum file, `PENDING_{name}.txt`
+- checksum control file, `CTL_PENDING_{name}.txt`
+
+The service will ensure all related required files are also present before then validating the `sha256` hash in the checksum file against the batch content.
+
+
+On successful validation, `PENDING_` is dropped from all filenames and all but the payment batch file are moved to the `archive` virtual directory.
 
 ## Prerequisites
 
@@ -50,10 +51,6 @@ The application is designed to run in containerised environments, using Docker C
 
 Container images are built using Docker Compose, with the same images used to run the service with either Docker Compose or Kubernetes.
 
-When using the Docker Compose files in development the local `app` folder will
-be mounted on top of the `app` folder within the Docker container, hiding the CSS files that were generated during the Docker build.  For the site to render correctly locally `npm run build` must be run on the host system.
-
-
 By default, the start script will build (or rebuild) images so there will
 rarely be a need to build images manually. However, this can be achieved
 through the Docker Compose
@@ -69,7 +66,7 @@ docker-compose build
 Use Docker Compose to run service locally.
 
 ```
-docker-compose up
+./scripts/start
 ```
 
 ## Test structure
