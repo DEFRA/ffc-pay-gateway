@@ -1,4 +1,4 @@
-const verifyContent = require('../../../app/verify/verify-content')
+const verifyContent = require('../../../app/transfer/verify-content')
 
 const VALID_CONTENT = 'This is valid content'
 const INVALID_CONTENT = 'This is invalid content'

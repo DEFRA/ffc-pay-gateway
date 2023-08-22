@@ -76,14 +76,6 @@ const moveFile = async (sourceFolder, destinationFolder, sourceFilename, destina
   return false
 }
 
-const archiveFile = async (filename) => {
-  return moveFile(config.inboundFolder, config.archiveFolder, filename, filename)
-}
-
-const quarantineFile = async (filename) => {
-  return moveFile(config.inboundFolder, config.quarantineFolder, filename, filename)
-}
-
 const renameFile = async (filename, targetFilename) => {
   filename = sanitizeFilename(filename)
   targetFilename = sanitizeFilename(targetFilename)
@@ -97,7 +89,5 @@ const sanitizeFilename = (filename) => {
 module.exports = {
   getPendingControlFiles,
   getFile,
-  renameFile,
-  archiveFile,
-  quarantineFile
+  renameFile
 }

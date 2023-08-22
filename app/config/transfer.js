@@ -17,7 +17,7 @@ const result = schema.validate(config, {
 })
 
 if (result.error) {
-  throw new Error(`The verification config is invalid. ${result.error.message}`)
+  throw new Error(`The transfer config is invalid. ${result.error.message}`)
 }
 
 module.exports = result.value

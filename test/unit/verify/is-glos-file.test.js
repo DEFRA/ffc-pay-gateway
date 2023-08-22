@@ -1,4 +1,4 @@
-const { isGlosFile } = require('../../../app/verify/is-glos-file')
+const { isGlosFile } = require('../../../app/transfer/is-glos-file')
 
 const glosFilename = 'PENDING_FCAP_0723_230524220145.dat'
 const sfiFilename = 'PENDING_SITISFI0001_AP_20230718073351559.dat'

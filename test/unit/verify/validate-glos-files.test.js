@@ -1,7 +1,7 @@
 jest.mock('../../../app/verify/get-number-of-glos-invoice-lines')
-const { getNumberOfGlosInvoiceLines: mockGetNumberOfGlosInvoiceLines } = require('../../../app/verify/get-number-of-glos-invoice-lines')
+const { getNumberOfGlosInvoiceLines: mockGetNumberOfGlosInvoiceLines } = require('../../../app/transfer/get-number-of-glos-invoice-lines')
 
-const { validateGlosFiles } = require('../../../app/verify/validate-glos-files')
+const { validateGlosFiles } = require('../../../app/transfer/validate-glos-files')
 
 let batchFile
 let controlFile

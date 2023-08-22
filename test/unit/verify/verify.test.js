@@ -1,4 +1,4 @@
-const createHash = require('../../../app/verify/create-hash')
+const createHash = require('../../../app/transfer/create-hash')
 jest.mock('../../../app/config/verify', () => ({ totalRetries: 1 }))
 
 const ORIGINAL_CTL_BATCH_FILE_NAME = 'CTL_PENDING_TEST_BATCH.dat'
@@ -84,7 +84,7 @@ jest.mock('@azure/storage-blob', () => {
     }
   }
 })
-const verify = require('../../../app/verify')
+const verify = require('../../../app/transfer')
 
 describe('verification', () => {
   const setupFileContent = (isValid) => {

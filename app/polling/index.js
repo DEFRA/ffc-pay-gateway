@@ -1,15 +1,15 @@
-const config = require('../config/verify')
-const pollInbound = require('./poll-inbound')
+const { transferConfig } = require('../config')
+const { pollInbound } = require('./poll-inbound')
 
 const start = async () => {
   try {
-    if (config.pollingActive) {
+    if (transferConfig.pollingActive) {
       await pollInbound()
     }
   } catch (err) {
     console.error(err)
   } finally {
-    setTimeout(start, config.pollingInterval)
+    setTimeout(start, transferConfig.pollingInterval)
   }
 }
 

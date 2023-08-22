@@ -1,15 +1,17 @@
-const storage = require('../storage')
-const verifyBatch = require('../verify')
+const { getPendingControlFiles } = require('../storage')
+const { transferBatch } = require('../transfer')
 
 const pollInbound = async () => {
-  const inboundFiles = await storage.getPendingControlFiles()
+  const inboundFiles = await getPendingControlFiles()
   for (const inboundFile of inboundFiles) {
     try {
-      await verifyBatch(inboundFile)
+      await transferBatch(inboundFile)
     } catch (err) {
       console.error(err)
     }
   }
 }
 
-module.exports = pollInbound
+module.exports = {
+  pollInbound
+}

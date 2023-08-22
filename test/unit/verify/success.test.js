@@ -1,6 +1,6 @@
 jest.mock('../../../app/storage')
 const mockStorage = require('../../../app/storage')
-const success = require('../../../app/verify/success')
+const success = require('../../../app/transfer/success')
 
 const PENDING_BATCH_BLOB_NAME = 'PENDING_TEST_BATCH.dat'
 const PENDING_CTL_BATCH_BLOB_NAME = 'CTL_PENDING_TEST_BATCH.dat'

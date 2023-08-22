@@ -2,7 +2,7 @@ jest.mock('../../../app/storage')
 const mockStorage = require('../../../app/storage')
 
 jest.mock('../../../app/verify')
-const mockVerify = require('../../../app/verify')
+const mockVerify = require('../../../app/transfer')
 
 const pollInbound = require('../../../app/polling/poll-inbound')
 

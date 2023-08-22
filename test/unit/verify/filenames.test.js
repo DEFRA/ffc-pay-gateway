@@ -1,4 +1,4 @@
-const filenames = require('../../../app/verify/filenames')
+const filenames = require('../../../app/transfer/filenames')
 
 const PENDING_BATCH_BLOB_NAME = 'PENDING_TEST_BATCH.dat'
 const PENDING_CTL_BATCH_BLOB_NAME = 'CTL_PENDING_TEST_BATCH.dat'

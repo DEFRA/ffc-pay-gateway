@@ -1,7 +1,7 @@
 jest.useFakeTimers()
 jest.spyOn(global, 'setTimeout')
 
-const config = require('../../../app/config/verify')
+const config = require('../../../app/config/transfer')
 jest.mock('../../../app/config/verify')
 
 jest.mock('../../../app/polling/poll-inbound')

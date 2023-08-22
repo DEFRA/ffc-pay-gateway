@@ -1,19 +1,19 @@
 jest.mock('../../../app/verify/success')
-const mockSuccess = require('../../../app/verify/success')
+const mockSuccess = require('../../../app/transfer/success')
 
 jest.mock('../../../app/verify/failure')
-const mockFailure = require('../../../app/verify/failure')
+const mockFailure = require('../../../app/transfer/failure')
 
 jest.mock('../../../app/verify/get-files')
-const mockGetFiles = require('../../../app/verify/get-files')
+const mockGetFiles = require('../../../app/transfer/get-files')
 
 jest.mock('../../../app/verify/is-glos-file')
-const { isGlosFile: mockIsGlosFile } = require('../../../app/verify/is-glos-file')
+const { isGlosFile: mockIsGlosFile } = require('../../../app/transfer/is-glos-file')
 
 jest.mock('../../../app/verify/validate-glos-files')
-const { validateGlosFiles: mockValidateGlosFiles } = require('../../../app/verify/validate-glos-files')
+const { validateGlosFiles: mockValidateGlosFiles } = require('../../../app/transfer/validate-glos-files')
 
-const validate = require('../../../app/verify/validate')
+const validate = require('../../../app/transfer/transfer')
 
 const VALID_CONTENT = 'This is valid content'
 const INVALID_CONTENT = 'This is invalid content'
