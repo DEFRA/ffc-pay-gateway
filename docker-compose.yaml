@@ -11,11 +11,22 @@ services:
       AZURE_STORAGE_ACCOUNT_NAME: ${AZURE_STORAGE_ACCOUNT_NAME:-devstoreaccount1}
       AZURE_STORAGE_USE_CONNECTION_STRING: "true"
       AZURE_STORAGE_CREATE_CONTAINERS: "true"
-      MANAGED_GATEWAY_HOST: ffc-pay-batch-azurite
-      MANAGED_GATEWAY_PORT: 10000
+      SFTP_MANAGED_GATEWAY_HOST: ffc-pay-gateway-sftp
+      SFTP_MANAGED_GATEWAY_USERNAME: ffc
+      SFTP_MANAGED_GATEWAY_PASSWORD: password
+      SFTP_CALLISTO_GATEWAY_HOST: ffc-pay-gateway-sftp
+      SFTP_CALLISTO_GATEWAY_USERNAME: ffc
+      SFTP_CALLISTO_GATEWAY_PASSWORD: password
+      SFTP_SITI_AGRI_DIRECTORY: /home/ffc/outbound
+      SFTP_GENESIS_DIRECTORY: /home/ffc/outbound
+      SFTP_GLOS_DIRECTORY: /home/ffc/outbound
+      SFTP_IMPS_DIRECTORY: /home/ffc/outbound
 
   ffc-pay-batch-azurite:
     image: mcr.microsoft.com/azure-storage/azurite:3.23.0
     command: "azurite-blob --loose --blobHost 0.0.0.0"
     labels:
       com.docker.compose.pay.role: ffc-pay-batch-azurite
+
+  ffc-pay-gateway-sftp:
+    image: atmoz/sftp

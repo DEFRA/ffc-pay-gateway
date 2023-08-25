@@ -4,7 +4,7 @@ const mockStorage = require('../../../app/storage')
 jest.mock('../../../app/verify')
 const mockVerify = require('../../../app/transfer')
 
-const pollInbound = require('../../../app/polling/poll-inbound')
+const pollInbound = require('../../../app/polling/poll')
 
 const FILE_NAME_1 = 'CTL_PENDING_TEST_BATCH_1.dat'
 const FILE_NAME_2 = 'CTL_PENDING_TEST_BATCH_2.dat'

@@ -4,7 +4,7 @@ jest.mock('../../app/config/verify', () => ({ totalRetries: 1 }))
 const createHash = require('../../app/transfer/create-hash')
 
 const storageConfig = require('../../app/config/storage')
-const pollInbound = require('../../app/polling/poll-inbound')
+const pollInbound = require('../../app/polling/poll')
 
 const INBOUND = 'inbound'
 const ARCHIVE = 'archive'

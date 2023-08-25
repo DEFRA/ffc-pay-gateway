@@ -1,9 +1,9 @@
 const storageConfig = require('./storage')
-const managedGatewayConfig = require('./managed-gateway')
+const sftpConfig = require('./sftp')
 const transferConfig = require('./transfer')
 
 module.exports = {
   storageConfig,
-  managedGatewayConfig,
+  sftpConfig,
   transferConfig
 }

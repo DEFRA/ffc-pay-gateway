@@ -16,6 +16,8 @@ cd "${projectRoot}"
 
 docker-compose down
 
+mkdir -p outbound
+
 docker-compose \
   -f docker-compose.yaml \
   -f docker-compose.override.yaml \

@@ -5,7 +5,7 @@ const config = require('../../../app/config/transfer')
 jest.mock('../../../app/config/verify')
 
 jest.mock('../../../app/polling/poll-inbound')
-const pollInbound = require('../../../app/polling/poll-inbound')
+const pollInbound = require('../../../app/polling/poll')
 
 const polling = require('../../../app/polling')
 
