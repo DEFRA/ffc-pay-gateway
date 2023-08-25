@@ -26,10 +26,11 @@ services:
 
   ffc-pay-gateway-sftp:
     volumes:
-        - ./local-server:/home/ffc/local-server
+        - sftp_data:/home/ffc/local-server
     ports:
         - "2222:22"
-    command: ffc:password::::local-server
+    command: ffc:password:::local-server
 
 volumes:
   azurite_data:
+  sftp_data:
