@@ -26,7 +26,7 @@ services:
 
   ffc-pay-gateway-sftp:
     volumes:
-        - sftp_data:/home/ffc/local-server
+        - sftp_data:/home/ffc
     ports:
         - "2222:22"
     command: ffc:password:::local-server

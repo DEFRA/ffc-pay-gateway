@@ -19,30 +19,30 @@ const transferPendingFiles = async (server, directory) => {
   const inboundFiles = await getControlFiles(server, directory)
   for (const inboundFile of inboundFiles) {
     try {
-      await transferFile(server, inboundFile)
+      await transferFile(server, directory, inboundFile)
     } catch (err) {
       console.error(err)
     }
   }
 }
 
-const transferFile = async (server, controlFilename) => {
+const transferFile = async (server, directory, controlFilename) => {
   const dataFilename = getDataFilename(controlFilename)
-  const [dataFileContent, controlFileContent] = await getFileContent(server, dataFilename, controlFilename)
+  const [dataFileContent, controlFileContent] = await getFileContent(server, directory, dataFilename, controlFilename)
   const controlPendingFilename = getPendingFilename(controlFilename)
   const dataPendingFilename = getPendingFilename(dataFilename)
   const dataFileBlobClient = await getBlobClient(dataPendingFilename)
   const controlFileBlobClient = await getBlobClient(controlPendingFilename)
   await dataFileBlobClient.upload(dataFileContent, dataFileContent.length)
   await controlFileBlobClient.upload(controlFileContent, controlFileContent.length)
-  await deleteFile(server, dataFilename)
-  await deleteFile(server, controlFilename)
+  await deleteFile(server, directory, dataFilename)
+  await deleteFile(server, directory, controlFilename)
 }
 
-const getFileContent = async (server, dataFilename, controlFilename) => {
+const getFileContent = async (server, directory, dataFilename, controlFilename) => {
   return Promise.all([
-    retry(() => getFile(server, dataFilename)),
-    retry(() => getFile(server, controlFilename))
+    retry(() => getFile(server, directory, dataFilename)),
+    retry(() => getFile(server, directory, controlFilename))
   ])
 }
 
@@ -58,7 +58,7 @@ const getDataFilename = (controlFilename) => {
   }
 }
 
-const getPendingFilename = async (originalFilename) => {
+const getPendingFilename = (originalFilename) => {
   if (originalFilename.startsWith('CTL_')) {
     return originalFilename.replace('CTL_', 'CTL_PENDING_')
   }

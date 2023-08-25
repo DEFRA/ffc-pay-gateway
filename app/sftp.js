@@ -25,15 +25,15 @@ const disconnect = async () => {
   }
 }
 
-const getFile = async (server, filename) => {
+const getFile = async (server, directory, filename) => {
   const client = getClient(server)
-  const buffer = await client.get(filename)
+  const buffer = await client.get(`${directory}/${filename}`)
   return buffer.toString()
 }
 
-const deleteFile = async (server, filename) => {
+const deleteFile = async (server, directory, filename) => {
   const client = getClient(server)
-  await client.delete(filename)
+  await client.delete(`${directory}/${filename}`)
 }
 
 const getClient = (server) => {
