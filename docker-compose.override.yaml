@@ -26,10 +26,10 @@ services:
 
   ffc-pay-gateway-sftp:
     volumes:
-        - ./outbound:/home/ffc/outbound
+        - ./local-server:/home/ffc/local-server
     ports:
         - "2222:22"
-    command: ffc:password:::outbound
+    command: ffc:password::::local-server
 
 volumes:
   azurite_data:

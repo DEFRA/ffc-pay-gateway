@@ -5,10 +5,14 @@ const retry = require('../retry')
 const { getBlobClient } = require('../storage')
 
 const poll = async () => {
-  await transferPendingFiles(MANAGED_GATEWAY, sftpConfig.sitiDirectory)
-  await transferPendingFiles(MANAGED_GATEWAY, sftpConfig.genesisDirectory)
-  await transferPendingFiles(MANAGED_GATEWAY, sftpConfig.glosDirectory)
-  await transferPendingFiles(CALLISTO, sftpConfig.impsDirectory)
+  if (sftpConfig.managedGatewayEnabled) {
+    await transferPendingFiles(MANAGED_GATEWAY, sftpConfig.sitiDirectory)
+    await transferPendingFiles(MANAGED_GATEWAY, sftpConfig.genesisDirectory)
+    await transferPendingFiles(MANAGED_GATEWAY, sftpConfig.glosDirectory)
+  }
+  if (sftpConfig.callistoEnabled) {
+    await transferPendingFiles(CALLISTO, sftpConfig.impsDirectory)
+  }
 }
 
 const transferPendingFiles = async (server, directory) => {

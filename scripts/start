@@ -16,7 +16,7 @@ cd "${projectRoot}"
 
 docker-compose down
 
-mkdir -p outbound
+mkdir -p local-server
 
 docker-compose \
   -f docker-compose.yaml \
