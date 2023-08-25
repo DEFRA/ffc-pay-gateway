@@ -14,9 +14,9 @@ services:
       SFTP_MANAGED_GATEWAY_HOST: ffc-pay-gateway-sftp
       SFTP_MANAGED_GATEWAY_USERNAME: ffc
       SFTP_MANAGED_GATEWAY_PASSWORD: password
-      SFTP_CALLISTO_GATEWAY_HOST: ffc-pay-gateway-sftp
-      SFTP_CALLISTO_GATEWAY_USERNAME: ffc
-      SFTP_CALLISTO_GATEWAY_PASSWORD: password
+      SFTP_CALLISTO_HOST: ffc-pay-gateway-sftp
+      SFTP_CALLISTO_USERNAME: ffc
+      SFTP_CALLISTO_PASSWORD: password
       SFTP_SITI_AGRI_DIRECTORY: /home/ffc/outbound
       SFTP_GENESIS_DIRECTORY: /home/ffc/outbound
       SFTP_GLOS_DIRECTORY: /home/ffc/outbound
