@@ -1,8 +1,16 @@
-const { schemeConfig } = require('../config')
+const { sftpConfig, schemeConfig } = require('../config')
+const { MANAGED_GATEWAY, CALLISTO } = require('../constants/servers')
 
-const getActiveTransfers = (server) => {
+const getActiveTransfers = () => {
+  const activeServers = []
+  if (sftpConfig.managedGatewayEnabled) {
+    activeServers.push(MANAGED_GATEWAY)
+  }
+  if (sftpConfig.callistoEnabled) {
+    activeServers.push(CALLISTO)
+  }
   return Object.values(schemeConfig)
-    .filter(x => x.server === server && x.enabled)
+    .filter(x => activeServers.includes(x.server))
     .flatMap(({ fileMasks, ...properties }) => fileMasks
       .map(fileMask => ({ ...properties, fileMask })))
 }

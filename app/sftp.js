@@ -25,15 +25,15 @@ const disconnect = async () => {
   }
 }
 
-const getFile = async (server, directory, filename) => {
-  const client = getClient(server)
-  const buffer = await client.get(`${directory}/${filename}`)
+const getFile = async (transfer, filename) => {
+  const client = getClient(transfer.server)
+  const buffer = await client.get(`${transfer.directory}/${filename}`)
   return buffer.toString()
 }
 
-const deleteFile = async (server, directory, filename) => {
-  const client = getClient(server)
-  await client.delete(`${directory}/${filename}`)
+const deleteFile = async (transfer, filename) => {
+  const client = getClient(transfer.server)
+  await client.delete(`${transfer.directory}/${filename}`)
 }
 
 const getClient = (server) => {
@@ -43,8 +43,8 @@ const getClient = (server) => {
   return callisto
 }
 
-const getControlFiles = async (server, transfer) => {
-  const client = getClient(server)
+const getControlFiles = async (transfer) => {
+  const client = getClient(transfer.server)
   const files = await client.list(transfer.directory)
   return files.filter(x => transfer.fileMask.test(x.name)).map(x => x.name)
 }
