@@ -3,4 +3,4 @@ node_modules
 helm/**/*.lock
 *.tgz
 .vscode
-local-server/
+local-directory/

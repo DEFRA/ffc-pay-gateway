@@ -17,10 +17,15 @@ services:
       SFTP_CALLISTO_HOST: ffc-pay-gateway-sftp
       SFTP_CALLISTO_USERNAME: ffc
       SFTP_CALLISTO_PASSWORD: password
-      SFTP_SITI_AGRI_DIRECTORY: local-server
-      SFTP_GENESIS_DIRECTORY: local-server
-      SFTP_GLOS_DIRECTORY: local-server
-      SFTP_IMPS_DIRECTORY: local-server
+      SFI_DIRECTORY: local-directory
+      SFI_PILOT_DIRECTORY: local-directory
+      LUMP_SUMS_DIRECTORY: local-directory
+      CS_DIRECTORY: local-directory
+      BPS_DIRECTORY: local-directory
+      ES_DIRECTORY: local-directory
+      FC_DIRECTORY: local-directory
+      IMPS_DIRECTORY: local-directory
+      SFI23_DIRECTORY: local-directory
 
   ffc-pay-batch-azurite:
     image: mcr.microsoft.com/azure-storage/azurite:3.23.0

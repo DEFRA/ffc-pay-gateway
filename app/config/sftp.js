@@ -14,12 +14,7 @@ const schema = Joi.object({
     port: Joi.number().integer().default(22),
     username: Joi.string().required(),
     password: Joi.string().required()
-  }).required(),
-  sitiDirectory: Joi.string().required(),
-  genesisDirectory: Joi.string().required(),
-  glosDirectory: Joi.string().required(),
-  impsDirectory: Joi.string().required(),
-  workingDirectory: Joi.string().default('/tmp')
+  }).required()
 })
 
 const config = {
@@ -36,12 +31,7 @@ const config = {
     port: process.env.SFTP_CALLISTO_PORT,
     username: process.env.SFTP_CALLISTO_USERNAME,
     password: process.env.SFTP_CALLISTO_PASSWORD
-  },
-  sitiDirectory: process.env.SFTP_SITI_AGRI_DIRECTORY,
-  genesisDirectory: process.env.SFTP_GENESIS_DIRECTORY,
-  glosDirectory: process.env.SFTP_GLOS_DIRECTORY,
-  impsDirectory: process.env.SFTP_IMPS_DIRECTORY,
-  workingDirectory: process.env.SFTP_WORKING_DIRECTORY
+  }
 }
 
 const result = schema.validate(config, {

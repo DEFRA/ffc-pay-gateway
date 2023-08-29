@@ -43,16 +43,10 @@ const getClient = (server) => {
   return callisto
 }
 
-const getControlFiles = async (server, directory) => {
-  const fileList = []
+const getControlFiles = async (server, transfer) => {
   const client = getClient(server)
-  const files = await client.list(directory)
-  for (const file of files) {
-    if (file.name.startsWith('CTL_') || file.name.endsWith('.ctl')) {
-      fileList.push(file.name)
-    }
-  }
-  return fileList
+  const files = await client.list(transfer.directory)
+  return files.filter(x => transfer.fileMask.test(x.name)).map(x => x.name)
 }
 
 module.exports = {

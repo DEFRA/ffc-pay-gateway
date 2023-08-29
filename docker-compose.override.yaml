@@ -29,7 +29,7 @@ services:
         - sftp_data:/home/ffc
     ports:
         - "2222:22"
-    command: ffc:password:::local-server
+    command: ffc:password:::local-directory
 
 volumes:
   azurite_data:
