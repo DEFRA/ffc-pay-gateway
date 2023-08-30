@@ -5,8 +5,6 @@ const schema = Joi.object({
   storageAccount: Joi.string().required(),
   container: Joi.string().required(),
   inboundFolder: Joi.string().required(),
-  archiveFolder: Joi.string().required(),
-  quarantineFolder: Joi.string().required(),
   useConnectionStr: Joi.boolean().default(false),
   createContainers: Joi.boolean().default(false)
 })
@@ -16,8 +14,6 @@ const config = {
   storageAccount: process.env.AZURE_STORAGE_ACCOUNT_NAME,
   container: 'batch',
   inboundFolder: 'inbound',
-  archiveFolder: 'archive',
-  quarantineFolder: 'quarantine',
   useConnectionStr: process.env.AZURE_STORAGE_USE_CONNECTION_STRING,
   createContainers: process.env.AZURE_STORAGE_CREATE_CONTAINERS
 }

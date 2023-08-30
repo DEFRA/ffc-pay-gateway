@@ -7,6 +7,7 @@ services:
       target: development
     depends_on:
       - ffc-pay-batch-azurite
+      - ffc-pay-gateway-sftp
     image: ffc-pay-gateway-development
     container_name: ffc-pay-gateway-development
     ports:
@@ -23,5 +24,13 @@ services:
     ports:
       - "10040:10000"
 
+  ffc-pay-gateway-sftp:
+    volumes:
+        - sftp_data:/home/ffc
+    ports:
+        - "2222:22"
+    command: ffc:password:::local-directory
+
 volumes:
   azurite_data:
+  sftp_data:
