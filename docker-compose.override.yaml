@@ -27,9 +27,12 @@ services:
   ffc-pay-gateway-sftp:
     volumes:
         - sftp_data:/home/ffc
+        - ./.ssh/ssh_host_ed25519_key:/etc/ssh/ssh_host_ed25519_key
+        - ./.ssh/ssh_host_rsa_key:/etc/ssh/ssh_host_rsa_key
+
     ports:
         - "2222:22"
-    command: ffc:password:::local-directory
+    command: ffc:password:::local-directory/inbound,local-directory/outbound
 
 volumes:
   azurite_data:

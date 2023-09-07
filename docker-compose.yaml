@@ -17,15 +17,24 @@ services:
       SFTP_CALLISTO_HOST: ffc-pay-gateway-sftp
       SFTP_CALLISTO_USERNAME: ffc
       SFTP_CALLISTO_PASSWORD: password
-      SFI_DIRECTORY: local-directory
-      SFI_PILOT_DIRECTORY: local-directory
-      LUMP_SUMS_DIRECTORY: local-directory
-      CS_DIRECTORY: local-directory
-      BPS_DIRECTORY: local-directory
-      ES_DIRECTORY: local-directory
-      FC_DIRECTORY: local-directory
-      IMPS_DIRECTORY: local-directory
-      SFI23_DIRECTORY: local-directory
+      SFI_INBOUND_DIRECTORY: local-directory/inbound
+      SFI_OUTBOUND_DIRECTORY: local-directory/outbound
+      SFI_PILOT_INBOUND_DIRECTORY: local-directory/inbound
+      SFI_PILOT_OUTBOUND_DIRECTORY: local-directory/outbound
+      LUMP_SUMS_INBOUND_DIRECTORY: local-directory/inbound
+      LUMP_SUMS_OUTBOUND_DIRECTORY: local-directory/outbound
+      CS_INBOUND_DIRECTORY: local-directory/inbound
+      CS_OUTBOUND_DIRECTORY: local-directory/outbound
+      BPS_INBOUND_DIRECTORY: local-directory/inbound
+      BPS_OUTBOUND_DIRECTORY: local-directory/outbound
+      ES_INBOUND_DIRECTORY: local-directory/inbound
+      ES_OUTBOUND_DIRECTORY: local-directory/outbound
+      FC_INBOUND_DIRECTORY: local-directory/inbound
+      FC_OUTBOUND_DIRECTORY: local-directory/outbound
+      IMPS_INBOUND_DIRECTORY: local-directory/inbound
+      IMPS_OUTBOUND_DIRECTORY: local-directory/outbound
+      SFI23_INBOUND_DIRECTORY: local-directory/inbound
+      SFI23_OUTBOUND_DIRECTORY: local-directory/outbound
 
   ffc-pay-batch-azurite:
     image: mcr.microsoft.com/azure-storage/azurite:3.23.0
