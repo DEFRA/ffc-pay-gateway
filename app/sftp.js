@@ -36,6 +36,11 @@ const deleteFile = async (transfer, filename) => {
   await client.delete(`${transfer.inboundDirectory}/${filename}`)
 }
 
+const putFile = async (transfer, filename, data) => {
+  const client = getClient(transfer.server)
+  await client.put(Buffer.from(data), `${transfer.outboundDirectory}/${filename}`)
+}
+
 const getClient = (server) => {
   if (server === MANAGED_GATEWAY) {
     return managedGateway
@@ -54,5 +59,6 @@ module.exports = {
   disconnect,
   getControlFiles,
   getFile,
-  deleteFile
+  deleteFile,
+  putFile
 }
