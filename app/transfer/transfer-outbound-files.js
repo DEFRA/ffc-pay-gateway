@@ -1,11 +1,11 @@
-const { getControlFiles } = require('../sftp')
-const { transferFile } = require('./transfer-file')
+const { getControlFiles } = require('../storage')
+const { transferOutboundFile } = require('./transfer-outbound-file')
 
 const transferOutboundFiles = async (transfer) => {
   const controlFiles = await getControlFiles(transfer)
   for (const controlFile of controlFiles) {
     try {
-      await transferFile(transfer, controlFile)
+      await transferOutboundFile(transfer, controlFile)
     } catch (err) {
       console.error(err)
     }

@@ -5,7 +5,7 @@ const { getBlobClient } = require('../storage')
 const { deleteFile } = require('../sftp')
 const { storageConfig } = require('../config')
 
-const transferFile = async (transfer, controlFilename) => {
+const transferOutboundFile = async (transfer, controlFilename) => {
   const dataFilename = getDataFilename(controlFilename)
   const [dataFileContent, controlFileContent] = await getFileContent(transfer, dataFilename, controlFilename)
   const controlPendingFilename = getPendingFilename(controlFilename)
@@ -19,5 +19,5 @@ const transferFile = async (transfer, controlFilename) => {
 }
 
 module.exports = {
-  transferFile
+  transferOutboundFile
 }
