@@ -30,6 +30,35 @@ container:
   azureStorageCreateContainers: false
   pollingInterval: 10000
   pollingActive: true
+  sftpManagedGatewayHost:
+  sftpManagedGatewayPort: 22
+  sftpManagedGatewayUsername:
+  sftpManagedGatewayPassword:
+  sftpCallistoHost:
+  sftpCallistoPort: 22
+  sftpCallistoUsername:
+  sftpCallistoPassword:
+  sfiInboundDirectory:
+  sfiPilotInboundDirectory:
+  lumpSumsInboundDirectory:
+  csInboundDirectory:
+  bpsInboundDirectory:
+  esInboundDirectory:
+  esOutboundDirectory:
+  fcInboundDirectory:
+  fcOutboundDirectory:
+  impsInboundDirectory:
+  impsOutboundDirectory:
+  sfi23InboundDirectory:
+  sfiEnabled: true
+  sfiPilotEnabled: true
+  lumpSumsEnabled: true
+  csEnabled: true
+  bpsEnabled: true
+  esEnabled: true
+  fcEnabled: true
+  impsEnabled: true
+  sfi23Enabled: true
 
 aadPodIdentity: true
 

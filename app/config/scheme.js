@@ -6,65 +6,55 @@ const schema = Joi.object({
   sfi: Joi.object({
     name: Joi.string().default(SFI),
     fileMasks: Joi.object({
-      inbound: Joi.array().items(Joi.string()).default([/^CTL_SITISFI\d{4}_AP_\d*.dat$/, /^CTL_SITISFI\d{4}_AP_\d*.txt$/]),
-      outbound: Joi.array().items(Joi.string()).default([])
+      inbound: Joi.array().items(Joi.string()).default([/^CTL_SITISFI\d{4}_AP_\d*.dat$/, /^CTL_SITISFI\d{4}_AP_\d*.txt$/])
     }),
     server: Joi.string().default(MANAGED_GATEWAY),
     directories: Joi.object({
-      inbound: Joi.string().required(),
-      outbound: Joi.string().required()
+      inbound: Joi.string().required()
     }).required(),
     enabled: Joi.boolean().default(true)
   }).required(),
   sfiPilot: Joi.object({
     name: Joi.string().default(SFI_PILOT),
     fileMasks: Joi.object({
-      inbound: Joi.array().items(Joi.string()).default([/^CTL_SITIELM\d{4}_AP_\d*.dat$/, /^CTL_SITIELM\d{4}_AP_\d*.txt$/]),
-      outbound: Joi.array().items(Joi.string()).default([])
+      inbound: Joi.array().items(Joi.string()).default([/^CTL_SITIELM\d{4}_AP_\d*.dat$/, /^CTL_SITIELM\d{4}_AP_\d*.txt$/])
     }),
     server: Joi.string().default(MANAGED_GATEWAY),
     directories: Joi.object({
-      inbound: Joi.string().required(),
-      outbound: Joi.string().required()
+      inbound: Joi.string().required()
     }).required(),
     enabled: Joi.boolean().default(true)
   }).required(),
   lumpSums: Joi.object({
     name: Joi.string().default(LUMP_SUMS),
     fileMasks: Joi.object({
-      inbound: Joi.array().items(Joi.string()).default([/^CTL_SITILSES\d{4}_AP_\d*.dat$/, /^CTL_SITILSES\d{4}_AP_\d*.txt$/]),
-      outbound: Joi.array().items(Joi.string()).default([])
+      inbound: Joi.array().items(Joi.string()).default([/^CTL_SITILSES\d{4}_AP_\d*.dat$/, /^CTL_SITILSES\d{4}_AP_\d*.txt$/])
     }),
     server: Joi.string().default(MANAGED_GATEWAY),
     directories: Joi.object({
-      inbound: Joi.string().required(),
-      outbound: Joi.string().required()
+      inbound: Joi.string().required()
     }).required(),
     enabled: Joi.boolean().default(true)
   }).required(),
   cs: Joi.object({
     name: Joi.string().default(CS),
     fileMasks: Joi.object({
-      inbound: Joi.array().items(Joi.string()).default([/^CTL_SITICS\d{4}_AP_\d*.dat$/, /^CTL_SITICS\d{4}_AP_\d*.txt$/]),
-      outbound: Joi.array().items(Joi.string()).default([])
+      inbound: Joi.array().items(Joi.string()).default([/^CTL_SITICS\d{4}_AP_\d*.dat$/, /^CTL_SITICS\d{4}_AP_\d*.txt$/])
     }),
     server: Joi.string().default(MANAGED_GATEWAY),
     directories: Joi.object({
-      inbound: Joi.string().required(),
-      outbound: Joi.string().required()
+      inbound: Joi.string().required()
     }).required(),
     enabled: Joi.boolean().default(true)
   }).required(),
   bps: Joi.object({
     name: Joi.string().default(BPS),
     fileMasks: Joi.object({
-      inbound: Joi.array().items(Joi.string()).default([/^CTL_SITI_\d{4}_AP_\d*.dat$/, /^CTL_SITI_\d{4}_AP_\d*.txt$/]),
-      outbound: Joi.array().items(Joi.string()).default([])
+      inbound: Joi.array().items(Joi.string()).default([/^CTL_SITI_\d{4}_AP_\d*.dat$/, /^CTL_SITI_\d{4}_AP_\d*.txt$/])
     }),
     server: Joi.string().default(MANAGED_GATEWAY),
     directories: Joi.object({
-      inbound: Joi.string().required(),
-      outbound: Joi.string().required()
+      inbound: Joi.string().required()
     }).required(),
     enabled: Joi.boolean().default(true)
   }).required(),
@@ -110,13 +100,11 @@ const schema = Joi.object({
   sfi23: Joi.object({
     name: Joi.string().default(SFI23),
     fileMasks: Joi.object({
-      inbound: Joi.array().items(Joi.string()).default([/^CTL_SITISFIA\d{4}_AP_\d*.dat$/, /^CTL_SITISFIA\d{4}_AP_\d*.txt$/]),
-      outbound: Joi.array().items(Joi.string()).default([])
+      inbound: Joi.array().items(Joi.string()).default([/^CTL_SITISFIA\d{4}_AP_\d*.dat$/, /^CTL_SITISFIA\d{4}_AP_\d*.txt$/])
     }),
     server: Joi.string().default(MANAGED_GATEWAY),
     directories: Joi.object({
-      inbound: Joi.string().required(),
-      outbound: Joi.string().required()
+      inbound: Joi.string().required()
     }).required(),
     enabled: Joi.boolean().default(true)
   }).required()
@@ -126,65 +114,55 @@ const config = {
   sfi: {
     name: process.env.SFI_NAME,
     fileMasks: {
-      inbound: process.env.SFI_FILE_INBOUND_MASKS,
-      outbound: process.env.SFI_FILE_OUTBOUND_MASKS
+      inbound: process.env.SFI_FILE_INBOUND_MASKS
     },
     server: process.env.SFI_SERVER,
     directories: {
-      inbound: process.env.SFI_INBOUND_DIRECTORY,
-      outbound: process.env.SFI_OUTBOUND_DIRECTORY
+      inbound: process.env.SFI_INBOUND_DIRECTORY
     },
     enabled: process.env.SFI_ENABLED
   },
   sfiPilot: {
     name: process.env.SFI_PILOT_NAME,
     fileMasks: {
-      inbound: process.env.SFI_PILOT_FILE_INBOUND_MASKS,
-      outbound: process.env.SFI_PILOT_FILE_OUTBOUND_MASKS
+      inbound: process.env.SFI_PILOT_FILE_INBOUND_MASKS
     },
     server: process.env.SFI_PILOT_SERVER,
     directories: {
-      inbound: process.env.SFI_PILOT_INBOUND_DIRECTORY,
-      outbound: process.env.SFI_PILOT_OUTBOUND_DIRECTORY
+      inbound: process.env.SFI_PILOT_INBOUND_DIRECTORY
     },
     enabled: process.env.SFI_PILOT_ENABLED
   },
   lumpSums: {
     name: process.env.LUMP_SUMS_NAME,
     fileMasks: {
-      inbound: process.env.LUMP_SUMS_FILE_INBOUND_MASKS,
-      outbound: process.env.LUMP_SUMS_FILE_OUTBOUND_MASKS
+      inbound: process.env.LUMP_SUMS_FILE_INBOUND_MASKS
     },
     server: process.env.LUMP_SUMS_SERVER,
     directories: {
-      inbound: process.env.LUMP_SUMS_INBOUND_DIRECTORY,
-      outbound: process.env.LUMP_SUMS_OUTBOUND_DIRECTORY
+      inbound: process.env.LUMP_SUMS_INBOUND_DIRECTORY
     },
     enabled: process.env.LUMP_SUMS_ENABLED
   },
   cs: {
     name: process.env.CS_NAME,
     fileMasks: {
-      inbound: process.env.CS_FILE_INBOUND_MASKS,
-      outbound: process.env.CS_FILE_OUTBOUND_MASKS
+      inbound: process.env.CS_FILE_INBOUND_MASKS
     },
     server: process.env.CS_SERVER,
     directories: {
-      inbound: process.env.CS_INBOUND_DIRECTORY,
-      outbound: process.env.CS_OUTBOUND_DIRECTORY
+      inbound: process.env.CS_INBOUND_DIRECTORY
     },
     enabled: process.env.CS_ENABLED
   },
   bps: {
     name: process.env.BPS_NAME,
     fileMasks: {
-      inbound: process.env.BPS_FILE_INBOUND_MASKS,
-      outbound: process.env.BPS_FILE_OUTBOUND_MASKS
+      inbound: process.env.BPS_FILE_INBOUND_MASKS
     },
     server: process.env.BPS_SERVER,
     directories: {
-      inbound: process.env.BPS_INBOUND_DIRECTORY,
-      outbound: process.env.BPS_OUTBOUND_DIRECTORY
+      inbound: process.env.BPS_INBOUND_DIRECTORY
     },
     enabled: process.env.BPS_ENABLED
   },
@@ -230,13 +208,11 @@ const config = {
   sfi23: {
     name: process.env.SFI23_NAME,
     fileMasks: {
-      inbound: process.env.SFI23_FILE_INBOUND_MASKS,
-      outbound: process.env.SFI23_FILE_OUTBOUND_MASKS
+      inbound: process.env.SFI23_FILE_INBOUND_MASKS
     },
     server: process.env.SFI23_SERVER,
     directories: {
-      inbound: process.env.SFI23_INBOUND_DIRECTORY,
-      outbound: process.env.SFI23_OUTBOUND_DIRECTORY
+      inbound: process.env.SFI23_INBOUND_DIRECTORY
     },
     enabled: process.env.SFI23_ENABLED
   }

@@ -9,4 +9,29 @@ data:
   AZURE_STORAGE_CREATE_CONTAINERS: {{ quote .Values.container.azureStorageCreateContainers }}
   POLLING_INTERVAL: {{ quote .Values.container.pollingInterval }}
   POLLING_ACTIVE: {{ quote .Values.container.pollingActive }}
+  SFTP_MANAGED_GATEWAY_HOST: {{ quote .Values.container.sftpManagedGatewayHost }}
+  SFPT_MANAGED_GATEWAY_PORT: {{ quote .Values.container.sftpManagedGatewayPort }}
+  SFTP_CALLISTO_HOST: {{ quote .Values.container.sftpCallistoHost }}
+  SFTP_CALLISTO_PORT: {{ quote .Values.container.sftpCallistoPort }}
+  SFI_INBOUND_DIRECTORY: {{ quote .Values.container.sfiInboundDirectory }}
+  SFI_PILOT_INBOUND_DIRECTORY: {{ quote .Values.container.sfiPilotInboundDirectory }}
+  LUMP_SUMS_INBOUND_DIRECTORY: {{ quote .Values.container.lumpSumsInboundDirectory }}
+  CS_INBOUND_DIRECTORY: {{ quote .Values.container.csInboundDirectory }}
+  BPS_INBOUND_DIRECTORY: {{ quote .Values.container.bpsInboundDirectory }}
+  ES_INBOUND_DIRECTORY: {{ quote .Values.container.esInboundDirectory }}
+  ES_OUTBOUND_DIRECTORY: {{ quote .Values.container.esOutboundDirectory }}
+  FC_INBOUND_DIRECTORY: {{ quote .Values.container.fcInboundDirectory }}
+  FC_OUTBOUND_DIRECTORY: {{ quote .Values.container.fcOutboundDirectory }}
+  IMPS_INBOUND_DIRECTORY: {{ quote .Values.container.impsInboundDirectory }}
+  IMPS_OUTBOUND_DIRECTORY: {{ quote .Values.container.impsOutboundDirectory }}
+  SFI23_INBOUND_DIRECTORY: {{ quote .Values.container.sfi23InboundDirectory }}
+  SFI_ENABLED: {{ quote .Values.container.sfiEnabled }}
+  SFI_PILOT_ENABLED: {{ quote .Values.container.sfiPilotEnabled }}
+  LUMP_SUMS_ENABLED: {{ quote .Values.container.lumpSumsEnabled }}
+  CS_ENABLED: {{ quote .Values.container.csEnabled }}
+  BPS_ENABLED: {{ quote .Values.container.bpsEnabled }}
+  ES_ENABLED: {{ quote .Values.container.esEnabled }}
+  FC_ENABLED: {{ quote .Values.container.fcEnabled }}
+  IMPS_ENABLED: {{ quote .Values.container.impsEnabled }}
+  SFI23_ENABLED: {{ quote .Values.container.sfi23Enabled }}
 {{- end -}}
