@@ -34,10 +34,12 @@ container:
   sftpManagedGatewayPort: 22
   sftpManagedGatewayUsername:
   sftpManagedGatewayPassword:
+  sftpManagedGatewayPrivateKey:
   sftpCallistoHost:
   sftpCallistoPort: 22
   sftpCallistoUsername:
   sftpCallistoPassword:
+  sftpCallistoPrivateKey:
   sfiInboundDirectory:
   sfiPilotInboundDirectory:
   lumpSumsInboundDirectory:
