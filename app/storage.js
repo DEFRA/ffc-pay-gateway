@@ -40,7 +40,7 @@ const initialiseFolders = async () => {
 }
 
 const getContainerLocation = (containerName) => {
-  if(containerName === config.batchContainer) {
+  if (containerName === config.batchContainer) {
     return {
       container: batchContainer,
       folder: config.inboundFolder
@@ -71,11 +71,13 @@ const getReturnFileList = async () => {
 }
 
 const downloadFile = async (filename) => {
-  const blob = await getBlob(config.daxContainer, filename)
+  const blob = await getBlobClient(config.daxContainer, filename)
   const downloaded = await blob.downloadToBuffer()
   return downloaded.toString()
 }
 
 module.exports = {
-  getBlobClient
+  getBlobClient,
+  getReturnFileList,
+  downloadFile
 }
