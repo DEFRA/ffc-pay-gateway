@@ -58,13 +58,14 @@ const getBlobClient = async (containerName, filename) => {
   return container.getBlockBlobClient(`${folder}/${filename}`)
 }
 
-const getReturnFileList = async () => {
+const getControlFiles = async (transfer) => {
   containersInitialised ?? await initialiseContainers()
 
   const fileList = []
   for await (const file of daxContainer.listBlobsFlat({ prefix: config.returnFolder })) {
-    // TODO: filter to control files
-    fileList.push(file.name.replace(`${config.returnFolder}/`, ''))
+    if (transfer.fileMask.test(file.name)) {
+      fileList.push(file.name.replace(`${config.returnFolder}/`, ''))
+    }
   }
 
   return fileList
@@ -78,6 +79,6 @@ const downloadFile = async (filename) => {
 
 module.exports = {
   getBlobClient,
-  getReturnFileList,
+  getControlFiles,
   downloadFile
 }

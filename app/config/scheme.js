@@ -72,7 +72,7 @@ const schema = Joi.object({
     name: Joi.string().default(ES),
     fileMasks: Joi.object({
       inbound: Joi.array().items(Joi.string()).default([/^GENESISPayReq_\d{8}_\d{4}.ctl$/]),
-      outbound: Joi.array().items(Joi.string()).default([])
+      outbound: Joi.array().items(Joi.string()).default([/^GENESISPayConf_\d{8}_\d{4}.ctl$/])
     }),
     server: Joi.string().default(MANAGED_GATEWAY),
     directories: Joi.object({
@@ -85,7 +85,7 @@ const schema = Joi.object({
     name: Joi.string().default(FC),
     fileMasks: Joi.object({
       inbound: Joi.array().items(Joi.string()).default([/^FCAP_\d{4}_\d*\.ctl$/]),
-      outbound: Joi.array().items(Joi.string()).default([])
+      outbound: Joi.array().items(Joi.string()).default([/^FCAP_\d{4}_RPA_\d*\.ctl$/])
     }),
     server: Joi.string().default(MANAGED_GATEWAY),
     directories: Joi.object({
@@ -98,7 +98,7 @@ const schema = Joi.object({
     name: Joi.string().default(IMPS),
     fileMasks: Joi.object({
       inbound: Joi.array().items(Joi.string()).default([/^CTL_FIN_IMPS_A[P|R]_\d{4}.INT$/]),
-      outbound: Joi.array().items(Joi.string()).default([])
+      outbound: Joi.array().items(Joi.string()).default([/^CTL_RET_IMPS_A[P|R]_\d{4}.INT$/])
     }),
     server: Joi.string().default(CALLISTO),
     directories: Joi.object({
