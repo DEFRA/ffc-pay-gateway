@@ -35,6 +35,8 @@ const initialiseFolders = async () => {
   await inboundClient.upload(placeHolderText, placeHolderText.length)
   const returnClient = daxContainer.getBlockBlobClient(`${config.returnFolder}/default.txt`)
   await returnClient.upload(placeHolderText, placeHolderText.length)
+  const archiveClient = daxContainer.getBlockBlobClient(`${config.archiveFolder}/default.txt`)
+  await archiveClient.upload(placeHolderText, placeHolderText.length)
   foldersInitialised = true
   console.log('Folders ready')
 }
@@ -71,14 +73,29 @@ const getControlFiles = async (transfer) => {
   return fileList
 }
 
-const downloadFile = async (filename) => {
+const getFile = async (filename) => {
   const blob = await getBlobClient(config.daxContainer, filename)
   const downloaded = await blob.downloadToBuffer()
   return downloaded.toString()
 }
 
+const moveFile = async (sourceFolder, destinationFolder, filename) => {
+  const sourceBlob = await getBlobClient(sourceFolder, filename)
+  const destinationBlob = await getBlobClient(destinationFolder, filename)
+  const copyResult = await (await destinationBlob.beginCopyFromURL(sourceBlob.url)).pollUntilDone()
+
+  if (copyResult.copyStatus === 'success') {
+    await sourceBlob.delete()
+  }
+}
+
+const archiveFile = (filename) => {
+  return moveFile(config.returnFolder, config.archiveFolder, filename)
+}
+
 module.exports = {
   getBlobClient,
   getControlFiles,
-  downloadFile
+  getFile,
+  archiveFile
 }

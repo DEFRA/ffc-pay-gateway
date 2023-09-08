@@ -7,6 +7,7 @@ const schema = Joi.object({
   daxContainer: Joi.string().default('dax'),
   inboundFolder: Joi.string().default('inbound'),
   returnFolder: Joi.string().default('return'),
+  archiveFolder: Joi.string().default('archive'),
   useConnectionStr: Joi.boolean().default(false),
   createContainers: Joi.boolean().default(false)
 })
@@ -18,6 +19,7 @@ const config = {
   daxContainer: process.env.AZURE_STORAGE_DAX_CONTAINER,
   inboundFolder: process.env.AZURE_STORAGE_INBOUND_FOLDER,
   returnFolder: process.env.AZURE_STORAGE_RETURN_FOLDER,
+  archiveFolder: process.env.AZURE_STORAGE_ARCHIVE_FOLDER,
   useConnectionStr: process.env.AZURE_STORAGE_USE_CONNECTION_STRING,
   createContainers: process.env.AZURE_STORAGE_CREATE_CONTAINERS
 }
