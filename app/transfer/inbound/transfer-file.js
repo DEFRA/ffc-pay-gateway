@@ -1,11 +1,11 @@
-const { getDataFilename } = require('./get-data-filename')
+const { getDataFilename } = require('../get-data-filename')
 const { getFileContent } = require('./get-file-content')
-const { getPendingFilename } = require('./get-pending-filename')
-const { getBlobClient } = require('../storage')
-const { deleteFile } = require('../sftp')
-const { storageConfig } = require('../config')
+const { getPendingFilename } = require('../get-pending-filename')
+const { getBlobClient } = require('../../storage')
+const { deleteFile } = require('../../sftp')
+const { storageConfig } = require('../../config')
 
-const transferOutboundFile = async (transfer, controlFilename) => {
+const transferFile = async (transfer, controlFilename) => {
   const dataFilename = getDataFilename(controlFilename)
   const [dataFileContent, controlFileContent] = await getFileContent(transfer, dataFilename, controlFilename)
   const controlPendingFilename = getPendingFilename(controlFilename)
@@ -19,5 +19,5 @@ const transferOutboundFile = async (transfer, controlFilename) => {
 }
 
 module.exports = {
-  transferOutboundFile
+  transferFile
 }
