@@ -6,7 +6,7 @@ const { deleteFile } = require('../../sftp')
 const { storageConfig } = require('../../config')
 
 const transferFile = async (transfer, controlFilename) => {
-  const dataFilename = getDataFilename(controlFilename)
+  const dataFilename = getDataFilename(controlFilename, transfer.direction)
   const [dataFileContent, controlFileContent] = await getFileContent(transfer, dataFilename, controlFilename)
   const controlPendingFilename = getPendingFilename(controlFilename)
   const dataPendingFilename = getPendingFilename(dataFilename)

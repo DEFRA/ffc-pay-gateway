@@ -65,8 +65,9 @@ const getControlFiles = async (transfer) => {
 
   const fileList = []
   for await (const file of daxContainer.listBlobsFlat({ prefix: config.returnFolder })) {
-    if (transfer.fileMask.test(file.name)) {
-      fileList.push(file.name.replace(`${config.returnFolder}/`, ''))
+    const filename = file.name.replace(`${config.returnFolder}/`, '')
+    if (transfer.fileMask.test(filename)) {
+      fileList.push(filename)
     }
   }
 
@@ -79,18 +80,14 @@ const getFile = async (filename) => {
   return downloaded.toString()
 }
 
-const moveFile = async (sourceFolder, destinationFolder, filename) => {
-  const sourceBlob = await getBlobClient(sourceFolder, filename)
-  const destinationBlob = await getBlobClient(destinationFolder, filename)
+const archiveFile = async (filename) => {
+  const sourceBlob = daxContainer.getBlockBlobClient(`${config.returnFolder}/${filename}`)
+  const destinationBlob = daxContainer.getBlobClient(`${config.archiveFolder}/${filename}`)
   const copyResult = await (await destinationBlob.beginCopyFromURL(sourceBlob.url)).pollUntilDone()
 
   if (copyResult.copyStatus === 'success') {
     await sourceBlob.delete()
   }
-}
-
-const archiveFile = (filename) => {
-  return moveFile(config.returnFolder, config.archiveFolder, filename)
 }
 
 module.exports = {
