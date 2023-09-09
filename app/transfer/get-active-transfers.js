@@ -13,12 +13,12 @@ const getActiveTransfers = () => {
   const inboundTransfers = Object.values(schemeConfig)
     .filter(x => activeServers.includes(x.server) && x.directories.inbound)
     .flatMap(({ fileMasks, ...config }) => fileMasks.inbound
-      .map(fileMask => ({ ...config, direction: INBOUND, directory: config.directories.inbound, fileMask })
-      ))
+      .map(fileMask => ({ ...config, direction: INBOUND, directory: config.directories.inbound, fileMask })))
 
   const outboundTransfers = Object.values(schemeConfig)
     .filter(x => activeServers.includes(x.server) && x.directories.outbound)
-    .flatMap(({ fileMasks, ...config }) => fileMasks.outbound.map(fileMask => ({ ...config, direction: OUTBOUND, directory: config.directories.outbound, fileMask })))
+    .flatMap(({ fileMasks, ...config }) => fileMasks.outbound
+      .map(fileMask => ({ ...config, direction: OUTBOUND, directory: config.directories.outbound, fileMask })))
 
   return inboundTransfers.concat(outboundTransfers)
 }
