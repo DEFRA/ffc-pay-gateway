@@ -7,15 +7,15 @@ const schema = Joi.object({
     host: Joi.string().required(),
     port: Joi.number().integer().default(22),
     username: Joi.string().required(),
-    password: Joi.string().optional(),
-    privateKey: Joi.string().optional()
+    password: Joi.string().optional().allow(''),
+    privateKey: Joi.string().optional().allow('')
   }).required(),
   callisto: Joi.object({
     host: Joi.string().required(),
     port: Joi.number().integer().default(22),
     username: Joi.string().required(),
-    password: Joi.string().optional(),
-    privateKey: Joi.string().optional()
+    password: Joi.string().optional().allow(''),
+    privateKey: Joi.string().optional().allow('')
   }).required()
 })
 
