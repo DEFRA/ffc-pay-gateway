@@ -1,5 +1,5 @@
 jest.mock('../../app/config/transfer', () => ({ totalRetries: 1, retryInterval: 1 }))
-const retry = require('../../app/retry')
+const { retry } = require('../../app/retry')
 let mockFunction
 
 describe('retry', () => {

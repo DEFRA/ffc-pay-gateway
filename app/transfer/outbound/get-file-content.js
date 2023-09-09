@@ -1,4 +1,4 @@
-const retry = require('../../retry')
+const { retry } = require('../../retry')
 const { getFile } = require('../../storage')
 
 const getFileContent = async (transfer, dataFilename, controlFilename) => {

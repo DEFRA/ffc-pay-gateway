@@ -13,4 +13,6 @@ const retry = async (fn, retriesLeft = totalRetries, interval = 2000, exponentia
   }
 }
 
-module.exports = retry
+module.exports = {
+  retry
+}
