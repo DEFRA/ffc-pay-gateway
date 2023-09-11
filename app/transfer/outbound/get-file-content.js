@@ -1,10 +1,10 @@
 const { retry } = require('../../retry')
 const { getFile } = require('../../storage')
 
-const getFileContent = async (transfer, dataFilename, controlFilename) => {
+const getFileContent = async (dataFilename, controlFilename) => {
   return Promise.all([
-    retry(() => getFile(transfer, dataFilename)),
-    retry(() => getFile(transfer, controlFilename))
+    retry(() => getFile(dataFilename)),
+    retry(() => getFile(controlFilename))
   ])
 }
 

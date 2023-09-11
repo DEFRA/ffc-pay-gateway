@@ -1,10 +1,12 @@
 const { retry } = require('../../retry')
 const { getFile } = require('../../sftp')
 
-const getFileContent = async (dataFilename, controlFilename) => {
+const getFileContent = async (transfer, dataFilename, controlFilename) => {
+  console.log(dataFilename, controlFilename)
+  console.log(transfer)
   return Promise.all([
-    retry(() => getFile(dataFilename)),
-    retry(() => getFile(controlFilename))
+    retry(() => getFile(transfer, dataFilename)),
+    retry(() => getFile(transfer, controlFilename))
   ])
 }
 

@@ -8,7 +8,7 @@ let callisto
 const connect = async () => {
   if (sftpConfig.managedGatewayEnabled) {
     managedGateway = new Client()
-    await managedGateway.connect(sftpConfig.managedGateway)
+    await managedGateway.connect({ ...sftpConfig.managedGateway, debug: (info) => console.log(info) })
   }
   if (sftpConfig.callistoEnabled) {
     callisto = new Client()
@@ -27,6 +27,7 @@ const disconnect = async () => {
 
 const getFile = async (transfer, filename) => {
   const client = getClient(transfer.server)
+  console.log('getting file', `${transfer.directory}/${filename}`)
   const buffer = await client.get(`${transfer.directory}/${filename}`)
   return buffer.toString()
 }

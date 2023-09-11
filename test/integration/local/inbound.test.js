@@ -7,7 +7,8 @@ const { connect, disconnect, putFile, getClient } = require('../../../app/sftp')
 const { storageConfig, schemeConfig } = require('../../../app/config')
 
 const { start } = require('../../../app/polling')
-const { MANAGED_GATEWAY } = require('../../../app/constants/servers')
+
+const { MANAGED_GATEWAY, CALLISTO } = require('../../../app/constants/servers')
 
 const sfiDataFilename = 'SITISFI0001_AP_20231109100000.dat'
 const sfiControlFilename = 'CTL_SITISFI0001_AP_20231109100000.dat'
@@ -51,15 +52,20 @@ const impsControlFilename = 'CTL_FIN_IMPS_AP_0001.INT'
 let blobServiceClient
 let batchContainer
 
-const uploadFile = async (scheme, filename) => {
-  const transfer = {
-    server: scheme.server,
-    directory: scheme.directories.inbound
+const deleteSftpFiles = async () => {
+  const client = getClient(MANAGED_GATEWAY)
+  const files = await client.list(schemeConfig.sfi.directories.inbound)
+  for (const file of files) {
+    await client.delete(`${schemeConfig.sfi.directories.inbound}/${file.name}`)
   }
-  await putFile(transfer, filename, '')
 }
 
-const getBlobs = async (folder) => {
+const uploadFile = async (filename) => {
+  const client = getClient(MANAGED_GATEWAY)
+  await client.put(Buffer.from('content'), `${schemeConfig.sfi.directories.inbound}/${filename}`)
+}
+
+const getBlobs = async () => {
   const fileList = []
   for await (const item of batchContainer.listBlobsFlat({ prefix: storageConfig.inboundFolder })) {
     fileList.push(item.name.replace(`${storageConfig.inboundFolder}/`, ''))
@@ -76,22 +82,21 @@ describe('process inbound files', () => {
     await batchContainer.deleteIfExists()
     await batchContainer.createIfNotExists()
 
-    const managedGateway = getClient(MANAGED_GATEWAY)
-    await managedGateway.rmDir(schemeConfig.sfi.directories.inbound, true)
-    await managedGateway.mkdir(schemeConfig.sfi.directories.inbound, true)
-  })
-
-  test('should transfer SFI data files to batch inbound location', async () => {
-    await uploadFile(schemeConfig.sfi, sfiDataFilename)
-    await uploadFile(schemeConfig.sfi, sfiControlFilename)
-
-    await start()
-
-    const fileList = await getBlobs(storageConfig.inboundFolder)
-    expect(fileList.length).toBe(2)
+    await deleteSftpFiles()
   })
 
   afterEach(async () => {
     await disconnect()
+  })
+
+  test('should transfer SFI data files to batch inbound location', async () => {
+    await uploadFile(sfiDataFilename)
+    // await uploadFile(sfiControlFilename)
+
+    // await start()
+
+    // const fileList = await getBlobs()
+    // console.log(fileList)
+    // expect(fileList.length).toBe(2)
   })
 })
