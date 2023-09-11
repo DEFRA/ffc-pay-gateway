@@ -1,14 +1,14 @@
-jest.useFakeTimers()
+global.setTimeout = jest.fn()
 
 const { BlobServiceClient } = require('@azure/storage-blob')
 
-const { connect, disconnect, putFile, getClient } = require('../../../app/sftp')
+const { connect, disconnect, getClient } = require('../../../app/sftp')
 
 const { storageConfig, schemeConfig } = require('../../../app/config')
 
 const { start } = require('../../../app/polling')
 
-const { MANAGED_GATEWAY, CALLISTO } = require('../../../app/constants/servers')
+const { MANAGED_GATEWAY } = require('../../../app/constants/servers')
 
 const sfiDataFilename = 'SITISFI0001_AP_20231109100000.dat'
 const sfiControlFilename = 'CTL_SITISFI0001_AP_20231109100000.dat'
@@ -91,12 +91,11 @@ describe('process inbound files', () => {
 
   test('should transfer SFI data files to batch inbound location', async () => {
     await uploadFile(sfiDataFilename)
-    // await uploadFile(sfiControlFilename)
+    await uploadFile(sfiControlFilename)
 
-    // await start()
+    await start()
 
-    // const fileList = await getBlobs()
-    // console.log(fileList)
-    // expect(fileList.length).toBe(2)
+    const fileList = await getBlobs()
+    expect(fileList.length).toBe(2)
   })
 })
