@@ -1,5 +1,7 @@
 global.setTimeout = jest.fn()
 
+const { ES_RETURN_FILENAME, ES_RETURN_CONTROL_FILENAME, FC_RETURN_FILENAME, FC_RETURN_CONTROL_FILENAME, IMPS_RETURN_FILENAME, IMPS_RETURN_CONTROL_FILENAME } = require('../../mocks/filenames')
+
 const { BlobServiceClient } = require('@azure/storage-blob')
 
 const { connect, disconnect, getClient } = require('../../../app/sftp')
@@ -9,15 +11,6 @@ const { storageConfig, schemeConfig } = require('../../../app/config')
 const { start } = require('../../../app/polling')
 
 const { MANAGED_GATEWAY } = require('../../../app/constants/servers')
-
-const esReturnFilename = 'GENESISPayConf_20230911_0001.gni'
-const esReturnControlFilename = 'GENESISPayConf_20230911_0001.ctl'
-
-const fcReturnFilename = 'FCAP_0001_RPA_230911100000.dat'
-const fcReturnControlFilename = 'FCAP_0001_RPA_230911100000.ctl'
-
-const impsReturnFilename = 'RET_IMPS_AP_0001.INT'
-const impsReturnControlFilename = 'CTL_RET_IMPS_AP_0001.INT'
 
 let blobServiceClient
 let daxContainer
@@ -57,35 +50,35 @@ describe('process outbound files', () => {
   })
 
   test('should process ES outbound files', async () => {
-    await uploadFile(esReturnFilename)
-    await uploadFile(esReturnControlFilename)
+    await uploadFile(ES_RETURN_FILENAME)
+    await uploadFile(ES_RETURN_CONTROL_FILENAME)
 
     await start()
 
     const fileList = await getFiles()
-    expect(fileList.find(x => x.name === esReturnFilename)).toBeDefined()
-    expect(fileList.find(x => x.name === esReturnControlFilename)).toBeDefined()
+    expect(fileList.find(x => x.name === ES_RETURN_FILENAME)).toBeDefined()
+    expect(fileList.find(x => x.name === ES_RETURN_CONTROL_FILENAME)).toBeDefined()
   })
 
   test('should process FC outbound files', async () => {
-    await uploadFile(fcReturnFilename)
-    await uploadFile(fcReturnControlFilename)
+    await uploadFile(FC_RETURN_FILENAME)
+    await uploadFile(FC_RETURN_CONTROL_FILENAME)
 
     await start()
 
     const fileList = await getFiles()
-    expect(fileList.find(x => x.name === fcReturnFilename)).toBeDefined()
-    expect(fileList.find(x => x.name === fcReturnControlFilename)).toBeDefined()
+    expect(fileList.find(x => x.name === FC_RETURN_FILENAME)).toBeDefined()
+    expect(fileList.find(x => x.name === FC_RETURN_CONTROL_FILENAME)).toBeDefined()
   })
 
   test('should process IMPS outbound files', async () => {
-    await uploadFile(impsReturnFilename)
-    await uploadFile(impsReturnControlFilename)
+    await uploadFile(IMPS_RETURN_FILENAME)
+    await uploadFile(IMPS_RETURN_CONTROL_FILENAME)
 
     await start()
 
     const fileList = await getFiles()
-    expect(fileList.find(x => x.name === impsReturnFilename)).toBeDefined()
-    expect(fileList.find(x => x.name === impsReturnControlFilename)).toBeDefined()
+    expect(fileList.find(x => x.name === IMPS_RETURN_FILENAME)).toBeDefined()
+    expect(fileList.find(x => x.name === IMPS_RETURN_CONTROL_FILENAME)).toBeDefined()
   })
 })
