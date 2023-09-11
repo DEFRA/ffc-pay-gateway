@@ -30,28 +30,28 @@ container:
   azureStorageCreateContainers: false
   pollingInterval: 10000
   pollingActive: true
-  sftpManagedGatewayHost:
+  sftpManagedGatewayHost: managed-gateway
   sftpManagedGatewayPort: 22
-  sftpManagedGatewayUsername:
-  sftpManagedGatewayPassword:
-  sftpManagedGatewayPrivateKey:
-  sftpCallistoHost:
+  sftpManagedGatewayUsername: ffc
+  sftpManagedGatewayPassword: not-real
+  sftpManagedGatewayPrivateKey: not-real
+  sftpCallistoHost: callisto
   sftpCallistoPort: 22
-  sftpCallistoUsername:
-  sftpCallistoPassword:
-  sftpCallistoPrivateKey:
-  sfiInboundDirectory:
-  sfiPilotInboundDirectory:
-  lumpSumsInboundDirectory:
-  csInboundDirectory:
-  bpsInboundDirectory:
-  esInboundDirectory:
-  esOutboundDirectory:
-  fcInboundDirectory:
-  fcOutboundDirectory:
-  impsInboundDirectory:
-  impsOutboundDirectory:
-  sfi23InboundDirectory:
+  sftpCallistoUsername: ffc
+  sftpCallistoPassword: not-real
+  sftpCallistoPrivateKey: not-real
+  sfiInboundDirectory: /opt/cap_prod_data/DAX/out/int_725/
+  sfiPilotInboundDirectory: /opt/cap_prod_data/DAX/out/int_725/
+  lumpSumsInboundDirectory: /opt/cap_prod_data/DAX/out/int_725/
+  csInboundDirectory: /opt/cap_prod_data/DAX/out/int_716/
+  bpsInboundDirectory: /opt/cap_prod_data/DAX/out/int_539/
+  esInboundDirectory: /opt/cap_prod_data/genesis/in/int_072/
+  esOutboundDirectory: /opt/cap_prod_data/genesis/out/int_073/
+  fcInboundDirectory: /opt/cap_prod_data/glos/in/int_230/
+  fcOutboundDirectory: /opt/cap_prod_data/glos/out/int_231/
+  impsInboundDirectory: /app/DAX_interface/CFI/outbound/
+  impsOutboundDirectory: /app/DAX_interface/CFI/inbound/
+  sfi23InboundDirectory: /opt/cap_prod_data/DAX/out/int_725/
   sfiEnabled: true
   sfiPilotEnabled: true
   lumpSumsEnabled: true
