@@ -9,6 +9,7 @@ services:
     container_name: ffc-pay-gateway-test
     depends_on:
       - ffc-pay-batch-azurite
+      - ffc-pay-gateway-sftp
     command: npm run test
     volumes:
       - ./app:/home/node/app
@@ -22,3 +23,6 @@ services:
   ffc-pay-batch-azurite:
     labels:
       com.docker.compose.pay.role: test
+
+  ffc-pay-gateway-sftp:
+    command: ffc:password:::local-directory/inbound,local-directory/outbound

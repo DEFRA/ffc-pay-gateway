@@ -60,5 +60,6 @@ module.exports = {
   getControlFiles,
   getFile,
   deleteFile,
-  putFile
+  putFile,
+  getClient
 }
