@@ -14,18 +14,23 @@ services:
       SFTP_MANAGED_GATEWAY_HOST: ffc-pay-gateway-sftp
       SFTP_MANAGED_GATEWAY_USERNAME: ffc
       SFTP_MANAGED_GATEWAY_PASSWORD: password
+      SFTP_MANAGED_GATEWAY_PRIVATE_KEY: ${SFTP_MANAGED_GATEWAY_PRIVATE_KEY}
       SFTP_CALLISTO_HOST: ffc-pay-gateway-sftp
       SFTP_CALLISTO_USERNAME: ffc
       SFTP_CALLISTO_PASSWORD: password
-      SFI_DIRECTORY: local-directory
-      SFI_PILOT_DIRECTORY: local-directory
-      LUMP_SUMS_DIRECTORY: local-directory
-      CS_DIRECTORY: local-directory
-      BPS_DIRECTORY: local-directory
-      ES_DIRECTORY: local-directory
-      FC_DIRECTORY: local-directory
-      IMPS_DIRECTORY: local-directory
-      SFI23_DIRECTORY: local-directory
+      SFTP_CALLISTO_PRIVATE_KEY: ${SFTP_CALLISTO_PRIVATE_KEY}
+      SFI_INBOUND_DIRECTORY: local-directory/inbound
+      SFI_PILOT_INBOUND_DIRECTORY: local-directory/inbound
+      LUMP_SUMS_INBOUND_DIRECTORY: local-directory/inbound
+      CS_INBOUND_DIRECTORY: local-directory/inbound
+      BPS_INBOUND_DIRECTORY: local-directory/inbound
+      ES_INBOUND_DIRECTORY: local-directory/inbound
+      ES_OUTBOUND_DIRECTORY: local-directory/outbound
+      FC_INBOUND_DIRECTORY: local-directory/inbound
+      FC_OUTBOUND_DIRECTORY: local-directory/outbound
+      IMPS_INBOUND_DIRECTORY: local-directory/inbound
+      IMPS_OUTBOUND_DIRECTORY: local-directory/outbound
+      SFI23_INBOUND_DIRECTORY: local-directory/inbound
 
   ffc-pay-batch-azurite:
     image: mcr.microsoft.com/azure-storage/azurite:3.23.0

@@ -14,6 +14,21 @@ projectRoot="$(a="/$0"; a=${a%/*}; a=${a:-.}; a=${a#/}/; cd "$a/.." || return; p
 
 cd "${projectRoot}"
 
+mkdir -p .ssh
+
+if [ ! -f .ssh/ssh_host_ed25519_key ]; then
+  echo "Generating ed25519 SSH keys"
+  ssh-keygen -t ed25519 -f .ssh/ssh_host_ed25519_key < /dev/null
+fi
+
+if [ ! -f .ssh/ssh_host_rsa_key ]; then
+  echo "Generating rsa SSH keys"
+  ssh-keygen -t rsa -b 4096 -f .ssh/ssh_host_rsa_key < /dev/null
+fi
+
+export SFTP_MANAGED_GATEWAY_PRIVATE_KEY=$(cat .ssh/ssh_host_rsa_key)
+export SFTP_CALLISTO_PRIVATE_KEY=$(cat .ssh/ssh_host_rsa_key)
+
 docker-compose down
 
 docker-compose \

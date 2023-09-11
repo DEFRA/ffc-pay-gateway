@@ -1,7 +1,9 @@
 const { getActiveTransfers } = require('./get-active-transfers')
-const { transferPendingFiles } = require('./transfer-pending-files')
+const { transferFiles: transferInboundFiles } = require('./inbound')
+const { transferFiles: transferOutboundFiles } = require('./outbound')
 
 module.exports = {
   getActiveTransfers,
-  transferPendingFiles
+  transferInboundFiles,
+  transferOutboundFiles
 }

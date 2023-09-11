@@ -7,13 +7,15 @@ const schema = Joi.object({
     host: Joi.string().required(),
     port: Joi.number().integer().default(22),
     username: Joi.string().required(),
-    password: Joi.string().required()
+    password: Joi.string().optional().allow(''),
+    privateKey: Joi.string().optional().allow('')
   }).required(),
   callisto: Joi.object({
     host: Joi.string().required(),
     port: Joi.number().integer().default(22),
     username: Joi.string().required(),
-    password: Joi.string().required()
+    password: Joi.string().optional().allow(''),
+    privateKey: Joi.string().optional().allow('')
   }).required()
 })
 
@@ -24,13 +26,15 @@ const config = {
     host: process.env.SFTP_MANAGED_GATEWAY_HOST,
     port: process.env.SFTP_MANAGED_GATEWAY_PORT,
     username: process.env.SFTP_MANAGED_GATEWAY_USERNAME,
-    password: process.env.SFTP_MANAGED_GATEWAY_PASSWORD
+    password: process.env.SFTP_MANAGED_GATEWAY_PASSWORD,
+    privateKey: process.env.SFTP_MANAGED_GATEWAY_PRIVATE_KEY
   },
   callisto: {
     host: process.env.SFTP_CALLISTO_HOST,
     port: process.env.SFTP_CALLISTO_PORT,
     username: process.env.SFTP_CALLISTO_USERNAME,
-    password: process.env.SFTP_CALLISTO_PASSWORD
+    password: process.env.SFTP_CALLISTO_PASSWORD,
+    privateKey: process.env.SFTP_CALLISTO_PRIVATE_KEY
   }
 }
 

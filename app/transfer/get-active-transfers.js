@@ -1,5 +1,7 @@
-const { sftpConfig, schemeConfig } = require('../config')
+const { sftpConfig } = require('../config')
+const { INBOUND, OUTBOUND } = require('../constants/directions')
 const { MANAGED_GATEWAY, CALLISTO } = require('../constants/servers')
+const { getSchemeTransfers } = require('./get-scheme-transfers')
 
 const getActiveTransfers = () => {
   const activeServers = []
@@ -9,10 +11,10 @@ const getActiveTransfers = () => {
   if (sftpConfig.callistoEnabled) {
     activeServers.push(CALLISTO)
   }
-  return Object.values(schemeConfig)
-    .filter(x => activeServers.includes(x.server))
-    .flatMap(({ fileMasks, ...properties }) => fileMasks
-      .map(fileMask => ({ ...properties, fileMask })))
+  const inboundTransfers = getSchemeTransfers(activeServers, INBOUND)
+  const outboundTransfers = getSchemeTransfers(activeServers, OUTBOUND)
+
+  return inboundTransfers.concat(outboundTransfers)
 }
 
 module.exports = {

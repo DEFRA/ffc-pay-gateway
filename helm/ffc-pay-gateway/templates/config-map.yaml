@@ -9,4 +9,44 @@ data:
   AZURE_STORAGE_CREATE_CONTAINERS: {{ quote .Values.container.azureStorageCreateContainers }}
   POLLING_INTERVAL: {{ quote .Values.container.pollingInterval }}
   POLLING_ACTIVE: {{ quote .Values.container.pollingActive }}
+  SFTP_MANAGED_GATEWAY_HOST: {{ quote .Values.container.sftpManagedGatewayHost }}
+  SFPT_MANAGED_GATEWAY_PORT: {{ quote .Values.container.sftpManagedGatewayPort }}
+  SFTP_CALLISTO_HOST: {{ quote .Values.container.sftpCallistoHost }}
+  SFTP_CALLISTO_PORT: {{ quote .Values.container.sftpCallistoPort }}
+  {{- if and (.Values.environmentCode) (eq (.Values.environmentCode | toString ) "prd") }}
+  SFI_INBOUND_DIRECTORY: {{ quote .Values.container.sfiInboundDirectory }}
+  SFI_PILOT_INBOUND_DIRECTORY: {{ quote .Values.container.sfiPilotInboundDirectory }}
+  LUMP_SUMS_INBOUND_DIRECTORY: {{ quote .Values.container.lumpSumsInboundDirectory }}
+  CS_INBOUND_DIRECTORY: {{ quote .Values.container.csInboundDirectory }}
+  BPS_INBOUND_DIRECTORY: {{ quote .Values.container.bpsInboundDirectory }}
+  ES_INBOUND_DIRECTORY: {{ quote .Values.container.esInboundDirectory }}
+  ES_OUTBOUND_DIRECTORY: {{ quote .Values.container.esOutboundDirectory }}
+  FC_INBOUND_DIRECTORY: {{ quote .Values.container.fcInboundDirectory }}
+  FC_OUTBOUND_DIRECTORY: {{ quote .Values.container.fcOutboundDirectory }}
+  SFI23_INBOUND_DIRECTORY: {{ quote .Values.container.sfi23InboundDirectory }}
+  {{ else }}
+  SFI_INBOUND_DIRECTORY: {{ .Values.container.sfiInboundDirectory | replace "cap_prod_data" "cap_test_data" }}
+  SFI_PILOT_INBOUND_DIRECTORY: {{ .Values.container.sfiPilotInboundDirectory | replace "cap_prod_data" "cap_test_data" }}
+  LUMP_SUMS_INBOUND_DIRECTORY: {{ .Values.container.lumpSumsInboundDirectory | replace "cap_prod_data" "cap_test_data" }}
+  CS_INBOUND_DIRECTORY: {{ .Values.container.csInboundDirectory | replace "cap_prod_data" "cap_test_data" }}
+  BPS_INBOUND_DIRECTORY: {{ .Values.container.bpsInboundDirectory | replace "cap_prod_data" "cap_test_data" }}
+  ES_INBOUND_DIRECTORY: {{ .Values.container.esInboundDirectory | replace "cap_prod_data" "cap_test_data" }}
+  ES_OUTBOUND_DIRECTORY: {{ .Values.container.esOutboundDirectory | replace "cap_prod_data" "cap_test_data" }}
+  FC_INBOUND_DIRECTORY: {{ .Values.container.fcInboundDirectory | replace "cap_prod_data" "cap_test_data" }}
+  FC_OUTBOUND_DIRECTORY: {{ .Values.container.fcOutboundDirectory | replace "cap_prod_data" "cap_test_data" }}
+  SFI23_INBOUND_DIRECTORY: {{ .Values.container.sfi23InboundDirectory | replace "cap_prod_data" "cap_test_data" }}
+  {{- end }}
+  IMPS_INBOUND_DIRECTORY: {{ quote .Values.container.impsInboundDirectory }}
+  IMPS_OUTBOUND_DIRECTORY: {{ quote .Values.container.impsOutboundDirectory }}
+  SFTP_MANAGED_GATEWAY_ENABLED: {{ quote .Values.container.sftpManagedGatewayEnabled }}
+  SFTP_CALLISTO_ENABLED: {{ quote .Values.container.sftpCallistoEnabled }}
+  SFI_ENABLED: {{ quote .Values.container.sfiEnabled }}
+  SFI_PILOT_ENABLED: {{ quote .Values.container.sfiPilotEnabled }}
+  LUMP_SUMS_ENABLED: {{ quote .Values.container.lumpSumsEnabled }}
+  CS_ENABLED: {{ quote .Values.container.csEnabled }}
+  BPS_ENABLED: {{ quote .Values.container.bpsEnabled }}
+  ES_ENABLED: {{ quote .Values.container.esEnabled }}
+  FC_ENABLED: {{ quote .Values.container.fcEnabled }}
+  IMPS_ENABLED: {{ quote .Values.container.impsEnabled }}
+  SFI23_ENABLED: {{ quote .Values.container.sfi23Enabled }}
 {{- end -}}

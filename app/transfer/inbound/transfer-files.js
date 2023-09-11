@@ -1,7 +1,7 @@
-const { getControlFiles } = require('../sftp')
+const { getControlFiles } = require('../../sftp')
 const { transferFile } = require('./transfer-file')
 
-const transferPendingFiles = async (transfer) => {
+const transferFiles = async (transfer) => {
   const controlFiles = await getControlFiles(transfer)
   for (const controlFile of controlFiles) {
     try {
@@ -13,5 +13,5 @@ const transferPendingFiles = async (transfer) => {
 }
 
 module.exports = {
-  transferPendingFiles
+  transferFiles
 }
