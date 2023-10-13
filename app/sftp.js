@@ -7,10 +7,18 @@ let callisto
 
 const connect = async () => {
   if (sftpConfig.managedGatewayEnabled) {
+    if (sftpConfig.debug) {
+      console.log('Connecting to Managed Gateway')
+      console.log(sftpConfig.managedGateway)
+    }
     managedGateway = new Client()
     await managedGateway.connect(sftpConfig.managedGateway)
   }
   if (sftpConfig.callistoEnabled) {
+    if (sftpConfig.debug) {
+      console.log('Connecting to Callisto')
+      console.log(sftpConfig.callisto)
+    }
     callisto = new Client()
     await callisto.connect(sftpConfig.callisto)
   }
