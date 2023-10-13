@@ -33,13 +33,13 @@ container:
   sftpManagedGatewayHost: managed-gateway
   sftpManagedGatewayPort: 22
   sftpManagedGatewayUsername: ffc
-  sftpManagedGatewayPassword: not-real
-  sftpManagedGatewayPrivateKey: not-real
+  sftpManagedGatewayPassword:
+  sftpManagedGatewayPrivateKey:
   sftpCallistoHost: callisto
   sftpCallistoPort: 22
   sftpCallistoUsername: ffc
-  sftpCallistoPassword: not-real
-  sftpCallistoPrivateKey: not-real
+  sftpCallistoPassword:
+  sftpCallistoPrivateKey:
   sfiInboundDirectory: /opt/cap_prod_data/DAX/out/int_725/
   sfiPilotInboundDirectory: /opt/cap_prod_data/DAX/out/int_725/
   lumpSumsInboundDirectory: /opt/cap_prod_data/DAX/out/int_725/
