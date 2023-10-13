@@ -1,6 +1,7 @@
 const Joi = require('joi')
 
 const schema = Joi.object({
+  debug: Joi.boolean().default(false),
   managedGatewayEnabled: Joi.boolean().default(true),
   callistoEnabled: Joi.boolean().default(true),
   managedGateway: Joi.object({
@@ -20,6 +21,7 @@ const schema = Joi.object({
 })
 
 const config = {
+  debug: process.env.SFTP_DEBUG,
   managedGatewayEnabled: process.env.SFTP_MANAGED_GATEWAY_ENABLED,
   callistoEnabled: process.env.SFTP_CALLISTO_ENABLED,
   managedGateway: {
