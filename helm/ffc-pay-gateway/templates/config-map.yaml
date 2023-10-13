@@ -9,6 +9,7 @@ data:
   AZURE_STORAGE_CREATE_CONTAINERS: {{ quote .Values.container.azureStorageCreateContainers }}
   POLLING_INTERVAL: {{ quote .Values.container.pollingInterval }}
   POLLING_ACTIVE: {{ quote .Values.container.pollingActive }}
+  SFTP_DEBUG: {{ quote .Values.container.sftpDebug }}
   SFTP_MANAGED_GATEWAY_HOST: {{ quote .Values.container.sftpManagedGatewayHost }}
   SFPT_MANAGED_GATEWAY_PORT: {{ quote .Values.container.sftpManagedGatewayPort }}
   SFTP_CALLISTO_HOST: {{ quote .Values.container.sftpCallistoHost }}
