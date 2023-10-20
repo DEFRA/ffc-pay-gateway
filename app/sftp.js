@@ -9,7 +9,7 @@ const connect = async () => {
   if (sftpConfig.managedGatewayEnabled) {
     if (sftpConfig.debug) {
       console.log('Connecting to Managed Gateway')
-      console.log(sftpConfig.managedGateway)
+      console.log({ ...sftpConfig.managedGateway, privateKey: 'HIDDEN' })
     }
     managedGateway = new Client()
     await managedGateway.connect(sftpConfig.managedGateway)
@@ -17,7 +17,7 @@ const connect = async () => {
   if (sftpConfig.callistoEnabled) {
     if (sftpConfig.debug) {
       console.log('Connecting to Callisto')
-      console.log(sftpConfig.callisto)
+      console.log({ ...sftpConfig.callisto, privateKey: 'HIDDEN' })
     }
     callisto = new Client()
     await callisto.connect(sftpConfig.callisto)

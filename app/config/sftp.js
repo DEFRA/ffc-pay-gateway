@@ -48,4 +48,14 @@ if (result.error) {
   throw new Error(`The SFTP config is invalid. ${result.error.message}`)
 }
 
+if (result.value.debug) {
+  result.value.managedGateway.debug = (message) => console.log(message)
+  result.value.callisto.debug = (message) => console.log(message)
+}
+
+if (process.env.NODE_ENV === 'production') {
+  result.value.managedGateway.algorithms = { kex: ['diffie-hellman-group1-sha1'] }
+  result.value.callisto.algorithms = { kex: ['diffie-hellman-group1-sha1'] }
+}
+
 module.exports = result.value
