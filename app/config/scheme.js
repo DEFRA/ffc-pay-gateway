@@ -112,7 +112,7 @@ const schema = Joi.object({
     name: Joi.string().default(DPS),
     fileMasks: Joi.object({
       inbound: Joi.array().items(Joi.string()).default([/^CTL_BGAN.*.OUT$/]),
-      outbound: Joi.array().items(Joi.string()).default([/^CTL_BGAN.*.ack$/]),
+      outbound: Joi.array().items(Joi.string()).default([/^CTL_BGAN.*.ack$/])
     }),
     server: Joi.string().default(CALLISTO),
     directories: Joi.object({
