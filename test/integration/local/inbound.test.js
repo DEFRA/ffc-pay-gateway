@@ -60,7 +60,11 @@ const {
   IMPS_DATA_FILENAME,
   IMPS_CONTROL_FILENAME,
   IMPS_DATA_FILENAME_PENDING,
-  IMPS_CONTROL_FILENAME_PENDING
+  IMPS_CONTROL_FILENAME_PENDING,
+  DPS_DATA_FILENAME,
+  DPS_CONTROL_FILENAME,
+  DPS_DATA_FILENAME_PENDING,
+  DPS_CONTROL_FILENAME_PENDING
 } = require('../../mocks/filenames')
 
 const { BlobServiceClient } = require('@azure/storage-blob')
@@ -277,5 +281,16 @@ describe('process inbound files', () => {
     const fileList = await getBlobs()
     expect(fileList.find(x => x === IMPS_DATA_FILENAME_PENDING)).toBeDefined()
     expect(fileList.find(x => x === IMPS_CONTROL_FILENAME_PENDING)).toBeDefined()
+  })
+
+  test('should transfer DPS data files to batch inbound location with pending filename', async () => {
+    await uploadFile(DPS_DATA_FILENAME)
+    await uploadFile(DPS_CONTROL_FILENAME)
+
+    await start()
+
+    const fileList = await getBlobs()
+    expect(fileList.find(x => x === DPS_DATA_FILENAME_PENDING)).toBeDefined()
+    expect(fileList.find(x => x === DPS_CONTROL_FILENAME_PENDING)).toBeDefined()
   })
 })

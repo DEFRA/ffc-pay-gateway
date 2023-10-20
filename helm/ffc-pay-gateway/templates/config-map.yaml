@@ -39,6 +39,8 @@ data:
   {{- end }}
   IMPS_INBOUND_DIRECTORY: {{ quote .Values.container.impsInboundDirectory }}
   IMPS_OUTBOUND_DIRECTORY: {{ quote .Values.container.impsOutboundDirectory }}
+  DPS_INBOUND_DIRECTORY: {{ quote .Values.container.dpsInboundDirectory }}
+  DPS_OUTBOUND_DIRECTORY: {{ quote .Values.container.dpsOutboundDirectory }}
   SFTP_MANAGED_GATEWAY_ENABLED: {{ quote .Values.container.sftpManagedGatewayEnabled }}
   SFTP_CALLISTO_ENABLED: {{ quote .Values.container.sftpCallistoEnabled }}
   SFI_ENABLED: {{ quote .Values.container.sfiEnabled }}
@@ -50,4 +52,5 @@ data:
   FC_ENABLED: {{ quote .Values.container.fcEnabled }}
   IMPS_ENABLED: {{ quote .Values.container.impsEnabled }}
   SFI23_ENABLED: {{ quote .Values.container.sfi23Enabled }}
+  DPS_ENABLED: {{ quote .Values.container.dpsEnabled }}
 {{- end -}}

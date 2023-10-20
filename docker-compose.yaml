@@ -29,6 +29,8 @@ services:
       IMPS_INBOUND_DIRECTORY: local-directory/inbound
       IMPS_OUTBOUND_DIRECTORY: local-directory/outbound
       SFI23_INBOUND_DIRECTORY: local-directory/inbound
+      DPS_INBOUND_DIRECTORY: local-directory/inbound
+      DPS_OUTBOUND_DIRECTORY: local-directory/outbound
 
   ffc-pay-batch-azurite:
     image: mcr.microsoft.com/azure-storage/azurite:3.23.0

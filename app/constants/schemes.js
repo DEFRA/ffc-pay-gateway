@@ -7,5 +7,6 @@ module.exports = {
   ES: 'ES',
   FC: 'FC',
   IMPS: 'IMPS',
-  SFI23: 'SFI23'
+  SFI23: 'SFI23',
+  DPS: 'DPS'
 }
