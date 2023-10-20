@@ -9,14 +9,16 @@ const schema = Joi.object({
     port: Joi.number().integer().default(22),
     username: Joi.string().required(),
     password: Joi.string().optional().allow(''),
-    privateKey: Joi.string().optional().allow('')
+    privateKey: Joi.string().optional().allow(''),
+    debug: Joi.boolean().default(false)
   }).required(),
   callisto: Joi.object({
     host: Joi.string().required(),
     port: Joi.number().integer().default(22),
     username: Joi.string().required(),
     password: Joi.string().optional().allow(''),
-    privateKey: Joi.string().optional().allow('')
+    privateKey: Joi.string().optional().allow(''),
+    debug: Joi.boolean().default(false)
   }).required()
 })
 
@@ -29,14 +31,16 @@ const config = {
     port: process.env.SFTP_MANAGED_GATEWAY_PORT,
     username: process.env.SFTP_MANAGED_GATEWAY_USERNAME,
     password: process.env.SFTP_MANAGED_GATEWAY_PASSWORD,
-    privateKey: process.env.SFTP_MANAGED_GATEWAY_PRIVATE_KEY
+    privateKey: process.env.SFTP_MANAGED_GATEWAY_PRIVATE_KEY,
+    debug: process.env.SFTP_DEBUG
   },
   callisto: {
     host: process.env.SFTP_CALLISTO_HOST,
     port: process.env.SFTP_CALLISTO_PORT,
     username: process.env.SFTP_CALLISTO_USERNAME,
     password: process.env.SFTP_CALLISTO_PASSWORD,
-    privateKey: process.env.SFTP_CALLISTO_PRIVATE_KEY
+    privateKey: process.env.SFTP_CALLISTO_PRIVATE_KEY,
+    debug: process.env.SFTP_DEBUG
   }
 }
 
