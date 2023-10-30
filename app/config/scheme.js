@@ -1,5 +1,5 @@
 const Joi = require('joi')
-const { SFI, SFI_PILOT, LUMP_SUMS, CS, BPS, ES, FC, IMPS, SFI23 } = require('../constants/schemes')
+const { SFI, SFI_PILOT, LUMP_SUMS, CS, BPS, ES, FC, IMPS, SFI23, DPS } = require('../constants/schemes')
 const { MANAGED_GATEWAY, CALLISTO } = require('../constants/servers')
 
 const schema = Joi.object({
@@ -105,6 +105,19 @@ const schema = Joi.object({
     server: Joi.string().default(MANAGED_GATEWAY),
     directories: Joi.object({
       inbound: Joi.string().required()
+    }).required(),
+    enabled: Joi.boolean().default(true)
+  }).required(),
+  dps: Joi.object({
+    name: Joi.string().default(DPS),
+    fileMasks: Joi.object({
+      inbound: Joi.array().items(Joi.string()).default([/^CTL_BGAN.*.OUT$/]),
+      outbound: Joi.array().items(Joi.string()).default([/^CTL_BGAN.*.ack$/])
+    }),
+    server: Joi.string().default(CALLISTO),
+    directories: Joi.object({
+      inbound: Joi.string().required(),
+      outbound: Joi.string().required()
     }).required(),
     enabled: Joi.boolean().default(true)
   }).required()
@@ -215,6 +228,19 @@ const config = {
       inbound: process.env.SFI23_INBOUND_DIRECTORY
     },
     enabled: process.env.SFI23_ENABLED
+  },
+  dps: {
+    name: process.env.DPS_NAME,
+    fileMasks: {
+      inbound: process.env.DPS_FILE_INBOUND_MASKS,
+      outbound: process.env.DPS_FILE_OUTBOUND_MASKS
+    },
+    server: process.env.DPS_SERVER,
+    directories: {
+      inbound: process.env.DPS_INBOUND_DIRECTORY,
+      outbound: process.env.DPS_OUTBOUND_DIRECTORY
+    },
+    enabled: process.env.DPS_ENABLED
   }
 }
 

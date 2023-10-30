@@ -1,6 +1,6 @@
 global.setTimeout = jest.fn()
 
-const { ES_RETURN_FILENAME, ES_RETURN_CONTROL_FILENAME, FC_RETURN_FILENAME, FC_RETURN_CONTROL_FILENAME, IMPS_RETURN_FILENAME, IMPS_RETURN_CONTROL_FILENAME } = require('../../mocks/filenames')
+const { ES_RETURN_FILENAME, ES_RETURN_CONTROL_FILENAME, FC_RETURN_FILENAME, FC_RETURN_CONTROL_FILENAME, IMPS_RETURN_FILENAME, IMPS_RETURN_CONTROL_FILENAME, DPS_RETURN_FILENAME, DPS_RETURN_CONTROL_FILENAME } = require('../../mocks/filenames')
 
 const { BlobServiceClient } = require('@azure/storage-blob')
 
@@ -80,5 +80,16 @@ describe('process outbound files', () => {
     const fileList = await getFiles()
     expect(fileList.find(x => x.name === IMPS_RETURN_FILENAME)).toBeDefined()
     expect(fileList.find(x => x.name === IMPS_RETURN_CONTROL_FILENAME)).toBeDefined()
+  })
+
+  test('should process DPS outbound files', async () => {
+    await uploadFile(DPS_RETURN_FILENAME)
+    await uploadFile(DPS_RETURN_CONTROL_FILENAME)
+
+    await start()
+
+    const fileList = await getFiles()
+    expect(fileList.find(x => x.name === DPS_RETURN_FILENAME)).toBeDefined()
+    expect(fileList.find(x => x.name === DPS_RETURN_CONTROL_FILENAME)).toBeDefined()
   })
 })
