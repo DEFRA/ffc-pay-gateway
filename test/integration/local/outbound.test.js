@@ -56,6 +56,7 @@ describe('process outbound files', () => {
 
     await start()
 
+    await connect()
     const fileList = await getFiles()
     expect(fileList.find(x => x.name === ES_RETURN_FILENAME)).toBeDefined()
     expect(fileList.find(x => x.name === ES_RETURN_CONTROL_FILENAME)).toBeDefined()
