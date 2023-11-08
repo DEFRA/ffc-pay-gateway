@@ -25,11 +25,15 @@ const connect = async () => {
 }
 
 const disconnect = async () => {
-  if (sftpConfig.managedGatewayEnabled) {
-    await managedGateway.end()
-  }
-  if (sftpConfig.callistoEnabled) {
-    await callisto.end()
+  try {
+    if (sftpConfig.managedGatewayEnabled) {
+      await managedGateway.end()
+    }
+    if (sftpConfig.callistoEnabled) {
+      await callisto.end()
+    }
+  } catch (err) {
+    console.error(`Unable to disconnect: ${err}`)
   }
 }
 

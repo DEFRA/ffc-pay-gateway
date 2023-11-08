@@ -1,6 +1,9 @@
 jest.useFakeTimers()
 jest.spyOn(global, 'setTimeout')
 
+jest.mock('../../../app/sftp')
+const { connect, disconnect } = require('../../../app/sftp')
+
 jest.mock('../../../app/polling/poll')
 const { poll } = require('../../../app/polling/poll')
 
@@ -23,6 +26,16 @@ describe('polling', () => {
     transferConfig.pollingActive = false
     await start()
     expect(poll).toHaveBeenCalledTimes(0)
+  })
+
+  test('should connect to sftp server before polling', async () => {
+    await start()
+    expect(connect).toHaveBeenCalledTimes(1)
+  })
+
+  test('should disconnect from sftp server after polling', async () => {
+    await start()
+    expect(disconnect).toHaveBeenCalledTimes(1)
   })
 
   test('should restart polling after polling interval if polling successful', async () => {
