@@ -35,14 +35,15 @@ const getFiles = async () => {
 
 describe('process outbound files', () => {
   beforeEach(async () => {
-    await connect()
     blobServiceClient = BlobServiceClient.fromConnectionString(storageConfig.connectionStr)
     daxContainer = blobServiceClient.getContainerClient(storageConfig.daxContainer)
 
     await daxContainer.deleteIfExists()
     await daxContainer.createIfNotExists()
 
+    await connect()
     await deleteSftpFiles()
+    await disconnect()
   })
 
   afterEach(async () => {
@@ -66,6 +67,7 @@ describe('process outbound files', () => {
 
     await start()
 
+    await connect()
     const fileList = await getFiles()
     expect(fileList.find(x => x.name === FC_RETURN_FILENAME)).toBeDefined()
     expect(fileList.find(x => x.name === FC_RETURN_CONTROL_FILENAME)).toBeDefined()
@@ -77,6 +79,7 @@ describe('process outbound files', () => {
 
     await start()
 
+    await connect()
     const fileList = await getFiles()
     expect(fileList.find(x => x.name === IMPS_RETURN_FILENAME)).toBeDefined()
     expect(fileList.find(x => x.name === IMPS_RETURN_CONTROL_FILENAME)).toBeDefined()
@@ -88,6 +91,7 @@ describe('process outbound files', () => {
 
     await start()
 
+    await connect()
     const fileList = await getFiles()
     expect(fileList.find(x => x.name === DPS_RETURN_FILENAME)).toBeDefined()
     expect(fileList.find(x => x.name === DPS_RETURN_CONTROL_FILENAME)).toBeDefined()
