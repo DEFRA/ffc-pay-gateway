@@ -1,6 +1,6 @@
 require('./insights').setup()
 require('log-timestamp')
-const { connect, disconnect } = require('./sftp')
+const { disconnect } = require('./sftp')
 const { start } = require('./polling')
 
 process.on(['SIGTERM', 'SIGINT'], async () => {
@@ -9,6 +9,5 @@ process.on(['SIGTERM', 'SIGINT'], async () => {
 })
 
 module.exports = (async () => {
-  await connect()
   await start()
 })()
