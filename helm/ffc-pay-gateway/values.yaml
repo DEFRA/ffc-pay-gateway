@@ -45,6 +45,7 @@ container:
   lumpSumsInboundDirectory: /opt/cap_prod_data/DAX/out/Int_725
   csInboundDirectory: /opt/cap_prod_data/DAX/out/int_716
   bpsInboundDirectory: /opt/cap_prod_data/DAX/out/int_539
+  fdmrInboundDirectory: /opt/cap_prod_data/DAX/out/int_539
   esInboundDirectory: /opt/cap_prod_data/genesis/in/int_072
   esOutboundDirectory: /opt/cap_prod_data/genesis/out/int_073
   fcInboundDirectory: /opt/cap_prod_data/glos/in/int_230
@@ -62,6 +63,7 @@ container:
   lumpSumsEnabled: true
   csEnabled: true
   bpsEnabled: true
+  fdmrEnabled: false
   esEnabled: true
   fcEnabled: true
   impsEnabled: true

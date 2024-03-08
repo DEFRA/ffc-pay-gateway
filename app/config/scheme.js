@@ -58,6 +58,17 @@ const schema = Joi.object({
     }).required(),
     enabled: Joi.boolean().default(true)
   }).required(),
+  fdmr: Joi.object({
+    name: Joi.string().default(BPS),
+    fileMasks: Joi.object({
+      inbound: Joi.array().items(Joi.string()).default([/^CTL_FDMR_\d{4}_AP_\d*.dat$/])
+    }),
+    server: Joi.string().default(MANAGED_GATEWAY),
+    directories: Joi.object({
+      inbound: Joi.string().required()
+    }).required(),
+    enabled: Joi.boolean().default(false)
+  }).required(),
   es: Joi.object({
     name: Joi.string().default(ES),
     fileMasks: Joi.object({
@@ -178,6 +189,17 @@ const config = {
       inbound: process.env.BPS_INBOUND_DIRECTORY
     },
     enabled: process.env.BPS_ENABLED
+  },
+  fdmr: {
+    name: process.env.FDMR_NAME,
+    fileMasks: {
+      inbound: process.env.FDMR_FILE_INBOUND_MASKS
+    },
+    server: process.env.FDMR_SERVER,
+    directories: {
+      inbound: process.env.FDMR_INBOUND_DIRECTORY
+    },
+    enabled: process.env.FDMR_ENABLED
   },
   es: {
     name: process.env.ES_NAME,
