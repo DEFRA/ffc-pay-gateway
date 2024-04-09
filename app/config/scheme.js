@@ -1,5 +1,5 @@
 const Joi = require('joi')
-const { SFI, SFI_PILOT, LUMP_SUMS, CS, BPS, ES, FC, IMPS, SFI23, DPS } = require('../constants/schemes')
+const { SFI, SFI_PILOT, LUMP_SUMS, CS, BPS, FDMR, ES, FC, IMPS, SFI23, DPS } = require('../constants/schemes')
 const { MANAGED_GATEWAY, CALLISTO } = require('../constants/servers')
 
 const schema = Joi.object({
@@ -59,7 +59,7 @@ const schema = Joi.object({
     enabled: Joi.boolean().default(true)
   }).required(),
   fdmr: Joi.object({
-    name: Joi.string().default(BPS),
+    name: Joi.string().default(FDMR),
     fileMasks: Joi.object({
       inbound: Joi.array().items(Joi.string()).default([/^CTL_FDMR_\d{4}_AP_\d*.dat$/])
     }),
