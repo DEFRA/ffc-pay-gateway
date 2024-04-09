@@ -103,7 +103,7 @@ const getBlobs = async () => {
 
 describe('process inbound files', () => {
   beforeEach(async () => {
-    await connect()
+    await connect(MANAGED_GATEWAY)
     blobServiceClient = BlobServiceClient.fromConnectionString(storageConfig.connectionStr)
     batchContainer = blobServiceClient.getContainerClient(storageConfig.batchContainer)
 
@@ -114,7 +114,7 @@ describe('process inbound files', () => {
   })
 
   afterEach(async () => {
-    await disconnect()
+    await disconnect(MANAGED_GATEWAY)
   })
 
   test('should transfer SFI data files to batch inbound location with pending filename', async () => {
