@@ -20,6 +20,7 @@ data:
   LUMP_SUMS_INBOUND_DIRECTORY: {{ quote .Values.container.lumpSumsInboundDirectory }}
   CS_INBOUND_DIRECTORY: {{ quote .Values.container.csInboundDirectory }}
   BPS_INBOUND_DIRECTORY: {{ quote .Values.container.bpsInboundDirectory }}
+  FDMR_INBOUND_DIRECTORY: {{ quote .Values.container.fdmrInboundDirectory }}
   ES_INBOUND_DIRECTORY: {{ quote .Values.container.esInboundDirectory }}
   ES_OUTBOUND_DIRECTORY: {{ quote .Values.container.esOutboundDirectory }}
   FC_INBOUND_DIRECTORY: {{ quote .Values.container.fcInboundDirectory }}
@@ -31,6 +32,7 @@ data:
   LUMP_SUMS_INBOUND_DIRECTORY: {{ .Values.container.lumpSumsInboundDirectory | replace "cap_prod_data" "cap_test_data" }}
   CS_INBOUND_DIRECTORY: {{ .Values.container.csInboundDirectory | replace "cap_prod_data" "cap_test_data" }}
   BPS_INBOUND_DIRECTORY: {{ .Values.container.bpsInboundDirectory | replace "cap_prod_data" "cap_test_data" }}
+  FDMR_INBOUND_DIRECTORY: {{ .Values.container.fdmrInboundDirectory | replace "cap_prod_data" "cap_test_data" }}
   ES_INBOUND_DIRECTORY: {{ .Values.container.esInboundDirectory | replace "cap_prod_data" "cap_test_data" }}
   ES_OUTBOUND_DIRECTORY: {{ .Values.container.esOutboundDirectory | replace "cap_prod_data" "cap_test_data" }}
   FC_INBOUND_DIRECTORY: {{ .Values.container.fcInboundDirectory | replace "cap_prod_data" "cap_test_data" }}
