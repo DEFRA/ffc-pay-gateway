@@ -10,7 +10,7 @@ const { storageConfig, schemeConfig } = require('../../../app/config')
 
 const { start } = require('../../../app/polling')
 
-const { MANAGED_GATEWAY } = require('../../../app/constants/servers')
+const { MANAGED_GATEWAY, CALLISTO } = require('../../../app/constants/servers')
 
 let blobServiceClient
 let daxContainer
@@ -28,8 +28,8 @@ const uploadFile = async (filename) => {
   await blockBlobClient.upload('content', 'content'.length)
 }
 
-const getFiles = async () => {
-  const client = getClient(MANAGED_GATEWAY)
+const getFiles = async (server) => {
+  const client = getClient(server)
   return client.list(schemeConfig.es.directories.outbound)
 }
 
@@ -41,13 +41,14 @@ describe('process outbound files', () => {
     await daxContainer.deleteIfExists()
     await daxContainer.createIfNotExists()
 
-    await connect()
+    await connect(MANAGED_GATEWAY)
     await deleteSftpFiles()
-    await disconnect()
+    await disconnect(MANAGED_GATEWAY)
   })
 
   afterEach(async () => {
-    await disconnect()
+    await disconnect(MANAGED_GATEWAY)
+    await disconnect(CALLISTO)
   })
 
   test('should process ES outbound files', async () => {
@@ -56,8 +57,8 @@ describe('process outbound files', () => {
 
     await start()
 
-    await connect()
-    const fileList = await getFiles()
+    await connect(MANAGED_GATEWAY)
+    const fileList = await getFiles(MANAGED_GATEWAY)
     expect(fileList.find(x => x.name === ES_RETURN_FILENAME)).toBeDefined()
     expect(fileList.find(x => x.name === ES_RETURN_CONTROL_FILENAME)).toBeDefined()
   })
@@ -68,8 +69,8 @@ describe('process outbound files', () => {
 
     await start()
 
-    await connect()
-    const fileList = await getFiles()
+    await connect(MANAGED_GATEWAY)
+    const fileList = await getFiles(MANAGED_GATEWAY)
     expect(fileList.find(x => x.name === FC_RETURN_FILENAME)).toBeDefined()
     expect(fileList.find(x => x.name === FC_RETURN_CONTROL_FILENAME)).toBeDefined()
   })
@@ -80,8 +81,8 @@ describe('process outbound files', () => {
 
     await start()
 
-    await connect()
-    const fileList = await getFiles()
+    await connect(CALLISTO)
+    const fileList = await getFiles(CALLISTO)
     expect(fileList.find(x => x.name === IMPS_RETURN_FILENAME)).toBeDefined()
     expect(fileList.find(x => x.name === IMPS_RETURN_CONTROL_FILENAME)).toBeDefined()
   })
@@ -92,8 +93,8 @@ describe('process outbound files', () => {
 
     await start()
 
-    await connect()
-    const fileList = await getFiles()
+    await connect(CALLISTO)
+    const fileList = await getFiles(CALLISTO)
     expect(fileList.find(x => x.name === DPS_RETURN_FILENAME)).toBeDefined()
     expect(fileList.find(x => x.name === DPS_RETURN_CONTROL_FILENAME)).toBeDefined()
   })

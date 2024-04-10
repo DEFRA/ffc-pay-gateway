@@ -1,12 +1,12 @@
 const Client = require('ssh2-sftp-client')
-const { MANAGED_GATEWAY } = require('./constants/servers')
+const { MANAGED_GATEWAY, CALLISTO } = require('./constants/servers')
 const { sftpConfig } = require('./config')
 
 let managedGateway
 let callisto
 
-const connect = async () => {
-  if (sftpConfig.managedGatewayEnabled) {
+const connect = async (server) => {
+  if (sftpConfig.managedGatewayEnabled && server === MANAGED_GATEWAY) {
     if (sftpConfig.debug) {
       console.log('Connecting to Managed Gateway')
       console.log({ ...sftpConfig.managedGateway, privateKey: 'HIDDEN' })
@@ -14,7 +14,7 @@ const connect = async () => {
     managedGateway = new Client()
     await managedGateway.connect(sftpConfig.managedGateway)
   }
-  if (sftpConfig.callistoEnabled) {
+  if (sftpConfig.callistoEnabled && server === CALLISTO) {
     if (sftpConfig.debug) {
       console.log('Connecting to Callisto')
       console.log({ ...sftpConfig.callisto, privateKey: 'HIDDEN' })
@@ -24,12 +24,12 @@ const connect = async () => {
   }
 }
 
-const disconnect = async () => {
+const disconnect = async (server) => {
   try {
-    if (sftpConfig.managedGatewayEnabled) {
+    if (sftpConfig.managedGatewayEnabled && server === MANAGED_GATEWAY) {
       await managedGateway.end()
     }
-    if (sftpConfig.callistoEnabled) {
+    if (sftpConfig.callistoEnabled && server === CALLISTO) {
       await callisto.end()
     }
   } catch (err) {
