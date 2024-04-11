@@ -8,7 +8,7 @@ const getDataFilename = (controlFilename, direction) => {
     return controlFilename.replace('.ctl', '.dat')
   }
   if (controlFilename.endsWith('.ctl') && controlFilename.startsWith('GENESIS')) {
-    return direction === INBOUND ? controlFilename.replace('.ctl', '.gne') : controlFilename.replace('.ctl', '.gni')
+    return direction === INBOUND ? controlFilename.replace('.ctl', '') : controlFilename.replace('.ctl', '')
   }
 }
 

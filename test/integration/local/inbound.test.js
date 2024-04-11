@@ -254,7 +254,6 @@ describe('process inbound files', () => {
     await uploadFile(ES_CONTROL_FILENAME)
 
     await start()
-
     const fileList = await getBlobs()
 
     expect(fileList.find(x => x === ES_DATA_FILENAME_PENDING)).toBeDefined()

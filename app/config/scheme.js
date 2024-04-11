@@ -72,8 +72,8 @@ const schema = Joi.object({
   es: Joi.object({
     name: Joi.string().default(ES),
     fileMasks: Joi.object({
-      inbound: Joi.array().items(Joi.string()).default([/^GENESISPayReq_\d{8}_\d{4}.ctl$/]),
-      outbound: Joi.array().items(Joi.string()).default([/^GENESISPayConf_\d{8}_\d{4}.ctl$/])
+      inbound: Joi.array().items(Joi.string()).default([/^GENESISPayReq_\d{8}_\d{4}.gne.ctl$/]),
+      outbound: Joi.array().items(Joi.string()).default([/^GENESISPayConf_\d{8}_\d{4}.gni.ctl$/])
     }),
     server: Joi.string().default(MANAGED_GATEWAY),
     directories: Joi.object({
