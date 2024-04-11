@@ -14,12 +14,12 @@ describe('get data filename', () => {
   })
 
   test('should return filename with .gne extension if inbound GENESIS control file', () => {
-    const result = getDataFilename('GENESIS_test.ctl', INBOUND)
+    const result = getDataFilename('GENESIS_test.gne.ctl', INBOUND)
     expect(result).toBe('GENESIS_test.gne')
   })
 
   test('should return filename with .gni extension if outbound GENESIS control file', () => {
-    const result = getDataFilename('GENESIS_test.ctl', OUTBOUND)
+    const result = getDataFilename('GENESIS_test.gni.ctl', OUTBOUND)
     expect(result).toBe('GENESIS_test.gni')
   })
 })
