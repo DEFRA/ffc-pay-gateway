@@ -1,3 +1,5 @@
+const { INBOUND } = require('../constants/directions')
+
 const getDataFilename = (controlFilename, direction) => {
   if (controlFilename.startsWith('CTL_')) {
     return controlFilename.replace('CTL_', '')
@@ -5,8 +7,11 @@ const getDataFilename = (controlFilename, direction) => {
   if (controlFilename.endsWith('.ctl') && controlFilename.startsWith('FCAP')) {
     return controlFilename.replace('.ctl', '.dat')
   }
-  if (controlFilename.endsWith('.ctl') && controlFilename.startsWith('GENESIS')) {
+  if (controlFilename.endsWith('.ctl') && controlFilename.startsWith('GENESIS') && direction === INBOUND) {
     return controlFilename.replace('.ctl', '')
+  }
+  if (controlFilename.endsWith('.ctl') && controlFilename.startsWith('GENESIS')) {
+    return controlFilename.replace('.ctl', '.gni')
   }
 }
 
