@@ -50,7 +50,11 @@ const deleteFile = async (transfer, filename) => {
 
 const putFile = async (transfer, filename, data) => {
   const client = getClient(transfer.server)
-  await client.put(Buffer.from(data), `${transfer.directory}/${filename}`)
+  await client.put(Buffer.from(data), `${transfer.directory}/${filename}`, {
+    writeStreamOptions: {
+      mode: 0o644
+    }
+  })
 }
 
 const getClient = (server) => {
