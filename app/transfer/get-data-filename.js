@@ -1,5 +1,3 @@
-const { INBOUND } = require('../constants/directions')
-
 const getDataFilename = (controlFilename, direction) => {
   if (controlFilename.startsWith('CTL_')) {
     return controlFilename.replace('CTL_', '')
