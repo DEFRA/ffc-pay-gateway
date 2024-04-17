@@ -98,4 +98,26 @@ describe('process outbound files', () => {
     expect(fileList.find(x => x.name === DPS_RETURN_FILENAME)).toBeDefined()
     expect(fileList.find(x => x.name === DPS_RETURN_CONTROL_FILENAME)).toBeDefined()
   })
+
+  test('should write files with correct file permission', async () => {
+    await uploadFile(ES_RETURN_FILENAME)
+    await uploadFile(ES_RETURN_CONTROL_FILENAME)
+
+    await start()
+
+    await connect(MANAGED_GATEWAY)
+    const fileList = await getFiles(MANAGED_GATEWAY)
+    expect(fileList.find(x =>
+      x.name === ES_RETURN_FILENAME &&
+      x.rights.user === 'rw' &&
+      x.rights.group === 'r' &&
+      x.rights.other === 'r'
+    )).toBeDefined()
+    expect(fileList.find(x =>
+      x.name === ES_RETURN_CONTROL_FILENAME &&
+      x.rights.user === 'rw' &&
+      x.rights.group === 'r' &&
+      x.rights.other === 'r'
+    )).toBeDefined()
+  })
 })
