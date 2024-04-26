@@ -1,5 +1,5 @@
 const Joi = require('joi')
-const { SFI, SFI_PILOT, LUMP_SUMS, CS, BPS, FDMR, ES, FC, IMPS, SFI23, DPS } = require('../constants/schemes')
+const { SFI, SFI_PILOT, LUMP_SUMS, CS, BPS, FDMR, ES, FC, IMPS, SFI23, DPS, DELINKED } = require('../constants/schemes')
 const { MANAGED_GATEWAY, CALLISTO } = require('../constants/servers')
 
 const schema = Joi.object({
@@ -129,6 +129,17 @@ const schema = Joi.object({
     directories: Joi.object({
       inbound: Joi.string().required(),
       outbound: Joi.string().required()
+    }).required(),
+    enabled: Joi.boolean().default(true)
+  }).required(),
+  delinked: Joi.object({
+    name: Joi.string().default(DELINKED),
+    fileMasks: Joi.object({
+      inbound: Joi.array().items(Joi.string()).default([/^CTL_SITIDP\d{4}_AP_\d*.dat$/, /^CTL_SITIDP\d{4}_AP_\d*.txt$/])
+    }),
+    server: Joi.string().default(MANAGED_GATEWAY),
+    directories: Joi.object({
+      inbound: Joi.string().required()
     }).required(),
     enabled: Joi.boolean().default(true)
   }).required()
@@ -263,6 +274,17 @@ const config = {
       outbound: process.env.DPS_OUTBOUND_DIRECTORY
     },
     enabled: process.env.DPS_ENABLED
+  },
+  delinked: {
+    name: process.env.DELINKED_NAME,
+    fileMasks: {
+      inbound: process.env.DELINKED_FILE_INBOUND_MASKS
+    },
+    server: process.env.DELINKED_SERVER,
+    directories: {
+      inbound: process.env.DELINKED_INBOUND_DIRECTORY
+    },
+    enabled: process.env.DELINKED_ENABLED
   }
 }
 

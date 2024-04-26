@@ -55,6 +55,7 @@ container:
   sfi23InboundDirectory: /opt/cap_prod_data/DAX/out/Int_725
   dpsInboundDirectory: /app/DAX_interface/DPS/outbound
   dpsOutboundDirectory: /app/DAX_interface/DAX/inbound
+  delinkedInboundDirectory: /opt/cap_prod_data/DAX/out/Int_725
   sftpDebug: false
   sftpManagedGatewayEnabled: true
   sftpCallistoEnabled: true
@@ -69,6 +70,7 @@ container:
   impsEnabled: true
   sfi23Enabled: true
   dpsEnabled: true
+  delinkedEnabled: true
 
 aadPodIdentity: true
 

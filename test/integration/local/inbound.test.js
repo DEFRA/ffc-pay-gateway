@@ -64,7 +64,15 @@ const {
   DPS_DATA_FILENAME,
   DPS_CONTROL_FILENAME,
   DPS_DATA_FILENAME_PENDING,
-  DPS_CONTROL_FILENAME_PENDING
+  DPS_CONTROL_FILENAME_PENDING,
+  DELINKED_DATA_FILENAME,
+  DELINKED_CONTROL_FILENAME,
+  DELINKED_DATA_FILENAME_PENDING,
+  DELINKED_CONTROL_FILENAME_PENDING,
+  DELINKED_CHECKSUM_FILENAME,
+  DELINKED_CHECKSUM_CONTROL_FILENAME,
+  DELINKED_CHECKSUM_FILENAME_PENDING,
+  DELINKED_CHECKSUM_CONTROL_FILENAME_PENDING
 } = require('../../mocks/filenames')
 
 const { BlobServiceClient } = require('@azure/storage-blob')
@@ -291,5 +299,27 @@ describe('process inbound files', () => {
     const fileList = await getBlobs()
     expect(fileList.find(x => x === DPS_DATA_FILENAME_PENDING)).toBeDefined()
     expect(fileList.find(x => x === DPS_CONTROL_FILENAME_PENDING)).toBeDefined()
+  })
+
+  test('should transfer delinked data files to batch inbound location with pending filename', async () => {
+    await uploadFile(DELINKED_DATA_FILENAME)
+    await uploadFile(DELINKED_CONTROL_FILENAME)
+
+    await start()
+
+    const fileList = await getBlobs()
+    expect(fileList.find(x => x === DELINKED_DATA_FILENAME_PENDING)).toBeDefined()
+    expect(fileList.find(x => x === DELINKED_CONTROL_FILENAME_PENDING)).toBeDefined()
+  })
+
+  test('should transfer delinked checksum files to batch inbound location with pending filename', async () => {
+    await uploadFile(DELINKED_CHECKSUM_FILENAME)
+    await uploadFile(DELINKED_CHECKSUM_CONTROL_FILENAME)
+
+    await start()
+
+    const fileList = await getBlobs()
+    expect(fileList.find(x => x === DELINKED_CHECKSUM_FILENAME_PENDING)).toBeDefined()
+    expect(fileList.find(x => x === DELINKED_CHECKSUM_CONTROL_FILENAME_PENDING)).toBeDefined()
   })
 })

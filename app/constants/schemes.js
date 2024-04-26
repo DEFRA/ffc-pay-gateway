@@ -9,5 +9,6 @@ module.exports = {
   FC: 'FC',
   IMPS: 'IMPS',
   SFI23: 'SFI23',
-  DPS: 'DPS'
+  DPS: 'DPS',
+  DELINKED: 'DP'
 }
