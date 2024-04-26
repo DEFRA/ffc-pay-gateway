@@ -26,7 +26,7 @@ data:
   FC_INBOUND_DIRECTORY: {{ quote .Values.container.fcInboundDirectory }}
   FC_OUTBOUND_DIRECTORY: {{ quote .Values.container.fcOutboundDirectory }}
   SFI23_INBOUND_DIRECTORY: {{ quote .Values.container.sfi23InboundDirectory }}
-  DELINKED_INBOUND_DIRECTORY: {{ quote .Values.container.sfi23InboundDirectory }}
+  DELINKED_INBOUND_DIRECTORY: {{ quote .Values.container.delinkedInboundDirectory }}
   {{ else }}
   SFI_INBOUND_DIRECTORY: {{ .Values.container.sfiInboundDirectory | replace "cap_prod_data" "cap_test_data" }}
   SFI_PILOT_INBOUND_DIRECTORY: {{ .Values.container.sfiPilotInboundDirectory | replace "cap_prod_data" "cap_test_data" }}
