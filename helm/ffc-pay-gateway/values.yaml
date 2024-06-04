@@ -54,7 +54,7 @@ container:
   impsOutboundDirectory: /app/DAX_interface/CFI/inbound
   sfi23InboundDirectory: /opt/cap_prod_data/DAX/out/Int_725
   dpsInboundDirectory: /app/DAX_interface/DPS/outbound
-  dpsOutboundDirectory: /app/DAX_interface/DAX/inbound
+  dpsOutboundDirectory: /app/DAX_interface/DPS/inbound
   delinkedInboundDirectory: /opt/cap_prod_data/DAX/out/Int_725
   sftpDebug: false
   sftpManagedGatewayEnabled: true
