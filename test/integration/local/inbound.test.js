@@ -72,7 +72,15 @@ const {
   DELINKED_CHECKSUM_FILENAME,
   DELINKED_CHECKSUM_CONTROL_FILENAME,
   DELINKED_CHECKSUM_FILENAME_PENDING,
-  DELINKED_CHECKSUM_CONTROL_FILENAME_PENDING
+  DELINKED_CHECKSUM_CONTROL_FILENAME_PENDING,
+  SFI_EXPANDED_DATA_FILENAME,
+  SFI_EXPANDED_CONTROL_FILENAME,
+  SFI_EXPANDED_DATA_FILENAME_PENDING,
+  SFI_EXPANDED_CONTROL_FILENAME_PENDING,
+  SFI_EXPANDED_CHECKSUM_FILENAME,
+  SFI_EXPANDED_CHECKSUM_CONTROL_FILENAME,
+  SFI_EXPANDED_CHECKSUM_FILENAME_PENDING,
+  SFI_EXPANDED_CHECKSUM_CONTROL_FILENAME_PENDING
 } = require('../../mocks/filenames')
 
 const { BlobServiceClient } = require('@azure/storage-blob')
@@ -321,5 +329,27 @@ describe('process inbound files', () => {
     const fileList = await getBlobs()
     expect(fileList.find(x => x === DELINKED_CHECKSUM_FILENAME_PENDING)).toBeDefined()
     expect(fileList.find(x => x === DELINKED_CHECKSUM_CONTROL_FILENAME_PENDING)).toBeDefined()
+  })
+
+  test('should transfer sfi expanded offer data files to batch inbound location with pending filename', async () => {
+    await uploadFile(SFI_EXPANDED_DATA_FILENAME)
+    await uploadFile(SFI_EXPANDED_CONTROL_FILENAME)
+
+    await start()
+
+    const fileList = await getBlobs()
+    expect(fileList.find(x => x === SFI_EXPANDED_DATA_FILENAME_PENDING)).toBeDefined()
+    expect(fileList.find(x => x === SFI_EXPANDED_CONTROL_FILENAME_PENDING)).toBeDefined()
+  })
+
+  test('should transfer sfi expanded offer checksum files to batch inbound location with pending filename', async () => {
+    await uploadFile(SFI_EXPANDED_CHECKSUM_FILENAME)
+    await uploadFile(SFI_EXPANDED_CHECKSUM_CONTROL_FILENAME)
+
+    await start()
+
+    const fileList = await getBlobs()
+    expect(fileList.find(x => x === SFI_EXPANDED_CHECKSUM_FILENAME_PENDING)).toBeDefined()
+    expect(fileList.find(x => x === SFI_EXPANDED_CHECKSUM_CONTROL_FILENAME_PENDING)).toBeDefined()
   })
 })

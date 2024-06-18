@@ -27,6 +27,7 @@ data:
   FC_OUTBOUND_DIRECTORY: {{ quote .Values.container.fcOutboundDirectory }}
   SFI23_INBOUND_DIRECTORY: {{ quote .Values.container.sfi23InboundDirectory }}
   DELINKED_INBOUND_DIRECTORY: {{ quote .Values.container.delinkedInboundDirectory }}
+  SFI_EXPANDED_INBOUND_DIRECTORY: {{ quote .Values.container.sfiExpandedInboundDirectory }}
   {{ else }}
   SFI_INBOUND_DIRECTORY: {{ .Values.container.sfiInboundDirectory | replace "cap_prod_data" "cap_test_data" }}
   SFI_PILOT_INBOUND_DIRECTORY: {{ .Values.container.sfiPilotInboundDirectory | replace "cap_prod_data" "cap_test_data" }}
@@ -40,6 +41,7 @@ data:
   FC_OUTBOUND_DIRECTORY: {{ .Values.container.fcOutboundDirectory | replace "cap_prod_data" "cap_test_data" }}
   SFI23_INBOUND_DIRECTORY: {{ .Values.container.sfi23InboundDirectory | replace "cap_prod_data" "cap_test_data" }}
   DELINKED_INBOUND_DIRECTORY: {{ .Values.container.delinkedInboundDirectory | replace "cap_prod_data" "cap_test_data" }}
+  SFI_EXPANDED_INBOUND_DIRECTORY: {{ quote .Values.container.sfiExpandedInboundDirectory | replace "cap_prod_data" "cap_test_data" }}
   {{- end }}
   IMPS_INBOUND_DIRECTORY: {{ quote .Values.container.impsInboundDirectory }}
   IMPS_OUTBOUND_DIRECTORY: {{ quote .Values.container.impsOutboundDirectory }}
@@ -58,4 +60,5 @@ data:
   SFI23_ENABLED: {{ quote .Values.container.sfi23Enabled }}
   DPS_ENABLED: {{ quote .Values.container.dpsEnabled }}
   DELINKED_ENABLED: {{ quote .Values.container.delinkedEnabled }}
+  SFI_EXPANDED_ENABLED: {{ quote .Values.container.sfiExpandedEnabled }}
 {{- end -}}
