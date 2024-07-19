@@ -86,7 +86,7 @@ const schema = Joi.object({
     name: Joi.string().default(FC),
     fileMasks: Joi.object({
       inbound: Joi.array().items(Joi.string()).default([/^FCAP_\d{4}_\d*\.ctl$/]),
-      outbound: Joi.array().items(Joi.string()).default([/^FCAP_\d{4}_RPA_\d*\.ctl$/])
+      outbound: Joi.array().items(Joi.string()).default([/^FCAP_\d{4}_RPA_\d*\.dat.ctl$/])
     }),
     server: Joi.string().default(MANAGED_GATEWAY),
     directories: Joi.object({
