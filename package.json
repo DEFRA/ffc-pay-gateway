@@ -22,7 +22,7 @@
   "dependencies": {
     "@azure/identity": "4.2.1",
     "@azure/storage-blob": "12.13.0",
-    "applicationinsights": "2.5.1",
+    "applicationinsights": "2.9.5",
     "joi": "17.6.3",
     "log-timestamp": "0.3.0",
     "ssh2-sftp-client": "9.1.0"
