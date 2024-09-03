@@ -29,9 +29,9 @@ fi
 export SFTP_MANAGED_GATEWAY_PRIVATE_KEY=$(cat .ssh/ssh_host_rsa_key)
 export SFTP_CALLISTO_PRIVATE_KEY=$(cat .ssh/ssh_host_rsa_key)
 
-docker-compose down
+docker compose down
 
-docker-compose \
+docker compose \
   -f docker-compose.yaml \
   -f docker-compose.override.yaml \
   -f docker-compose.link.yaml \
