@@ -36,7 +36,7 @@ services:
       SFI_EXPANDED_INBOUND_DIRECTORY: local-directory/inbound
 
   ffc-pay-batch-azurite:
-    image: mcr.microsoft.com/azure-storage/azurite:3.23.0
+    image: mcr.microsoft.com/azure-storage/azurite:3.32.0
     command: "azurite-blob --loose --blobHost 0.0.0.0"
     labels:
       com.docker.compose.pay.role: ffc-pay-batch-azurite
