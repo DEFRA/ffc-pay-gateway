@@ -28,7 +28,7 @@
     "ssh2-sftp-client": "9.1.0"
   },
   "devDependencies": {
-    "jest": "27.5.1",
+    "jest": "29.6.4",
     "jest-junit": "13.0.0",
     "nodemon": "3.0.1",
     "standard": "16.0.4"
