@@ -8,7 +8,7 @@ image: ffc-pay-gateway
 labels: {}
 
 appInsights:
-  key:
+  connectionString:
 
 containerConfigMap:
   name: ffc-pay-gateway-config-map
