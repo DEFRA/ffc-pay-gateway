@@ -7,7 +7,7 @@ services:
     container_name: ffc-pay-gateway
     environment:
       APPINSIGHTS_CLOUDROLE: ffc-pay-gateway-local
-      APPINSIGHTS_INSTRUMENTATIONKEY: ${APPINSIGHTS_INSTRUMENTATIONKEY}
+      APPINSIGHTS_CONNECTIONSTRING: ${APPINSIGHTS_CONNECTIONSTRING}
       AZURE_STORAGE_ACCOUNT_NAME: ${AZURE_STORAGE_ACCOUNT_NAME:-devstoreaccount1}
       AZURE_STORAGE_USE_CONNECTION_STRING: "true"
       AZURE_STORAGE_CREATE_CONTAINERS: "true"
@@ -36,7 +36,7 @@ services:
       SFI_EXPANDED_INBOUND_DIRECTORY: local-directory/inbound
 
   ffc-pay-batch-azurite:
-    image: mcr.microsoft.com/azure-storage/azurite:3.23.0
+    image: mcr.microsoft.com/azure-storage/azurite:3.32.0
     command: "azurite-blob --loose --blobHost 0.0.0.0"
     labels:
       com.docker.compose.pay.role: ffc-pay-batch-azurite
