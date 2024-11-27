@@ -53,11 +53,8 @@ if (result.value.debug) {
   result.value.callisto.debug = (message) => console.log(message)
 }
 
-if (['test', 'production'].includes(process.env.NODE_ENV)) {
-  result.value.callisto.algorithms = { kex: ['diffie-hellman-group1-sha1'] }
-}
-
 if (process.env.NODE_ENV === 'production') {
+  result.value.callisto.algorithms = { kex: ['diffie-hellman-group14-sha256'] }
   result.value.managedGateway.algorithms = { kex: ['diffie-hellman-group1-sha1'] }
 }
 
