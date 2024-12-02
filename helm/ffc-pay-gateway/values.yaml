@@ -50,11 +50,11 @@ container:
   fdmrInboundDirectory: /opt/cap_prod_data/DAX/out/int_539
   fcInboundDirectory: /opt/cap_prod_data/glos/in/int_230
   fcOutboundDirectory: /opt/cap_prod_data/glos/out/int_231
-  impsInboundDirectory: /app/DAX_interface/CFI/outbound
-  impsOutboundDirectory: /app/DAX_interface/CFI/inbound
+  impsInboundDirectory: D:\app\DAX_interface\CFI\outbound
+  impsOutboundDirectory: D:\app\DAX_interface\CFI\inbound
   sfi23InboundDirectory: /opt/cap_prod_data/DAX/out/Int_725
-  dpsInboundDirectory: /app/DAX_interface/DPS/outbound
-  dpsOutboundDirectory: /app/DAX_interface/DPS/inbound
+  dpsInboundDirectory: D:\app\DAX_interface\DPS\outbound
+  dpsOutboundDirectory: D:\app\DAX_interface\DPS\inbound
   delinkedInboundDirectory: /opt/cap_prod_data/DAX/out/Int_725
   sfiExpandedInboundDirectory: /opt/cap_prod_data/DAX/out/Int_725
   sftpDebug: false
