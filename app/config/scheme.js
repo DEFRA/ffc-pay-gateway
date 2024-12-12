@@ -98,8 +98,8 @@ const schema = Joi.object({
   imps: Joi.object({
     name: Joi.string().default(IMPS),
     fileMasks: Joi.object({
-      inbound: Joi.array().items(Joi.string()).default([/^CTL_FIN_IMPS_A[P|R]_\d{4}.INT$/]),
-      outbound: Joi.array().items(Joi.string()).default([/^CTL_RET_IMPS_A[P|R]_\d{4}.INT$/])
+      inbound: Joi.array().items(Joi.string()).default([/^CTL_FIN_IMPS_A[P|R]_\d*.INT$/]),
+      outbound: Joi.array().items(Joi.string()).default([/^CTL_RET_IMPS_A[P|R]_\d*.INT$/])
     }),
     server: Joi.string().default(CALLISTO),
     directories: Joi.object({
