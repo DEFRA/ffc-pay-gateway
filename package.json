@@ -1,6 +1,6 @@
 {
   "name": "ffc-pay-gateway",
-  "version": "1.4.15",
+  "version": "1.4.16",
   "description": "Managed Gateway integration",
   "homepage": "https://github.com/DEFRA/ffc-pay-gateway",
   "main": "app/index.js",
@@ -16,7 +16,8 @@
   "author": "Defra",
   "contributors": [
     "John Watson <john.watson1@defra.gov.uk>",
-    "Sam Plackett <samuel.plackett@eviden.com>"
+    "Sam Plackett <samuel.plackett@eviden.com>",
+    "Leigh Godson <leigh.godson.external@eviden.com>"
   ],
   "license": "OGL-UK-3.0",
   "dependencies": {
