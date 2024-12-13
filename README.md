@@ -43,7 +43,7 @@ Container images are built using Docker Compose, with the same images used to ru
 
 By default, the start script will build (or rebuild) images so there will
 rarely be a need to build images manually. However, this can be achieved
-through the Docker Compose;
+through the Docker Compose
 [build](https://docs.docker.com/compose/reference/build/) command:
 
 ```
