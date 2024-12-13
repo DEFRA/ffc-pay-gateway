@@ -6,19 +6,18 @@ This service is part of the [Payment Hub](https://github.com/DEFRA/ffc-pay-core)
 
 ## Validation
 
-There are four files that make up a payment batch.  All four are required before the batch can be validated.
+There are four files that make up a payment batch. All four are required before the batch can be validated.
 
 ### Required files
 
-| File | Description | Mask |
-| --- | --- | --- |
+| File               | Description                               | Mask                 |
+| ------------------ | ----------------------------------------- | -------------------- |
 | Payment batch file | Contains a collection of payment requests | `PENDING_{name}.dat` |
 
 - payment batch file, `{name}.dat`
 - control file, `CTL_{name}.dat`
 - checksum file, `{name}.txt`
 - checksum control file, `CTL_{name}.txt`
-
 
 On successful validation, `PENDING_` is added to all filenames and all but the payment batch file are moved to the `inbound` virtual directory.
 
@@ -28,6 +27,7 @@ On successful validation, `PENDING_` is added to all filenames and all but the p
 - Docker Compose
 
 Optional:
+
 - Kubernetes
 - Helm
 
