@@ -37,7 +37,7 @@ jobs:
           git config commit.gpgsign true
           git config gpg.format ssh
           git config user.signingkey "$ACTIONS_SIGNING_KEY"
-          echo -e "5\ny\n" | gpg --command-fd 0 --expert --edit-key $ACTIONS_SIGNING_KEY trust
+          echo -e "5\ny\n" | gpg --batch --yes --command-fd 0 --expert --edit-key $ACTIONS_SIGNING_KEY trust
 
         env:
           ACTIONS_PRIVATE_KEY: ${{ secrets.ACTIONS_PRIVATE_KEY }}
