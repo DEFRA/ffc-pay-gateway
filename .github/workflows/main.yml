@@ -28,22 +28,23 @@ jobs:
 
       - name: Configure Git for signed commits
         run: |
-          git config user.name "GitHub Actions Bot"
+          git config user.name "DEFRA FFC Pay Version Bump Bot"
           git config user.email "samplackett@users.noreply.github.com"
           git config commit.gpgsign true
           git config gpg.format ssh
           git config user.signingkey ${{ secrets.ACTIONS_PRIVATE_KEY }}
+
           echo "$ACTIONS_PRIVATE_KEY" | gpg --batch --import
-          echo "$ACTIONS_PASSPHRASE" | gpg --batch --pinentry-mode loopback --passphrase-fd 0 --list-secret-keys --keyid-format LONG
         env:
-          ACTIONS_IDENTITY: ${{ secrets.ACTIONS_PRIVATE_KEY }}
-          ACTIONS_PASSPHRASE: ${{ secrets.ACTIONS_PASSPHRASE }}
+          ACTIONS_PRIVATE_KEY: ${{ secrets.ACTIONS_PRIVATE_KEY }}
 
       - name: Bump NPM version (patch)
         run: npm version patch
 
-      - name: Push version bump
+      - name: Commit and push version bump
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: |
+          git add -A
+          git commit --amend --no-edit --gpg-sign
           git push origin HEAD:${{ github.head_ref }} --follow-tags
