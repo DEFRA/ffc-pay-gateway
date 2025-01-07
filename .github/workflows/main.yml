@@ -33,20 +33,24 @@ jobs:
           GPG_PRIVATE_KEY: ${{ secrets.GPG_PRIVATE_KEY }}
           GPG_KEY_ID: ${{ secrets.GPG_KEY_ID }}
 
-      - name: Commit changes with GPG signing
+      - name: Check if package-lock.json has changes
         run: |
-          git add package-lock.json
-          echo "$GPG_PASSPHRASE" | gpg --batch --yes --pinentry-mode loopback --passphrase-fd 0 --sign-key ${{ secrets.GPG_KEY_ID }}
-          git commit -S -m "chore: update package-lock.json"
+          git add package-lock.json || true
+          if git diff --cached --quiet; then
+            echo "No changes to commit."
+          else
+            echo "Committing changes..."
+            git commit -S -m "chore: update package-lock.json"
+          fi
 
       - name: Bump version number
         run: |
-          npm version patch
+          npm version patch --sign-git-tag || true
         env:
           GPG_TTY: $(tty)
 
       - name: Push changes
         run: |
-          git push
+          git push --set-upstream origin ${{ github.head_ref }} --force
         env:
           GPG_TTY: $(tty)
