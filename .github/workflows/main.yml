@@ -40,9 +40,7 @@ jobs:
         run: |
           npm version patch
 
-      - name: Commit version bump with GPG sign
+      - name: Push version bump and commit with GPG sign
         run: |
-          git add package.json
-          git add package-lock.json
-          git commit -S -am "chore: bump version"
           git push --set-upstream origin ${{ github.head_ref }} --force
+          git push --tags
