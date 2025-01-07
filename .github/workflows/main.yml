@@ -47,5 +47,5 @@ jobs:
           jq ".version = \"$NEW_VERSION\"" package.json > temp.json && mv temp.json package.json
           git add package.json
           git commit -m "Bump version to $NEW_VERSION"
-          git push origin HEAD:${{ github.head_ref }} --follow-tags
+          git push origin HEAD:${{ github.head_ref }}
 
