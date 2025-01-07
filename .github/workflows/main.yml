@@ -50,9 +50,11 @@ jobs:
 
       - name: Bump version number
         run: |
-          npm version patch --sign-git-tag || true
+          echo "$GPG_PASSPHRASE" | gpg --batch --yes --passphrase-fd 0 --pinentry-mode loopback --sign-key ${{ secrets.GPG_KEY_ID }}
+          npm version patch --sign-git-tag
         env:
           GPG_TTY: $(tty)
+          GPG_PASSPHRASE: ${{ secrets.GPG_PASSPHRASE }}
 
       - name: Push changes
         run: |
