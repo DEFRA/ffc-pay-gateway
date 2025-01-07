@@ -32,9 +32,9 @@ jobs:
           git config user.email "actions@github.com"
           git config commit.gpgsign true
           git config gpg.format ssh
-          git config user.signingkey ${{ secrets.GITHUB_ACTIONS_PRIVATE_KEY }}
+          git config user.signingkey ${{ secrets.ACTIONS_PRIVATE_KEY }}
         env:
-          ACTIONS_IDENTITY: ${{ secrets.GITHUB_ACTIONS_PRIVATE_KEY }}
+          ACTIONS_IDENTITY: ${{ secrets.ACTIONS_PRIVATE_KEY }}
 
       - name: Bump NPM version (patch)
         run: npm version patch
