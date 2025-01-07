@@ -20,18 +20,16 @@ jobs:
       - name: Install dependencies
         run: npm install
 
-      - name: Debug GPG Key Import
-        run: |
-          echo "$GPG_PRIVATE_KEY" | gpg --batch --import || echo "Key import failed"
-          gpg --list-keys || echo "No keys found"
-        env:
-          GPG_PRIVATE_KEY: ${{ secrets.GPG_PRIVATE_KEY }}
-
       - name: Set up GPG keys for signing
         run: |
           echo "$GPG_PRIVATE_KEY" | gpg --batch --import
-          echo "user.email=samplackett@users.noreply.github.com" >> ~/.gitconfig
-          echo "user.name=DEFRA FFC Pay Version Bump Bot" >> ~/.gitconfig
+          git config --global user.signingkey ${{ secrets.GPG_KEY_ID }}
+          git config --global commit.gpgsign true
+          git config --global user.email "samplackett@users.noreply.github.com"
+          git config --global user.name "DEFRA FFC Pay Version Bump Bot"
+        env:
+          GPG_PRIVATE_KEY: ${{ secrets.GPG_PRIVATE_KEY }}
+          GPG_KEY_ID: ${{ secrets.GPG_KEY_ID }}
 
       - name: Commit dependency updates with GPG sign
         run: |
@@ -46,6 +44,3 @@ jobs:
         run: |
           git commit -S -am "chore: bump version"
           git push --set-upstream origin ${{ github.head_ref }} --force
-        env:
-          GPG_PRIVATE_KEY: ${{ secrets.GPG_PRIVATE_KEY }}
-          GPG_KEY_ID: ${{ secrets.GPG_KEY_ID }}
