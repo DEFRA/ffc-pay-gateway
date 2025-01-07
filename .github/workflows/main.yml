@@ -29,7 +29,7 @@ jobs:
 
       - name: Configure Git for signed commits
         run: |
-          cd /home/runner/work/ffc-pay-gateway/ffc-pay-gateway
+          cd /home/runner/work/ffc-pay-gateway/ffc-pay-gateway/
           echo "$ACTIONS_PRIVATE_KEY" | gpg --batch --import
           git config --global core.longpaths true
           git config user.name "DEFRA FFC Pay Version Bump Bot"
