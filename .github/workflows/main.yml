@@ -20,6 +20,13 @@ jobs:
       - name: Install dependencies
         run: npm install
 
+      - name: Debug GPG Key Import
+        run: |
+          echo "$GPG_PRIVATE_KEY" | gpg --batch --import || echo "Key import failed"
+          gpg --list-keys || echo "No keys found"
+        env:
+          GPG_PRIVATE_KEY: ${{ secrets.GPG_PRIVATE_KEY }}
+
       - name: Set up GPG keys for signing
         run: |
           echo "$GPG_PRIVATE_KEY" | gpg --batch --import
