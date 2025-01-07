@@ -42,5 +42,7 @@ jobs:
 
       - name: Commit version bump with GPG sign
         run: |
+          git add package.json
+          git add package-lock.json
           git commit -S -am "chore: bump version"
           git push --set-upstream origin ${{ github.head_ref }} --force
