@@ -27,22 +27,28 @@ jobs:
       - name: Install dependencies
         run: npm install
 
-      - name: Configure Git for signed commits
-        run: |
-          cd /home/runner/work/ffc-pay-gateway/ffc-pay-gateway/
-          echo "$ACTIONS_PRIVATE_KEY" | gpg --batch --import
-          git config --global core.longpaths true
-          git config user.name "DEFRA FFC Pay Version Bump Bot"
-          git config user.email "samplackett@users.noreply.github.com"
-          git config commit.gpgsign true
-          git config gpg.format ssh
-          git config user.signingkey "$ACTIONS_SIGNING_KEY"
-          echo -e "5\ny\n" | gpg --batch --yes --command-fd 0 --expert --edit-key $ACTIONS_SIGNING_KEY trust
-
+      - name: Import GPG key
+        run: echo $ACTIONS_PRIVATE_KEY | base64 --decode | gpg --batch --import
         env:
           ACTIONS_PRIVATE_KEY: ${{ secrets.ACTIONS_PRIVATE_KEY }}
-          ACTIONS_SIGNING_KEY: ${{ secrets.ACTIONS_SIGNING_KEY }}
 
+      - name: Add the custom gpg siging program that passes the passphrase to the gpg CLI
+        run: |
+          rm -rf /tmp/gpg.sh
+          echo '#!/bin/bash' >> /tmp/gpg.sh
+          echo 'gpg --batch --pinentry-mode=loopback --passphrase $ACTIONS_PASSPHRASE $@' >> /tmp/gpg.sh
+          chmod +x /tmp/gpg.sh
+        env:
+          ACTIONS_PASSPHRASE: ${{ secrets.ACTIONS_PASSPHRASE }}
+
+      - name: Setup git
+        run: |
+          git config commit.gpgsign true
+          git config user.signingkey $ACTIONS_SIGNING_KEY
+          git config gpg.program /tmp/gpg.sh
+        env:
+          ACTIONS_SIGNING_KEY: ${{ secrets.ACTIONS_SIGNING_KEY }}
+      
       - name: Bump NPM version manually
         run: |
           VERSION=$(node -p "require('./package.json').version")
