@@ -35,11 +35,11 @@ container:
   sftpManagedGatewayUsername: ffc
   sftpManagedGatewayPassword:
   sftpManagedGatewayPrivateKey:
-  sftpCallistoHost: callisto
-  sftpCallistoPort: 22
-  sftpCallistoUsername: ffc
-  sftpCallistoPassword:
-  sftpCallistoPrivateKey:
+  sftpTraderHost: trader
+  sftpTraderPort: 22
+  sftpTraderUsername: ffc
+  sftpTraderPassword:
+  sftpTraderPrivateKey:
   sfiInboundDirectory: /opt/cap_prod_data/DAX/out/Int_725
   sfiPilotInboundDirectory: /opt/cap_prod_data/DAX/out/Int_725
   lumpSumsInboundDirectory: /opt/cap_prod_data/DAX/out/Int_725
@@ -59,7 +59,7 @@ container:
   sfiExpandedInboundDirectory: /opt/cap_prod_data/DAX/out/Int_725
   sftpDebug: false
   sftpManagedGatewayEnabled: true
-  sftpCallistoEnabled: true
+  sftpTraderEnabled: true
   sfiEnabled: true
   sfiPilotEnabled: true
   lumpSumsEnabled: true

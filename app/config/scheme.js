@@ -1,6 +1,6 @@
 const Joi = require('joi')
 const { SFI, SFI_PILOT, LUMP_SUMS, CS, BPS, FDMR, ES, FC, IMPS, SFI23, DPS, DELINKED, SFI_EXPANDED } = require('../constants/schemes')
-const { MANAGED_GATEWAY, CALLISTO } = require('../constants/servers')
+const { MANAGED_GATEWAY, TRADER } = require('../constants/servers')
 
 const schema = Joi.object({
   sfi: Joi.object({
@@ -101,7 +101,7 @@ const schema = Joi.object({
       inbound: Joi.array().items(Joi.string()).default([/^CTL_FIN_IMPS_A[P|R]_\d*\.INT$/]),
       outbound: Joi.array().items(Joi.string()).default([/^CTL_RET_IMPS_A[P|R]_\d*\.INT$/])
     }),
-    server: Joi.string().default(CALLISTO),
+    server: Joi.string().default(TRADER),
     directories: Joi.object({
       inbound: Joi.string().required(),
       outbound: Joi.string().required()
@@ -125,7 +125,7 @@ const schema = Joi.object({
       inbound: Joi.array().items(Joi.string()).default([/^CTL_BGAN.*.OUT$/]),
       outbound: Joi.array().items(Joi.string()).default([/^CTL_BGAN.*.ack$/])
     }),
-    server: Joi.string().default(CALLISTO),
+    server: Joi.string().default(TRADER),
     directories: Joi.object({
       inbound: Joi.string().required(),
       outbound: Joi.string().required()

@@ -1,5 +1,5 @@
 const { INBOUND, OUTBOUND } = require('../../../app/constants/directions')
-const { MANAGED_GATEWAY, CALLISTO } = require('../../../app/constants/servers')
+const { MANAGED_GATEWAY, TRADER } = require('../../../app/constants/servers')
 
 jest.mock('../../../app/config/scheme', () => ({
   scheme1: {
@@ -20,7 +20,7 @@ jest.mock('../../../app/config/scheme', () => ({
     fileMasks: {
       inbound: ['mask5']
     },
-    server: 'Callisto',
+    server: 'Trader',
     directories: {
       inbound: 'directory3'
     },
@@ -31,7 +31,7 @@ jest.mock('../../../app/config/scheme', () => ({
     fileMasks: {
       inbound: ['mask6']
     },
-    server: 'Callisto',
+    server: 'Trader',
     directories: {
       inbound: 'directory4'
     },
@@ -63,23 +63,23 @@ describe('get scheme transfers', () => {
   })
 
   test('should return empty array if no file masks for direction', () => {
-    const result = getSchemeTransfers([CALLISTO], OUTBOUND)
+    const result = getSchemeTransfers([TRADER], OUTBOUND)
     expect(result).toEqual([])
   })
 
   test('should only return active schemes', () => {
-    const result = getSchemeTransfers([CALLISTO], INBOUND)
+    const result = getSchemeTransfers([TRADER], INBOUND)
     expect(result[0].fileMask).toBe('mask5')
     expect(result.length).toBe(1)
   })
 
   test('should add direction to scheme', () => {
-    const result = getSchemeTransfers([CALLISTO], INBOUND)
+    const result = getSchemeTransfers([TRADER], INBOUND)
     expect(result[0].direction).toBe(INBOUND)
   })
 
   test('should add file mask as top level property', () => {
-    const result = getSchemeTransfers([CALLISTO], INBOUND)
+    const result = getSchemeTransfers([TRADER], INBOUND)
     expect(result[0].fileMask).toBe('mask5')
   })
 })
