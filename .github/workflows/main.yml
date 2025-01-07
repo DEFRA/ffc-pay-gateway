@@ -17,12 +17,14 @@ jobs:
         with:
           node-version: '20'
 
-      - name: Install dependencies
-        run: npm install
-
-      - name: Set up GPG keys for signing
+      - name: Set up GPG for non-interactive signing
         run: |
           echo "$GPG_PRIVATE_KEY" | gpg --batch --import
+          echo "use-agent" >> ~/.gnupg/gpg.conf
+          echo "pinentry-mode loopback" >> ~/.gnupg/gpg.conf
+          echo "allow-loopback-pinentry" >> ~/.gnupg/gpg-agent.conf
+          gpgconf --kill gpg-agent
+          gpgconf --launch gpg-agent
           git config --global user.signingkey ${{ secrets.GPG_KEY_ID }}
           git config --global commit.gpgsign true
           git config --global user.email "samplackett@users.noreply.github.com"
@@ -31,16 +33,20 @@ jobs:
           GPG_PRIVATE_KEY: ${{ secrets.GPG_PRIVATE_KEY }}
           GPG_KEY_ID: ${{ secrets.GPG_KEY_ID }}
 
-      - name: Commit dependency updates with GPG sign
+      - name: Commit changes with GPG signing
         run: |
           git add package-lock.json
-          git commit -S -m "chore: update package-lock.json" || echo "No changes to commit"
+          echo "$GPG_PASSPHRASE" | gpg --batch --yes --pinentry-mode loopback --passphrase-fd 0 --sign-key ${{ secrets.GPG_KEY_ID }}
+          git commit -S -m "chore: update package-lock.json"
 
       - name: Bump version number
         run: |
           npm version patch
+        env:
+          GPG_TTY: $(tty)
 
-      - name: Commit version bump with GPG sign
+      - name: Push changes
         run: |
-          git commit -S -am "chore: bump version"
-          git push --set-upstream origin ${{ github.head_ref }} --force
+          git push
+        env:
+          GPG_TTY: $(tty)
