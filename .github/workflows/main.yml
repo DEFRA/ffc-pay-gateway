@@ -38,6 +38,24 @@ jobs:
           git add package-lock.json
           git commit -S -m "chore: update package-lock.json" || echo "No changes to commit"
 
+      - name: Fetch main branch
+        run: git fetch origin main
+
+      - name: Merge main into feature branch
+        run: |
+          git merge origin/main --no-commit
+        continue-on-error: true
+
+      - name: Check for merge conflicts
+        run: |
+          if [[ $(git ls-files -u | wc -l) -gt 0 ]]; then
+            echo "Merge conflicts detected. Exiting without version bump."
+            exit 0
+          else
+            echo "Merge successful. Proceeding with version bump."
+          fi
+        shell: bash
+
       - name: Bump version number
         run: |
           npm version patch
