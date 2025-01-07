@@ -33,6 +33,11 @@ jobs:
           GPG_PRIVATE_KEY: ${{ secrets.GPG_PRIVATE_KEY }}
           GPG_KEY_ID: ${{ secrets.GPG_KEY_ID }}
 
+      - name: Create or switch to PR branch
+        run: |
+          BRANCH_NAME=${{ github.head_ref }}
+          git checkout -b "$BRANCH_NAME" || git checkout "$BRANCH_NAME"
+
       - name: Check if package-lock.json has changes
         run: |
           git add package-lock.json || true
