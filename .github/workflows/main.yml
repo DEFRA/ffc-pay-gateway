@@ -1,0 +1,46 @@
+name: Bump NPM Version on PR open
+
+on:
+  pull_request:
+    branches:
+      - main
+    types:
+      - opened
+
+jobs:
+  bump-version:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v3
+        with:
+          fetch-depth: 0
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v3
+        with:
+          node-version: '20'
+          cache: 'npm'
+
+      - name: Install dependencies
+        run: npm install
+
+      - name: Configure Git for signed commits
+        run: |
+          git config user.name "GitHub Actions Bot"
+          git config user.email "actions@github.com"
+          git config commit.gpgsign true
+          git config gpg.format ssh
+          git config user.signingkey ${{ secrets.GITHUB_ACTIONS_PRIVATE_KEY }}
+        env:
+          ACTIONS_IDENTITY: ${{ secrets.GITHUB_ACTIONS_PRIVATE_KEY }}
+
+      - name: Bump NPM version (patch)
+        run: npm version patch
+
+      - name: Push version bump
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          git push origin HEAD:${{ github.head_ref }} --follow-tags
