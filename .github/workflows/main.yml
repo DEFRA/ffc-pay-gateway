@@ -40,6 +40,10 @@ jobs:
         run: |
           npm version patch
 
+      - name: Ensure branch is checked out
+        run: |
+          git checkout ${{ github.head_ref }}
+
       - name: Push version bump and commit with GPG sign
         run: |
           git push --set-upstream origin ${{ github.head_ref }} --force
