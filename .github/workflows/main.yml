@@ -29,12 +29,15 @@ jobs:
       - name: Configure Git for signed commits
         run: |
           git config user.name "GitHub Actions Bot"
-          git config user.email "actions@github.com"
+          git config user.email "samplackett@users.noreply.github.com"
           git config commit.gpgsign true
           git config gpg.format ssh
           git config user.signingkey ${{ secrets.ACTIONS_PRIVATE_KEY }}
+          echo "$ACTIONS_PRIVATE_KEY" | gpg --batch --import
+          echo "$ACTIONS_PASSPHRASE" | gpg --batch --pinentry-mode loopback --passphrase-fd 0 --list-secret-keys --keyid-format LONG
         env:
           ACTIONS_IDENTITY: ${{ secrets.ACTIONS_PRIVATE_KEY }}
+          ACTIONS_PASSPHRASE: ${{ secrets.ACTIONS_PASSPHRASE }}
 
       - name: Bump NPM version (patch)
         run: npm version patch
