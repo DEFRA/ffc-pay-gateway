@@ -15,19 +15,10 @@ jobs:
       - name: Set up Node.js
         uses: actions/setup-node@v3
         with:
-          node-version: '14'  # Adjust as needed
+          node-version: '20'
 
       - name: Install dependencies
         run: npm install
-
-      - name: Configure Git user
-        run: |
-          git config user.name "DEFRA FFC Pay Version Bump Bot"
-          git config user.email "samplackett@users.noreply.github.com"
-
-      - name: Bump version number
-        run: |
-          npm version patch
 
       - name: Set up GPG keys for signing
         run: |
@@ -35,9 +26,18 @@ jobs:
           echo "user.email=samplackett@users.noreply.github.com" >> ~/.gitconfig
           echo "user.name=DEFRA FFC Pay Version Bump Bot" >> ~/.gitconfig
 
+      - name: Commit dependency updates with GPG sign
+        run: |
+          git add package-lock.json
+          git commit -S -m "chore: update package-lock.json" || echo "No changes to commit"
+
+      - name: Bump version number
+        run: |
+          npm version patch
+
       - name: Commit version bump with GPG sign
         run: |
-          git commit -am "chore: bump version"
+          git commit -S -am "chore: bump version"
           git push --set-upstream origin ${{ github.head_ref }} --force
         env:
           GPG_PRIVATE_KEY: ${{ secrets.GPG_PRIVATE_KEY }}
