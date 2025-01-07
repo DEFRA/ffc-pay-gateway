@@ -1,60 +1,40 @@
-name: Bump NPM Version on PR open
+name: Version Bump
 
 on:
   pull_request:
-    branches:
-      - main
-    types:
-      - opened
-      - reopened
+    types: [opened, reopened]
 
 jobs:
-  bump-version:
+  version-bump:
     runs-on: ubuntu-latest
 
     steps:
       - name: Checkout code
         uses: actions/checkout@v3
-        with:
-          fetch-depth: 0
 
       - name: Set up Node.js
         uses: actions/setup-node@v3
         with:
           node-version: '20'
-          cache: 'npm'
 
       - name: Install dependencies
         run: npm install
 
-      - name: Import GPG key
-        run: echo $ACTIONS_PRIVATE_KEY | base64 --decode | gpg --batch --import
-        env:
-          ACTIONS_PRIVATE_KEY: ${{ secrets.ACTIONS_PRIVATE_KEY }}
-
-      - name: Add the custom gpg siging program that passes the passphrase to the gpg CLI
+      - name: Bump version number
         run: |
-          rm -rf /tmp/gpg.sh
-          echo '#!/bin/bash' >> /tmp/gpg.sh
-          echo 'gpg --batch --pinentry-mode=loopback --passphrase $ACTIONS_PASSPHRASE $@' >> /tmp/gpg.sh
-          chmod +x /tmp/gpg.sh
-        env:
-          ACTIONS_PASSPHRASE: ${{ secrets.ACTIONS_PASSPHRASE }}
+          # Bump version by 1 patch (adjust to minor/major as needed)
+          npm version patch
 
-      - name: Setup git
+      - name: Set up GPG keys for signing
         run: |
-          git config commit.gpgsign true
-          git config user.signingkey $ACTIONS_SIGNING_KEY
-          git config gpg.program /tmp/gpg.sh
-        env:
-          ACTIONS_SIGNING_KEY: ${{ secrets.ACTIONS_SIGNING_KEY }}
-      
-      - name: Bump NPM version manually
-        run: |
-          VERSION=$(node -p "require('./package.json').version")
-          NEW_VERSION=$(echo $VERSION | awk -F. -v OFS=. '{$NF++;print}')
-          jq ".version = \"$NEW_VERSION\"" package.json > temp.json && mv temp.json package.json
-          git add package.json
-          git commit -m "Bump version to $NEW_VERSION"
-          git push origin HEAD:${{ github.head_ref }}
+          echo "$GPG_PRIVATE_KEY" | gpg --batch --import
+          echo "user.email=samplackett@users.noreply.github.com" >> ~/.gitconfig
+          echo "user.name=DEFRA FFC Pay Version Bump Bot" >> ~/.gitconfig
 
+      - name: Commit version bump with GPG sign
+        run: |
+          git commit -am "chore: bump version"
+          git push --set-upstream origin ${{ github.head_ref }} --force
+        env:
+          GPG_PRIVATE_KEY: ${{ secrets.GPG_PRIVATE_KEY }}
+          GPG_KEY_ID: ${{ secrets.GPG_KEY_ID }}
