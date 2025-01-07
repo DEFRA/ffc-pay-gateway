@@ -6,7 +6,7 @@ on:
       - main
     types:
       - opened
-      - reopened  # This will trigger the workflow when the PR is reopened
+      - reopened
 
 jobs:
   bump-version:
@@ -30,6 +30,7 @@ jobs:
       - name: Configure Git for signed commits
         run: |
           echo "$ACTIONS_PRIVATE_KEY" | gpg --batch --import
+          git config --system core.longpaths true
           git config user.name "GitHub Actions Bot"
           git config user.email "samplackett@users.noreply.github.com"
           git config commit.gpgsign true
