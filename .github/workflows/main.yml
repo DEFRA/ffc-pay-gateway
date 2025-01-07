@@ -40,13 +40,12 @@ jobs:
         env:
           ACTIONS_PRIVATE_KEY: ${{ secrets.ACTIONS_PRIVATE_KEY }}
 
-      - name: Bump NPM version (patch)
-        run: npm version patch
-
-      - name: Commit and push version bump
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      - name: Bump NPM version manually
         run: |
-          git add -A
-          git commit -m "Bump version to $(npm version)"
+          VERSION=$(node -p "require('./package.json').version")
+          NEW_VERSION=$(echo $VERSION | awk -F. -v OFS=. '{$NF++;print}')
+          jq ".version = \"$NEW_VERSION\"" package.json > temp.json && mv temp.json package.json
+          git add package.json
+          git commit -m "Bump version to $NEW_VERSION"
           git push origin HEAD:${{ github.head_ref }} --follow-tags
+
