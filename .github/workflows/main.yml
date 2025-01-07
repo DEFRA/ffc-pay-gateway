@@ -1,4 +1,4 @@
-name: Version Bump
+name: Bump Version on PR
 
 on:
   pull_request:
@@ -17,47 +17,33 @@ jobs:
         with:
           node-version: '20'
 
-      - name: Set up GPG for non-interactive signing
+      - name: Import GPG key
         run: |
-          echo "$GPG_PRIVATE_KEY" | gpg --batch --import
-          echo "use-agent" >> ~/.gnupg/gpg.conf
-          echo "pinentry-mode loopback" >> ~/.gnupg/gpg.conf
-          echo "allow-loopback-pinentry" >> ~/.gnupg/gpg-agent.conf
-          gpgconf --kill gpg-agent
-          gpgconf --launch gpg-agent
-          git config --global user.signingkey ${{ secrets.GPG_KEY_ID }}
-          git config --global commit.gpgsign true
-          git config --global user.email "samplackett@users.noreply.github.com"
-          git config --global user.name "DEFRA FFC Pay Version Bump Bot"
+          echo "$GPG_PRIVATE_KEY" | gpg --batch --yes --passphrase-fd 0 --pinentry-mode loopback --import
         env:
           GPG_PRIVATE_KEY: ${{ secrets.GPG_PRIVATE_KEY }}
-          GPG_KEY_ID: ${{ secrets.GPG_KEY_ID }}
 
-      - name: Create or switch to PR branch
+      - name: Configure Git for GPG signing
         run: |
-          BRANCH_NAME=${{ github.head_ref }}
-          git checkout -b "$BRANCH_NAME" || git checkout "$BRANCH_NAME"
-
-      - name: Check if package-lock.json has changes
-        run: |
-          git add package-lock.json || true
-          if git diff --cached --quiet; then
-            echo "No changes to commit."
-          else
-            echo "Committing changes..."
-            git commit -S -m "chore: update package-lock.json"
-          fi
+          echo "$GPG_PASSPHRASE" | gpg --batch --yes --passphrase-fd 0 --pinentry-mode loopback --sign-key ${{ secrets.GPG_KEY_ID }}
+          git config --global gpg.program gpg
+          git config --global commit.gpgsign true
+          git config --global user.signingkey ${{ secrets.GPG_KEY_ID }}
+          git config --global gpg.format openpgp
+          echo "export GIT_COMMITTER_EMAIL=samplackett@users.noreply.github.com" >> $GITHUB_ENV
+          echo "export GIT_AUTHOR_EMAIL=samplackett@users.noreply.github.com" >> $GITHUB_ENV
+          echo "export GPG_TTY=$(tty)" >> $GITHUB_ENV
+        env:
+          GPG_PASSPHRASE: ${{ secrets.GPG_PASSPHRASE }}
 
       - name: Bump version number
         run: |
-          echo "$GPG_PASSPHRASE" | gpg --batch --yes --passphrase-fd 0 --pinentry-mode loopback --sign-key ${{ secrets.GPG_KEY_ID }}
-          npm version patch --sign-git-tag
+          npm version patch --sign-git-tag || true
         env:
           GPG_TTY: $(tty)
-          GPG_PASSPHRASE: ${{ secrets.GPG_PASSPHRASE }}
 
-      - name: Push changes
+      - name: Push version bump
         run: |
-          git push --set-upstream origin ${{ github.head_ref }} --force
+          git push --set-upstream origin bump-version-on-pr --force
         env:
           GPG_TTY: $(tty)
