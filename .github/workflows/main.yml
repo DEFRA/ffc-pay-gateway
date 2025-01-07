@@ -15,14 +15,18 @@ jobs:
       - name: Set up Node.js
         uses: actions/setup-node@v3
         with:
-          node-version: '20'
+          node-version: '14'  # Adjust as needed
 
       - name: Install dependencies
         run: npm install
 
+      - name: Configure Git user
+        run: |
+          git config user.name "DEFRA FFC Pay Version Bump Bot"
+          git config user.email "samplackett@users.noreply.github.com"
+
       - name: Bump version number
         run: |
-          # Bump version by 1 patch (adjust to minor/major as needed)
           npm version patch
 
       - name: Set up GPG keys for signing
