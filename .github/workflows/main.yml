@@ -1,0 +1,61 @@
+name: Version Bump
+
+on:
+  pull_request:
+    types: [opened, reopened]
+
+jobs:
+  version-bump:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v3
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v3
+        with:
+          node-version: '20'
+
+      - name: Set up GPG for non-interactive signing
+        run: |
+          echo "$GPG_PRIVATE_KEY" | gpg --batch --import
+          echo "use-agent" >> ~/.gnupg/gpg.conf
+          echo "pinentry-mode loopback" >> ~/.gnupg/gpg.conf
+          echo "allow-loopback-pinentry" >> ~/.gnupg/gpg-agent.conf
+          gpgconf --kill gpg-agent
+          gpgconf --launch gpg-agent
+          git config --global user.signingkey ${{ secrets.GPG_KEY_ID }}
+          git config --global commit.gpgsign true
+          git config --global user.email "samplackett@users.noreply.github.com"
+          git config --global user.name "DEFRA FFC Pay Version Bump Bot"
+        env:
+          GPG_PRIVATE_KEY: ${{ secrets.GPG_PRIVATE_KEY }}
+          GPG_KEY_ID: ${{ secrets.GPG_KEY_ID }}
+
+      - name: Create or switch to PR branch
+        run: |
+          BRANCH_NAME=${{ github.head_ref }}
+          git checkout -b "$BRANCH_NAME" || git checkout "$BRANCH_NAME"
+
+      - name: Check if package-lock.json has changes
+        run: |
+          git add package-lock.json || true
+          if git diff --cached --quiet; then
+            echo "No changes to commit."
+          else
+            echo "Committing changes..."
+            git commit -S -m "chore: update package-lock.json"
+          fi
+
+      - name: Bump version number
+        run: |
+          npm version patch --sign-git-tag || true
+        env:
+          GPG_TTY: $(tty)
+
+      - name: Push changes
+        run: |
+          git push --set-upstream origin ${{ github.head_ref }} --force
+        env:
+          GPG_TTY: $(tty)
