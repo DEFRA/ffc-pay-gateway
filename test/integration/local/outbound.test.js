@@ -10,7 +10,7 @@ const { storageConfig, schemeConfig } = require('../../../app/config')
 
 const { start } = require('../../../app/polling')
 
-const { MANAGED_GATEWAY, CALLISTO } = require('../../../app/constants/servers')
+const { MANAGED_GATEWAY, TRADER } = require('../../../app/constants/servers')
 
 let blobServiceClient
 let daxContainer
@@ -48,7 +48,7 @@ describe('process outbound files', () => {
 
   afterEach(async () => {
     await disconnect(MANAGED_GATEWAY)
-    await disconnect(CALLISTO)
+    await disconnect(TRADER)
   })
 
   test('should process ES outbound files', async () => {
@@ -81,8 +81,8 @@ describe('process outbound files', () => {
 
     await start()
 
-    await connect(CALLISTO)
-    const fileList = await getFiles(CALLISTO)
+    await connect(TRADER)
+    const fileList = await getFiles(TRADER)
     expect(fileList.find(x => x.name === IMPS_RETURN_FILENAME)).toBeDefined()
     expect(fileList.find(x => x.name === IMPS_RETURN_CONTROL_FILENAME)).toBeDefined()
   })
@@ -93,8 +93,8 @@ describe('process outbound files', () => {
 
     await start()
 
-    await connect(CALLISTO)
-    const fileList = await getFiles(CALLISTO)
+    await connect(TRADER)
+    const fileList = await getFiles(TRADER)
     expect(fileList.find(x => x.name === DPS_RETURN_FILENAME)).toBeDefined()
     expect(fileList.find(x => x.name === DPS_RETURN_CONTROL_FILENAME)).toBeDefined()
   })

@@ -14,9 +14,9 @@ services:
       SFTP_MANAGED_GATEWAY_HOST: ffc-pay-gateway-sftp
       SFTP_MANAGED_GATEWAY_USERNAME: ffc
       SFTP_MANAGED_GATEWAY_PRIVATE_KEY: ${SFTP_MANAGED_GATEWAY_PRIVATE_KEY}
-      SFTP_CALLISTO_HOST: ffc-pay-gateway-sftp
-      SFTP_CALLISTO_USERNAME: ffc
-      SFTP_CALLISTO_PRIVATE_KEY: ${SFTP_CALLISTO_PRIVATE_KEY}
+      SFTP_TRADER_HOST: ffc-pay-gateway-sftp
+      SFTP_TRADER_USERNAME: ffc
+      SFTP_TRADER_PRIVATE_KEY: ${SFTP_TRADER_PRIVATE_KEY}
       SFI_INBOUND_DIRECTORY: local-directory/inbound
       SFI_PILOT_INBOUND_DIRECTORY: local-directory/inbound
       LUMP_SUMS_INBOUND_DIRECTORY: local-directory/inbound

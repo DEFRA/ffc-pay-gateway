@@ -27,7 +27,7 @@ if [ ! -f .ssh/ssh_host_rsa_key ]; then
 fi
 
 export SFTP_MANAGED_GATEWAY_PRIVATE_KEY=$(cat .ssh/ssh_host_rsa_key)
-export SFTP_CALLISTO_PRIVATE_KEY=$(cat .ssh/ssh_host_rsa_key)
+export SFTP_TRADER_PRIVATE_KEY=$(cat .ssh/ssh_host_rsa_key)
 
 docker compose down
 

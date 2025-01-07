@@ -12,8 +12,8 @@ data:
   SFTP_DEBUG: {{ quote .Values.container.sftpDebug }}
   SFTP_MANAGED_GATEWAY_HOST: {{ quote .Values.container.sftpManagedGatewayHost }}
   SFPT_MANAGED_GATEWAY_PORT: {{ quote .Values.container.sftpManagedGatewayPort }}
-  SFTP_CALLISTO_HOST: {{ quote .Values.container.sftpCallistoHost }}
-  SFTP_CALLISTO_PORT: {{ quote .Values.container.sftpCallistoPort }}
+  SFTP_TRADER_HOST: {{ quote .Values.container.sftpTraderHost }}
+  SFTP_TRADER_PORT: {{ quote .Values.container.sftpTraderPort }}
   {{- if and (.Values.environmentCode) (eq (.Values.environmentCode | toString ) "prd") }}
   SFI_INBOUND_DIRECTORY: {{ quote .Values.container.sfiInboundDirectory }}
   SFI_PILOT_INBOUND_DIRECTORY: {{ quote .Values.container.sfiPilotInboundDirectory }}
@@ -48,7 +48,7 @@ data:
   DPS_INBOUND_DIRECTORY: {{ quote .Values.container.dpsInboundDirectory }}
   DPS_OUTBOUND_DIRECTORY: {{ quote .Values.container.dpsOutboundDirectory }}
   SFTP_MANAGED_GATEWAY_ENABLED: {{ quote .Values.container.sftpManagedGatewayEnabled }}
-  SFTP_CALLISTO_ENABLED: {{ quote .Values.container.sftpCallistoEnabled }}
+  SFTP_TRADER_ENABLED: {{ quote .Values.container.sftpTraderEnabled }}
   SFI_ENABLED: {{ quote .Values.container.sfiEnabled }}
   SFI_PILOT_ENABLED: {{ quote .Values.container.sfiPilotEnabled }}
   LUMP_SUMS_ENABLED: {{ quote .Values.container.lumpSumsEnabled }}
