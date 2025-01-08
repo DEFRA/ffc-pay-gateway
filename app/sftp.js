@@ -4,20 +4,60 @@ const { sftpConfig } = require('./config')
 
 let managedGateway
 let trader
+const connectionStates = new Map()
+
+const connect = async (server) => {
+  try {
+    if (server === TRADER) {
+      if (sftpConfig.traderEnabled) {
+        if (sftpConfig.debug) {
+          console.log('Connecting to Trader')
+        }
+        trader = await createTraderConnection()
+      }
+    } else if (server === MANAGED_GATEWAY) {
+      if (sftpConfig.managedGatewayEnabled) {
+        if (sftpConfig.debug) {
+          console.log('Connecting to Managed Gateway')
+        }
+        managedGateway = await createManagedGatewayConnection()
+      }
+    }
+  } catch (error) {
+    console.error(`Failed to connect to ${server === MANAGED_GATEWAY ? 'Managed Gateway' : 'Trader'}:`, error)
+    throw error
+  }
+}
+
+const cleanupClientState = (client, type) => {
+  connectionStates.set(client, { isConnected: false })
+  if (type === TRADER && trader === client) {
+    trader = null
+  } else if (type === MANAGED_GATEWAY && managedGateway === client) {
+    managedGateway = null
+  }
+  connectionStates.delete(client)
+}
 
 const createTraderConnection = async () => {
   const newClient = new Client('trader-' + Date.now())
+  connectionStates.set(newClient, { isConnected: false })
 
   newClient.on('error', async (err) => {
     console.error('Trader connection error:', err)
+    if (err.code === 'ECONNRESET') {
+      cleanupClientState(newClient, TRADER)
+      return
+    }
+
     try {
-      await newClient.end()
+      if (connectionStates.get(newClient)?.isConnected) {
+        await newClient.end()
+      }
     } catch (cleanupErr) {
       console.error('Error cleaning up Trader connection:', cleanupErr)
     } finally {
-      if (trader === newClient) {
-        trader = null
-      }
+      cleanupClientState(newClient, TRADER)
     }
   })
 
@@ -29,22 +69,29 @@ const createTraderConnection = async () => {
   }
 
   await newClient.connect(traderConfig)
+  connectionStates.set(newClient, { isConnected: true })
   return newClient
 }
 
 const createManagedGatewayConnection = async () => {
   const newClient = new Client('managed-gateway-' + Date.now())
+  connectionStates.set(newClient, { isConnected: false })
 
   newClient.on('error', async (err) => {
     console.error('Managed Gateway connection error:', err)
+    if (err.code === 'ECONNRESET') {
+      cleanupClientState(newClient, MANAGED_GATEWAY)
+      return
+    }
+
     try {
-      await newClient.end()
+      if (connectionStates.get(newClient)?.isConnected) {
+        await newClient.end()
+      }
     } catch (cleanupErr) {
       console.error('Error cleaning up Managed Gateway connection:', cleanupErr)
     } finally {
-      if (managedGateway === newClient) {
-        managedGateway = null
-      }
+      cleanupClientState(newClient, MANAGED_GATEWAY)
     }
   })
 
@@ -56,50 +103,19 @@ const createManagedGatewayConnection = async () => {
   }
 
   await newClient.connect(gatewayConfig)
+  connectionStates.set(newClient, { isConnected: true })
   return newClient
-}
-
-const connect = async (server) => {
-  if (sftpConfig.managedGatewayEnabled && server === MANAGED_GATEWAY) {
-    if (sftpConfig.debug) {
-      console.log('Connecting to Managed Gateway')
-      console.log({ ...sftpConfig.managedGateway, password: 'HIDDEN', privateKey: 'HIDDEN' })
-    }
-
-    try {
-      managedGateway = await createManagedGatewayConnection()
-    } catch (err) {
-      console.error('Failed to connect to Managed Gateway:', err)
-      throw err
-    }
-  }
-
-  if (sftpConfig.traderEnabled && server === TRADER) {
-    if (sftpConfig.debug) {
-      console.log('Connecting to Trader')
-      console.log({ ...sftpConfig.trader, password: 'HIDDEN', privateKey: 'HIDDEN' })
-    }
-
-    try {
-      trader = await createTraderConnection()
-    } catch (err) {
-      console.error('Failed to connect to Trader:', err)
-      throw err
-    }
-  }
 }
 
 const disconnect = async (server) => {
   try {
-    if (server === TRADER && trader) {
-      await trader.end()
-      trader = null
+    const client = server === TRADER ? trader : managedGateway
+    if (!client || !connectionStates.get(client)?.isConnected) {
+      return
     }
 
-    if (sftpConfig.managedGatewayEnabled && server === MANAGED_GATEWAY && managedGateway) {
-      await managedGateway.end()
-      managedGateway = null
-    }
+    await client.end()
+    cleanupClientState(client, server)
   } catch (err) {
     console.error(`Unable to disconnect from ${server}:`, err)
     throw err
