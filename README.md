@@ -10,14 +10,12 @@ There are four files that make up a payment batch. All four are required before 
 
 ### Required files
 
-| File               | Description                               | Mask                 |
-| ------------------ | ----------------------------------------- | -------------------- |
-| Payment batch file | Contains a collection of payment requests | `PENDING_{name}.dat` |
-
-- payment batch file, `{name}.dat`
-- control file, `CTL_{name}.dat`
-- checksum file, `{name}.txt`
-- checksum control file, `CTL_{name}.txt`
+| File                       | Description                                                                                           | Mask             |
+| -------------------------- | ----------------------------------------------------------------------------------------------------- | ---------------- |
+| Payment batch file         | Contains a collection of payment requests                                                             | `{name}.dat`     |
+| Payment batch control file | Control file for the payment batch file                                                               | `CTL_{name}.dat` |
+| Checksum file              | Checksum file which validates the contents of the payment batch file has not been modified in transit | `{name}.txt`     |
+| Checksum control file      | Control file for the checksum file                                                                    | `CTL_{name}.txt` |
 
 On successful validation, `PENDING_` is added to all filenames and all but the payment batch file are moved to the `inbound` virtual directory.
 
