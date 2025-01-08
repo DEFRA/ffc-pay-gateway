@@ -1,0 +1,52 @@
+name: Version Bump
+
+on:
+  pull_request:
+    types: [opened, reopened]
+
+jobs:
+  version-bump:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v3
+        with:
+          ref: ${{ github.head_ref }}
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v3
+        with:
+          node-version: '20'
+
+      - name: Install dependencies
+        run: npm install
+
+      - name: Set up GPG keys for signing
+        run: |
+          echo "$GPG_PRIVATE_KEY" | gpg --batch --import
+          git config --global user.signingkey ${{ secrets.GPG_KEY_ID }}
+          git config --global commit.gpgsign true
+          git config --global user.email "samplackett@users.noreply.github.com"
+          git config --global user.name "DEFRA FFC Pay Version Bump Bot"
+        env:
+          GPG_PRIVATE_KEY: ${{ secrets.GPG_PRIVATE_KEY }}
+          GPG_KEY_ID: ${{ secrets.GPG_KEY_ID }}
+
+      - name: Commit dependency updates with GPG sign
+        run: |
+          git add package-lock.json
+          git commit -S -m "chore: update package-lock.json" || echo "No changes to commit"
+
+      - name: Bump version number
+        run: |
+          npm version patch
+
+      - name: Ensure branch is checked out
+        run: |
+          git checkout ${{ github.head_ref }}
+
+      - name: Push version bump and commit with GPG sign
+        run: |
+          git push --set-upstream origin ${{ github.head_ref }} --force
+          git push --tags
