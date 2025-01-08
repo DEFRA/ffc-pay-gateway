@@ -177,4 +177,89 @@ describe('SFTP', () => {
       expect(console.error).toHaveBeenCalledWith('Unable to disconnect from Managed Gateway:', error)
     })
   })
+  describe('error handling and cleanup', () => {
+    test('handles connection loss and cleanup for trader', async () => {
+      sftpConfig.traderEnabled = true
+      await sftp.connect(TRADER)
+
+      const errorCallback = mockClient.on.mock.calls.find(call => call[0] === 'error')[1]
+      await errorCallback({ code: 'ECONNRESET', message: 'Connection reset' })
+
+      await expect(async () => {
+        await sftp.getClient(TRADER)
+      }).rejects.toThrow('No active Trader connection')
+    })
+
+    test('handles connection loss and cleanup for managed gateway', async () => {
+      sftpConfig.managedGatewayEnabled = true
+      await sftp.connect(MANAGED_GATEWAY)
+
+      const errorCallback = mockClient.on.mock.calls.find(call => call[0] === 'error')[1]
+      await errorCallback({ code: 'ECONNRESET', message: 'Connection reset' })
+
+      await expect(async () => {
+        await sftp.getClient(MANAGED_GATEWAY)
+      }).rejects.toThrow('No active Managed Gateway connection')
+    })
+  })
+
+  describe('file operation errors', () => {
+    beforeEach(async () => {
+      sftpConfig.traderEnabled = true
+      await sftp.connect(TRADER)
+    })
+
+    test('handles getFile errors', async () => {
+      mockClient.get.mockRejectedValueOnce(new Error('Get failed'))
+      await expect(sftp.getFile({
+        server: TRADER,
+        directory: '/test'
+      }, 'file.txt')).rejects.toThrow('Get failed')
+    })
+
+    test('handles deleteFile errors', async () => {
+      mockClient.delete.mockRejectedValueOnce(new Error('Delete failed'))
+      await expect(sftp.deleteFile({
+        server: TRADER,
+        directory: '/test'
+      }, 'file.txt')).rejects.toThrow('Delete failed')
+    })
+
+    test('handles putFile errors', async () => {
+      mockClient.put.mockRejectedValueOnce(new Error('Put failed'))
+      await expect(sftp.putFile({
+        server: TRADER,
+        directory: '/test'
+      }, 'file.txt', 'data')).rejects.toThrow('Put failed')
+    })
+
+    test('handles listFiles errors', async () => {
+      mockClient.list.mockRejectedValueOnce(new Error('List failed'))
+      await expect(sftp.getControlFiles({
+        server: TRADER,
+        directory: '/test',
+        fileMask: /\.ctl$/
+      })).rejects.toThrow('List failed')
+    })
+  })
+
+  describe('null client scenarios', () => {
+    beforeEach(() => {
+      // Reset any existing connections
+      sftp.disconnect(TRADER)
+      sftp.disconnect(MANAGED_GATEWAY)
+    })
+
+    test('throws error when trader client is null', async () => {
+      await expect(() => {
+        return sftp.getClient(TRADER)
+      }).toThrow('No active Trader connection')
+    })
+
+    test('throws error when managed gateway client is null', async () => {
+      await expect(() => {
+        return sftp.getClient(MANAGED_GATEWAY)
+      }).toThrow('No active Managed Gateway connection')
+    })
+  })
 })
