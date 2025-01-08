@@ -37,7 +37,7 @@ jobs:
       - name: Commit dependency updates with GPG sign
         run: |
           git add package-lock.json
-          git commit -S -m "chore: update package-lock.json" || echo "No changes to commit"
+          git commit -S -m "update package-lock.json" || echo "No changes to commit"
 
       - name: Fetch main branch
         run: git fetch origin main
@@ -56,6 +56,10 @@ jobs:
             echo "Merge successful. Proceeding with version bump."
           fi
         shell: bash
+
+      - name: Commit merged changes
+        run: |
+          git commit -S -m "merge main into feature branch" || echo "No changes to commit"
 
       - name: Bump version number
         run: |
