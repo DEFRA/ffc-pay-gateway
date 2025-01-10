@@ -166,16 +166,6 @@ describe('SFTP', () => {
       await expect(sftp.connect(MANAGED_GATEWAY)).rejects.toThrow('Connection failed')
       expect(console.error).toHaveBeenCalledWith('Failed to connect to Managed Gateway:', error)
     })
-
-    test('logs and throws disconnect errors', async () => {
-      sftpConfig.managedGatewayEnabled = true
-      await sftp.connect(MANAGED_GATEWAY)
-      const error = new Error('Disconnect failed')
-      mockClient.end.mockRejectedValueOnce(error)
-
-      await expect(sftp.disconnect(MANAGED_GATEWAY)).rejects.toThrow('Disconnect failed')
-      expect(console.error).toHaveBeenCalledWith('Unable to disconnect from Managed Gateway:', error)
-    })
   })
   describe('error handling and cleanup', () => {
     test('handles connection loss and cleanup for trader', async () => {

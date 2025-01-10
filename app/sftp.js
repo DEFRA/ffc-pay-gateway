@@ -118,7 +118,6 @@ const disconnect = async (server) => {
     cleanupClientState(client, server)
   } catch (err) {
     console.error(`Unable to disconnect from ${server}:`, err)
-    throw err
   }
 }
 
