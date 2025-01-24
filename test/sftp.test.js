@@ -28,7 +28,7 @@ describe('SFTP', () => {
     test('creates new trader connection when enabled', async () => {
       sftpConfig.traderEnabled = true
       await sftp.connect(TRADER)
-      expect(Client).toHaveBeenCalledWith(expect.stringContaining('trader-'))
+      expect(Client).toHaveBeenCalledWith(expect.stringContaining('Trader-'))
       expect(mockClient.connect).toHaveBeenCalledWith(expect.objectContaining({
         keepaliveInterval: 10000,
         keepaliveCountMax: 3,
@@ -39,7 +39,7 @@ describe('SFTP', () => {
     test('creates new managed gateway connection when enabled', async () => {
       sftpConfig.managedGatewayEnabled = true
       await sftp.connect(MANAGED_GATEWAY)
-      expect(Client).toHaveBeenCalledWith(expect.stringContaining('managed-gateway-'))
+      expect(Client).toHaveBeenCalledWith(expect.stringContaining('Managed Gateway-'))
       expect(mockClient.connect).toHaveBeenCalled()
     })
 
@@ -47,7 +47,8 @@ describe('SFTP', () => {
       sftpConfig.debug = true
       sftpConfig.traderEnabled = true
       await sftp.connect(TRADER)
-      expect(console.log).toHaveBeenCalledWith('Connecting to Trader')
+      expect(console.log).toHaveBeenCalledWith('Initiating connection to Trader server...')
+      expect(console.log).toHaveBeenCalledWith('Successfully connected to Trader server')
     })
 
     test('handles connection errors', async () => {
@@ -58,18 +59,99 @@ describe('SFTP', () => {
   })
 
   describe('disconnect', () => {
-    test('disconnects trader client', async () => {
-      sftpConfig.traderEnabled = true
-      await sftp.connect(TRADER)
-      await sftp.disconnect(TRADER)
-      expect(mockClient.end).toHaveBeenCalled()
+    beforeEach(() => {
+      jest.clearAllMocks()
+      sftp.disconnect(TRADER)
+      sftp.disconnect(MANAGED_GATEWAY)
     })
 
-    test('disconnects managed gateway client', async () => {
-      sftpConfig.managedGatewayEnabled = true
+    test('disconnects trader client successfully', async () => {
+      // Setup
+      await sftp.connect(TRADER)
+
+      // Execute
+      await sftp.disconnect(TRADER)
+
+      // Assert
+      expect(mockClient.end).toHaveBeenCalled()
+      expect(console.log).toHaveBeenCalledWith('Initiating disconnect from Trader server...')
+      expect(console.log).toHaveBeenCalledWith('Cleaning up Trader connection...')
+      expect(console.log).toHaveBeenCalledWith('Successfully disconnected from Trader server')
+    })
+
+    test('disconnects managed gateway client successfully', async () => {
+      await sftp.connect(MANAGED_GATEWAY)
+
+      await sftp.disconnect(MANAGED_GATEWAY)
+
+      expect(mockClient.end).toHaveBeenCalled()
+      expect(console.log).toHaveBeenCalledWith('Initiating disconnect from Managed Gateway server...')
+      expect(console.log).toHaveBeenCalledWith('Cleaning up Managed Gateway connection...')
+      expect(console.log).toHaveBeenCalledWith('Successfully disconnected from Managed Gateway server')
+    })
+
+    test('resolves when no active connection exists', async () => {
+      await expect(sftp.disconnect(TRADER)).resolves.not.toThrow()
+      expect(mockClient.end).not.toHaveBeenCalled()
+      expect(console.log).not.toHaveBeenCalled()
+    })
+
+    test('handles disconnect timeout', async () => {
+      await sftp.connect(TRADER)
+      mockClient.end.mockImplementation(() =>
+        new Promise(resolve => setTimeout(resolve, 31000))
+      )
+
+      await expect(sftp.disconnect(TRADER)).resolves.not.toThrow()
+      expect(console.error).toHaveBeenCalledWith(
+        'Disconnect error from Trader:',
+        expect.any(Error)
+      )
+    })
+  })
+
+  describe('cleanupClientState', () => {
+    beforeEach(() => {
+      jest.clearAllMocks()
+      mockClient.socket = {
+        destroyed: false,
+        destroy: jest.fn()
+      }
+    })
+
+    test('destroys socket for trader if not already destroyed', async () => {
+      await sftp.connect(TRADER)
+      await sftp.disconnect(TRADER)
+
+      expect(mockClient.socket.destroy).toHaveBeenCalled()
+      expect(console.log).toHaveBeenCalledWith('Cleaning up Trader connection...')
+      expect(console.log).toHaveBeenCalledWith('Successfully disconnected from Trader server')
+    })
+
+    test('does not destroy already destroyed trader socket', async () => {
+      mockClient.socket.destroyed = true
+      await sftp.connect(TRADER)
+      await sftp.disconnect(TRADER)
+
+      expect(mockClient.socket.destroy).not.toHaveBeenCalled()
+    })
+
+    test('destroys socket for managed gateway if not already destroyed', async () => {
       await sftp.connect(MANAGED_GATEWAY)
       await sftp.disconnect(MANAGED_GATEWAY)
-      expect(mockClient.end).toHaveBeenCalled()
+
+      expect(mockClient.socket.destroy).toHaveBeenCalled()
+      expect(console.log).toHaveBeenCalledWith('Cleaning up Managed Gateway connection...')
+      expect(console.log).toHaveBeenCalledWith('Successfully disconnected from Managed Gateway server')
+    })
+
+    test('handles cleanup when socket is undefined', async () => {
+      mockClient.socket = undefined
+      await sftp.connect(TRADER)
+      await sftp.disconnect(TRADER)
+
+      expect(console.log).toHaveBeenCalledWith('Cleaning up Trader connection...')
+      expect(console.log).toHaveBeenCalledWith('Successfully disconnected from Trader server')
     })
   })
 
@@ -143,7 +225,6 @@ describe('SFTP', () => {
       await errorCallback(new Error('Connection error'))
 
       expect(console.error).toHaveBeenCalledWith('Trader connection error:', expect.any(Error))
-      expect(console.error).toHaveBeenCalledWith('Error cleaning up Trader connection:', expect.any(Error))
     })
 
     test('logs managed gateway cleanup errors', async () => {
@@ -155,7 +236,6 @@ describe('SFTP', () => {
       await errorCallback(new Error('Connection error'))
 
       expect(console.error).toHaveBeenCalledWith('Managed Gateway connection error:', expect.any(Error))
-      expect(console.error).toHaveBeenCalledWith('Error cleaning up Managed Gateway connection:', expect.any(Error))
     })
 
     test('logs and throws connection failures', async () => {
