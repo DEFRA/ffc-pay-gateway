@@ -1,70 +1,111 @@
 const Client = require('ssh2-sftp-client')
 const { MANAGED_GATEWAY, TRADER } = require('./constants/servers')
 const { sftpConfig } = require('./config')
-const TIMEOUT = 45000
-const OPERATION_TIMEOUT = 90000
+
+const TIMEOUT = 90000
+const OPERATION_TIMEOUT = 180000
 const keepaliveInterval = 5000
 const keepaliveCountMax = 5
-const LOG_MESSAGES = {
-  CONNECTING: (type) => `Initiating connection to ${type} server...`,
-  CONNECTED: (type) => `Successfully connected to ${type} server`,
-  DISCONNECTING: (type) => `Initiating disconnect from ${type} server...`,
-  DISCONNECTED: (type) => `Successfully disconnected from ${type} server`,
-  CLEANUP: (type) => `Cleaning up ${type} connection...`
+const MAX_RETRIES = 3
+const RETRY_DELAY = 1000
+
+const logMessages = {
+  connecting: (type) => `Initiating connection to ${type} server...`,
+  connected: (type) => `Successfully connected to ${type} server`,
+  disconnecting: (type) => `Initiating disconnect from ${type} server...`,
+  disconnected: (type) => `Successfully disconnected from ${type} server`,
+  cleanup: (type) => `Cleaning up ${type} connection...`,
+  retry: (type, attempt) => `Retry attempt ${attempt} for ${type} server...`,
+  server_disconnect: (type) => `${type} server initiated disconnect`
 }
 
 let managedGateway
 let trader
-let isConnecting = false
+let connectionPromise = null
 const connectionStates = new Map()
 
+const sleep = ms => new Promise(resolve => setTimeout(resolve, ms))
+
 const timeoutPromise = (ms, message) =>
-  new Promise((resolve, reject) => setTimeout(() => reject(new Error(message)), ms))
+  new Promise((resolve, reject) => {
+    if (typeof resolve === 'function') {
+      // no-op to avoid eslint error and sonar clash
+    }
+    setTimeout(() => {
+      reject(new Error(message))
+    }, ms)
+  })
 
 const withTimeout = (promise, ms, message) =>
   Promise.race([promise, timeoutPromise(ms, message)])
 
-const createConnection = (type, config) => {
-  if (isConnecting) {
-    console.warn(`Potential race condition: already connecting to ${type}`)
-  }
-  isConnecting = true
+const createConnection = (type, config, retryCount = 0) => {
   const newClient = new Client(`${type}-${Date.now()}`)
-  console.log(LOG_MESSAGES.CONNECTING(type))
-  connectionStates.set(newClient, { isConnected: false })
+  console.log(logMessages.connecting(type))
+  connectionStates.set(newClient, { isConnected: false, isCleaningUp: false })
 
   newClient.on('error', (err) => {
-    console.error(`${type} connection error:`, err)
-    console.log(LOG_MESSAGES.DISCONNECTING(type))
+    const state = connectionStates.get(newClient)
+    if (state && (state.isCleaningUp || !state.isConnected)) {
+      return
+    }
 
-    return withTimeout(
-      newClient.end(),
-      TIMEOUT,
-      `Timeout closing ${type} connection`
-    )
-      .then(() => {
-        isConnecting = false
-        cleanupClientState(newClient, type)
-      })
-      .catch(err => {
-        isConnecting = false
-        throw err
-      })
+    console.error(`${type} connection error:`, err)
+    if (err.code === 'ECONNRESET' && type === TRADER && retryCount < MAX_RETRIES) {
+      const delay = RETRY_DELAY * Math.pow(2, retryCount)
+      console.log(logMessages.retry(type, retryCount + 1))
+      return cleanupClientState(newClient, type)
+        .then(() => sleep(delay))
+        .then(() => createConnection(type, config, retryCount + 1))
+    }
+
+    console.log(logMessages.disconnecting(type))
+    state.isCleaningUp = true
+    return withTimeout(newClient.end(), TIMEOUT, `Timeout closing ${type} connection`)
+      .catch(endError => console.error(`Error ending ${type} connection:`, endError))
+      .then(() => cleanupClientState(newClient, type))
   })
 
-  return withTimeout(
-    newClient.connect(config),
-    TIMEOUT,
-    `Timeout connecting to ${type}`
-  )
+  newClient.on('ready', () => {
+    const state = connectionStates.get(newClient)
+    if (state) {
+      state.isConnected = true
+      state.lastActivity = Date.now()
+    }
+  })
+
+  newClient.on('close', () => {
+    const state = connectionStates.get(newClient)
+    if (!state?.isCleaningUp) {
+      console.log(logMessages.server_disconnect(type))
+      state.isCleaningUp = true
+      return cleanupClientState(newClient, type)
+    }
+  })
+
+  return withTimeout(newClient.connect(config), TIMEOUT, `Timeout connecting to ${type}`)
     .then(() => {
-      connectionStates.set(newClient, { isConnected: true })
-      console.log(LOG_MESSAGES.CONNECTED(type))
+      connectionStates.set(newClient, { isConnected: true, isCleaningUp: false })
+      console.log(logMessages.connected(type))
       return newClient
+    })
+    .catch(error => {
+      if (error.code === 'ECONNRESET' && type === TRADER && retryCount < MAX_RETRIES) {
+        console.log(logMessages.retry(type, retryCount + 1))
+        return cleanupClientState(newClient, type)
+          .then(() => sleep(RETRY_DELAY))
+          .then(() => createConnection(type, config, retryCount + 1))
+      }
+      throw error
     })
 }
 
-const connect = (server) => {
+const connect = async (server) => {
+  if (connectionPromise) {
+    console.warn(`[RACE WARNING] Waiting for existing ${server} connection to complete`)
+    return connectionPromise
+  }
+
   const config = {
     ...(server === TRADER ? sftpConfig.trader : sftpConfig.managedGateway),
     keepaliveInterval,
@@ -72,55 +113,62 @@ const connect = (server) => {
     readyTimeout: TIMEOUT
   }
 
-  return createConnection(server, config)
+  connectionPromise = createConnection(server, config)
     .then(client => {
       if (server === TRADER) {
         trader = client
       } else {
         managedGateway = client
       }
+      connectionPromise = null
       return client
     })
     .catch(error => {
+      connectionPromise = null
       console.error(`Failed to connect to ${server}:`, error)
       throw error
     })
+
+  return connectionPromise
 }
 
-const cleanupClientState = (client, type) => {
-  return new Promise((resolve) => {
-    console.log(LOG_MESSAGES.CLEANUP(type))
-    if (client.socket && !client.socket.destroyed) {
-      client.socket.destroy()
-    }
-    connectionStates.set(client, { isConnected: false })
-    if (type === TRADER && trader === client) {
-      trader = null
-    } else if (type === MANAGED_GATEWAY && managedGateway === client) {
-      managedGateway = null
-    }
-    connectionStates.delete(client)
-    console.log(LOG_MESSAGES.DISCONNECTED(type))
-    resolve()
-  })
-}
-
-const disconnect = (server) => {
-  const client = server === TRADER ? trader : managedGateway
-  if (!client || !connectionStates.get(client)?.isConnected) {
-    return Promise.resolve()
+const cleanupClientState = async (client, type) => {
+  console.log(logMessages.cleanup(type))
+  if (client.socket && !client.socket.destroyed) {
+    client.socket.destroy()
   }
-  console.log(LOG_MESSAGES.DISCONNECTING(server))
-  return withTimeout(
-    client.end(),
-    TIMEOUT,
-    `Timeout disconnecting from ${server}`
-  )
-    .then(() => cleanupClientState(client, server))
-    .catch(error => {
-      console.error(`Disconnect error from ${server}:`, error)
-      return cleanupClientState(client, server)
-    })
+  connectionStates.set(client, { isConnected: false, isCleaningUp: true })
+  if (type === TRADER && trader === client) {
+    trader = null
+  } else if (type === MANAGED_GATEWAY && managedGateway === client) {
+    managedGateway = null
+  }
+  connectionStates.delete(client)
+  console.log(logMessages.disconnected(type))
+}
+
+const disconnect = async (server) => {
+  if (connectionPromise) {
+    await connectionPromise
+  }
+
+  const client = server === TRADER ? trader : managedGateway
+  if (!client) {
+    return
+  }
+  const state = connectionStates.get(client)
+  if (!state?.isConnected || state.isCleaningUp) {
+    return
+  }
+
+  console.log(logMessages.disconnecting(server))
+  state.isCleaningUp = true
+  try {
+    await withTimeout(client.end(), TIMEOUT, `Timeout disconnecting from ${server}`)
+  } catch (error) {
+    console.error(`Disconnect error from ${server}:`, error)
+  }
+  await cleanupClientState(client, server)
 }
 
 const getClient = (server) => {
@@ -129,7 +177,8 @@ const getClient = (server) => {
   }
 
   const client = server === TRADER ? trader : managedGateway
-  if (!client || !connectionStates.get(client)?.isConnected) {
+  const state = connectionStates.get(client)
+  if (!client || !state?.isConnected) {
     throw new Error(`No active ${server} connection`)
   }
   return client
