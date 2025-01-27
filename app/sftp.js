@@ -15,6 +15,7 @@ const LOG_MESSAGES = {
 
 let managedGateway
 let trader
+let isConnecting = false
 const connectionStates = new Map()
 
 const timeoutPromise = (ms, message) =>
@@ -24,6 +25,10 @@ const withTimeout = (promise, ms, message) =>
   Promise.race([promise, timeoutPromise(ms, message)])
 
 const createConnection = (type, config) => {
+  if (isConnecting) {
+    console.warn(`Potential race condition: already connecting to ${type}`)
+  }
+  isConnecting = true
   const newClient = new Client(`${type}-${Date.now()}`)
   console.log(LOG_MESSAGES.CONNECTING(type))
   connectionStates.set(newClient, { isConnected: false })
@@ -37,8 +42,14 @@ const createConnection = (type, config) => {
       TIMEOUT,
       `Timeout closing ${type} connection`
     )
-      .then(() => cleanupClientState(newClient, type))
-      .catch(() => cleanupClientState(newClient, type))
+      .then(() => {
+        isConnecting = false
+        cleanupClientState(newClient, type)
+      })
+      .catch(err => {
+        isConnecting = false
+        throw err
+      })
   })
 
   return withTimeout(
