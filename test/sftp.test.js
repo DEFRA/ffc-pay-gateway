@@ -279,10 +279,11 @@ describe('SFTP', () => {
       const errorCallback = mockClient.on.mock.calls.find(call => call[0] === 'error')[1]
       await errorCallback({ code: 'ECONNRESET', message: 'Connection reset' })
 
-      await expect(async () => {
-        await sftp.getClient(MANAGED_GATEWAY)
-      }).rejects.toThrow('No active Managed Gateway connection')
+      await new Promise(resolve => setTimeout(resolve, 100))
+
+      expect(() => sftp.getClient(MANAGED_GATEWAY)).toThrow('No active Managed Gateway connection')
     })
+
     test('logs Trader race condition warning when already connecting', async () => {
       sftpConfig.traderEnabled = true
 

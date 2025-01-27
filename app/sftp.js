@@ -16,9 +16,8 @@ const logMessages = {
   disconnected: (type) => `Successfully disconnected from ${type} server`,
   cleanup: (type) => `Cleaning up ${type} connection...`,
   retry: (type, attempt) => `Retry attempt ${attempt} for ${type} server...`,
-  server_disconnect: (type) => `${type} server initiated disconnect`
+  serverDisconnect: (type) => `${type} server initiated disconnect`
 }
-
 let managedGateway
 let trader
 let connectionPromise = null
@@ -39,31 +38,39 @@ const timeoutPromise = (ms, message) =>
 const withTimeout = (promise, ms, message) =>
   Promise.race([promise, timeoutPromise(ms, message)])
 
+const handleError = async (newClient, type, err, retryCount, config) => {
+  const state = connectionStates.get(newClient)
+  if (state && (state.isCleaningUp || !state.isConnected)) {
+    return
+  }
+
+  console.error(`${type} connection error:`, err)
+  if (err.code === 'ECONNRESET' && type === TRADER && retryCount < MAX_RETRIES) {
+    const delay = RETRY_DELAY * Math.pow(2, retryCount)
+    console.log(logMessages.retry(type, retryCount + 1))
+    await cleanupClientState(newClient, type)
+    await sleep(delay)
+    await createConnection(type, config, retryCount + 1)
+    return
+  }
+
+  console.log(logMessages.disconnecting(type))
+  state.isCleaningUp = true
+  try {
+    await withTimeout(newClient.end(), TIMEOUT, `Timeout closing ${type} connection`)
+  } catch (endError) {
+    console.error(`Error ending ${type} connection:`, endError)
+  }
+  await cleanupClientState(newClient, type)
+}
+
 const createConnection = (type, config, retryCount = 0) => {
   const newClient = new Client(`${type}-${Date.now()}`)
   console.log(logMessages.connecting(type))
   connectionStates.set(newClient, { isConnected: false, isCleaningUp: false })
 
   newClient.on('error', (err) => {
-    const state = connectionStates.get(newClient)
-    if (state && (state.isCleaningUp || !state.isConnected)) {
-      return
-    }
-
-    console.error(`${type} connection error:`, err)
-    if (err.code === 'ECONNRESET' && type === TRADER && retryCount < MAX_RETRIES) {
-      const delay = RETRY_DELAY * Math.pow(2, retryCount)
-      console.log(logMessages.retry(type, retryCount + 1))
-      return cleanupClientState(newClient, type)
-        .then(() => sleep(delay))
-        .then(() => createConnection(type, config, retryCount + 1))
-    }
-
-    console.log(logMessages.disconnecting(type))
-    state.isCleaningUp = true
-    return withTimeout(newClient.end(), TIMEOUT, `Timeout closing ${type} connection`)
-      .catch(endError => console.error(`Error ending ${type} connection:`, endError))
-      .then(() => cleanupClientState(newClient, type))
+    handleError(newClient, type, err, retryCount, config)
   })
 
   newClient.on('ready', () => {
@@ -77,9 +84,9 @@ const createConnection = (type, config, retryCount = 0) => {
   newClient.on('close', () => {
     const state = connectionStates.get(newClient)
     if (!state?.isCleaningUp) {
-      console.log(logMessages.server_disconnect(type))
+      console.log(logMessages.serverDisconnect(type))
       state.isCleaningUp = true
-      return cleanupClientState(newClient, type)
+      cleanupClientState(newClient, type)
     }
   })
 
@@ -140,7 +147,8 @@ const cleanupClientState = async (client, type) => {
   connectionStates.set(client, { isConnected: false, isCleaningUp: true })
   if (type === TRADER && trader === client) {
     trader = null
-  } else if (type === MANAGED_GATEWAY && managedGateway === client) {
+  }
+  if (type === MANAGED_GATEWAY && managedGateway === client) {
     managedGateway = null
   }
   connectionStates.delete(client)
