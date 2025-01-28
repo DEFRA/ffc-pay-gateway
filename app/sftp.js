@@ -2,187 +2,250 @@ const Client = require('ssh2-sftp-client')
 const { MANAGED_GATEWAY, TRADER } = require('./constants/servers')
 const { sftpConfig } = require('./config')
 
+const TIMEOUT = 90000
+const OPERATION_TIMEOUT = 180000
+const keepaliveInterval = 5000
+const keepaliveCountMax = 5
+const MAX_RETRIES = 3
+const RETRY_DELAY = 1000
+
+const logMessages = {
+  connecting: (type) => `Initiating connection to ${type} server...`,
+  connected: (type) => `Successfully connected to ${type} server`,
+  disconnecting: (type) => `Initiating disconnect from ${type} server...`,
+  disconnected: (type) => `Successfully disconnected from ${type} server`,
+  cleanup: (type) => `Cleaning up ${type} connection...`,
+  retry: (type, attempt) => `Retry attempt ${attempt} for ${type} server...`,
+  serverDisconnect: (type) => `${type} server initiated disconnect`
+}
 let managedGateway
 let trader
+let connectionPromise = null
 const connectionStates = new Map()
 
-const connect = async (server) => {
-  try {
-    if (server === TRADER) {
-      if (sftpConfig.traderEnabled) {
-        if (sftpConfig.debug) {
-          console.log('Connecting to Trader')
-        }
-        trader = await createTraderConnection()
-      }
-    } else if (server === MANAGED_GATEWAY) {
-      if (sftpConfig.managedGatewayEnabled) {
-        if (sftpConfig.debug) {
-          console.log('Connecting to Managed Gateway')
-        }
-        managedGateway = await createManagedGatewayConnection()
-      }
+const sleep = ms => new Promise(resolve => setTimeout(resolve, ms))
+
+const timeoutPromise = (ms, message) =>
+  new Promise((resolve, reject) => {
+    if (typeof resolve === 'function') {
+      // no-op to avoid eslint error and sonar clash
     }
-  } catch (error) {
-    console.error(`Failed to connect to ${server === MANAGED_GATEWAY ? 'Managed Gateway' : 'Trader'}:`, error)
-    throw error
+    setTimeout(() => {
+      reject(new Error(message))
+    }, ms)
+  })
+
+const withTimeout = (promise, ms, message) =>
+  Promise.race([promise, timeoutPromise(ms, message)])
+
+const handleError = async (newClient, type, err, retryCount, config) => {
+  const state = connectionStates.get(newClient)
+  if (state && (state.isCleaningUp || !state.isConnected)) {
+    return
   }
+
+  console.error(`${type} connection error:`, err)
+  if (err.code === 'ECONNRESET' && type === TRADER && retryCount < MAX_RETRIES) {
+    const delay = RETRY_DELAY * Math.pow(2, retryCount)
+    console.log(logMessages.retry(type, retryCount + 1))
+    await cleanupClientState(newClient, type)
+    await sleep(delay)
+    await createConnection(type, config, retryCount + 1)
+    return
+  }
+
+  console.log(logMessages.disconnecting(type))
+  state.isCleaningUp = true
+  try {
+    await withTimeout(newClient.end(), TIMEOUT, `Timeout closing ${type} connection`)
+  } catch (endError) {
+    console.error(`Error ending ${type} connection:`, endError)
+  }
+  await cleanupClientState(newClient, type)
 }
 
-const cleanupClientState = (client, type) => {
-  connectionStates.set(client, { isConnected: false })
+const createConnection = (type, config, retryCount = 0) => {
+  const newClient = new Client(`${type}-${Date.now()}`)
+  console.log(logMessages.connecting(type))
+  connectionStates.set(newClient, { isConnected: false, isCleaningUp: false })
+
+  newClient.on('error', (err) => {
+    handleError(newClient, type, err, retryCount, config)
+  })
+
+  newClient.on('ready', () => {
+    const state = connectionStates.get(newClient)
+    if (state) {
+      state.isConnected = true
+      state.lastActivity = Date.now()
+    }
+  })
+
+  newClient.on('close', () => {
+    const state = connectionStates.get(newClient)
+    if (!state?.isCleaningUp) {
+      console.log(logMessages.serverDisconnect(type))
+      state.isCleaningUp = true
+      cleanupClientState(newClient, type)
+    }
+  })
+
+  return withTimeout(newClient.connect(config), TIMEOUT, `Timeout connecting to ${type}`)
+    .then(() => {
+      connectionStates.set(newClient, { isConnected: true, isCleaningUp: false })
+      console.log(logMessages.connected(type))
+      return newClient
+    })
+    .catch(error => {
+      if (error.code === 'ECONNRESET' && type === TRADER && retryCount < MAX_RETRIES) {
+        console.log(logMessages.retry(type, retryCount + 1))
+        return cleanupClientState(newClient, type)
+          .then(() => sleep(RETRY_DELAY))
+          .then(() => createConnection(type, config, retryCount + 1))
+      }
+      throw error
+    })
+}
+
+const connect = async (server) => {
+  if (connectionPromise) {
+    console.warn(`[RACE WARNING] Waiting for existing ${server} connection to complete`)
+    return connectionPromise
+  }
+
+  const config = {
+    ...(server === TRADER ? sftpConfig.trader : sftpConfig.managedGateway),
+    keepaliveInterval,
+    keepaliveCountMax,
+    readyTimeout: TIMEOUT
+  }
+
+  connectionPromise = createConnection(server, config)
+    .then(client => {
+      if (server === TRADER) {
+        trader = client
+      } else {
+        managedGateway = client
+      }
+      connectionPromise = null
+      return client
+    })
+    .catch(error => {
+      connectionPromise = null
+      console.error(`Failed to connect to ${server}:`, error)
+      throw error
+    })
+
+  return connectionPromise
+}
+
+const cleanupClientState = async (client, type) => {
+  console.log(logMessages.cleanup(type))
+  if (client.socket && !client.socket.destroyed) {
+    client.socket.destroy()
+  }
+  connectionStates.set(client, { isConnected: false, isCleaningUp: true })
   if (type === TRADER && trader === client) {
     trader = null
-  } else if (type === MANAGED_GATEWAY && managedGateway === client) {
+  }
+  if (type === MANAGED_GATEWAY && managedGateway === client) {
     managedGateway = null
   }
   connectionStates.delete(client)
-}
-
-const createTraderConnection = async () => {
-  const newClient = new Client('trader-' + Date.now())
-  connectionStates.set(newClient, { isConnected: false })
-
-  newClient.on('error', async (err) => {
-    console.error('Trader connection error:', err)
-    if (err.code === 'ECONNRESET') {
-      cleanupClientState(newClient, TRADER)
-      return
-    }
-
-    try {
-      if (connectionStates.get(newClient)?.isConnected) {
-        await newClient.end()
-      }
-    } catch (cleanupErr) {
-      console.error('Error cleaning up Trader connection:', cleanupErr)
-    } finally {
-      cleanupClientState(newClient, TRADER)
-    }
-  })
-
-  const traderConfig = {
-    ...sftpConfig.trader,
-    keepaliveInterval: 10000,
-    keepaliveCountMax: 3,
-    readyTimeout: 30000
-  }
-
-  await newClient.connect(traderConfig)
-  connectionStates.set(newClient, { isConnected: true })
-  return newClient
-}
-
-const createManagedGatewayConnection = async () => {
-  const newClient = new Client('managed-gateway-' + Date.now())
-  connectionStates.set(newClient, { isConnected: false })
-
-  newClient.on('error', async (err) => {
-    console.error('Managed Gateway connection error:', err)
-    if (err.code === 'ECONNRESET') {
-      cleanupClientState(newClient, MANAGED_GATEWAY)
-      return
-    }
-
-    try {
-      if (connectionStates.get(newClient)?.isConnected) {
-        await newClient.end()
-      }
-    } catch (cleanupErr) {
-      console.error('Error cleaning up Managed Gateway connection:', cleanupErr)
-    } finally {
-      cleanupClientState(newClient, MANAGED_GATEWAY)
-    }
-  })
-
-  const gatewayConfig = {
-    ...sftpConfig.managedGateway,
-    keepaliveInterval: 10000,
-    keepaliveCountMax: 3,
-    readyTimeout: 30000
-  }
-
-  await newClient.connect(gatewayConfig)
-  connectionStates.set(newClient, { isConnected: true })
-  return newClient
+  console.log(logMessages.disconnected(type))
 }
 
 const disconnect = async (server) => {
-  try {
-    const client = server === TRADER ? trader : managedGateway
-    if (!client || !connectionStates.get(client)?.isConnected) {
-      return
-    }
-
-    await client.end()
-    cleanupClientState(client, server)
-  } catch (err) {
-    console.error(`Unable to disconnect from ${server}:`, err)
+  if (connectionPromise) {
+    await connectionPromise
   }
+
+  const client = server === TRADER ? trader : managedGateway
+  if (!client) {
+    return
+  }
+  const state = connectionStates.get(client)
+  if (!state?.isConnected || state.isCleaningUp) {
+    return
+  }
+
+  console.log(logMessages.disconnecting(server))
+  state.isCleaningUp = true
+  try {
+    await withTimeout(client.end(), TIMEOUT, `Timeout disconnecting from ${server}`)
+  } catch (error) {
+    console.error(`Disconnect error from ${server}:`, error)
+  }
+  await cleanupClientState(client, server)
 }
 
 const getClient = (server) => {
-  if (server === TRADER) {
-    if (!trader) {
-      throw new Error('No active Trader connection')
-    }
-    return trader
+  if (server !== TRADER && server !== MANAGED_GATEWAY) {
+    throw new Error(`Unknown server type: ${server}, no active connection`)
   }
 
-  if (server === MANAGED_GATEWAY) {
-    if (!managedGateway) {
-      throw new Error('No active Managed Gateway connection')
-    }
-    return managedGateway
+  const client = server === TRADER ? trader : managedGateway
+  const state = connectionStates.get(client)
+  if (!client || !state?.isConnected) {
+    throw new Error(`No active ${server} connection`)
   }
-
-  throw new Error(`Unknown server type: ${server}`)
+  return client
 }
 
-const getFile = async (transfer, filename) => {
-  try {
-    const client = getClient(transfer.server)
-    const buffer = await client.get(`${transfer.directory}/${filename}`)
-    return buffer.toString()
-  } catch (err) {
-    console.error(`Error getting file ${filename}:`, err)
-    throw err
-  }
-}
-
-const deleteFile = async (transfer, filename) => {
-  try {
-    const client = getClient(transfer.server)
-    await client.delete(`${transfer.directory}/${filename}`)
-  } catch (err) {
-    console.error(`Error deleting file ${filename}:`, err)
-    throw err
-  }
-}
-
-const putFile = async (transfer, filename, data) => {
-  try {
-    const client = getClient(transfer.server)
-    await client.put(Buffer.from(data), `${transfer.directory}/${filename}`, {
-      writeStreamOptions: {
-        mode: 0o644
-      }
+const getFile = (transfer, filename) => {
+  const client = getClient(transfer.server)
+  return withTimeout(
+    client.get(`${transfer.directory}/${filename}`),
+    OPERATION_TIMEOUT,
+    `Timeout getting file ${filename}`
+  )
+    .then(buffer => buffer.toString())
+    .catch(err => {
+      console.error(`Error getting file ${filename}:`, err)
+      throw err
     })
-  } catch (err) {
-    console.error(`Error putting file ${filename}:`, err)
-    throw err
-  }
 }
 
-const getControlFiles = async (transfer) => {
-  try {
-    const client = getClient(transfer.server)
-    const files = await client.list(transfer.directory)
-    return files.filter(x => transfer.fileMask.test(x.name)).map(x => x.name)
-  } catch (err) {
-    console.error(`Error listing control files in ${transfer.directory}:`, err)
-    throw err
-  }
+const deleteFile = (transfer, filename) => {
+  const client = getClient(transfer.server)
+  return withTimeout(
+    client.delete(`${transfer.directory}/${filename}`),
+    OPERATION_TIMEOUT,
+    `Timeout deleting file ${filename}`
+  )
+    .catch(err => {
+      console.error(`Error deleting file ${filename}:`, err)
+      throw err
+    })
+}
+
+const putFile = (transfer, filename, data) => {
+  const client = getClient(transfer.server)
+  return withTimeout(
+    client.put(Buffer.from(data), `${transfer.directory}/${filename}`, {
+      writeStreamOptions: { mode: 0o644 }
+    }),
+    OPERATION_TIMEOUT,
+    `Timeout putting file ${filename}`
+  )
+    .catch(err => {
+      console.error(`Error putting file ${filename}:`, err)
+      throw err
+    })
+}
+
+const getControlFiles = (transfer) => {
+  const client = getClient(transfer.server)
+  return withTimeout(
+    client.list(transfer.directory),
+    OPERATION_TIMEOUT,
+    `Timeout listing control files in ${transfer.directory}`
+  )
+    .then(files => files.filter(x => transfer.fileMask.test(x.name)).map(x => x.name))
+    .catch(err => {
+      console.error(`Error listing control files in ${transfer.directory}:`, err)
+      throw err
+    })
 }
 
 module.exports = {

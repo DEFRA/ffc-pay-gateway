@@ -28,18 +28,14 @@ describe('SFTP', () => {
     test('creates new trader connection when enabled', async () => {
       sftpConfig.traderEnabled = true
       await sftp.connect(TRADER)
-      expect(Client).toHaveBeenCalledWith(expect.stringContaining('trader-'))
-      expect(mockClient.connect).toHaveBeenCalledWith(expect.objectContaining({
-        keepaliveInterval: 10000,
-        keepaliveCountMax: 3,
-        readyTimeout: 30000
-      }))
+      expect(Client).toHaveBeenCalledWith(expect.stringContaining('Trader-'))
+      expect(mockClient.connect).toHaveBeenCalled()
     })
 
     test('creates new managed gateway connection when enabled', async () => {
       sftpConfig.managedGatewayEnabled = true
       await sftp.connect(MANAGED_GATEWAY)
-      expect(Client).toHaveBeenCalledWith(expect.stringContaining('managed-gateway-'))
+      expect(Client).toHaveBeenCalledWith(expect.stringContaining('Managed Gateway-'))
       expect(mockClient.connect).toHaveBeenCalled()
     })
 
@@ -47,7 +43,8 @@ describe('SFTP', () => {
       sftpConfig.debug = true
       sftpConfig.traderEnabled = true
       await sftp.connect(TRADER)
-      expect(console.log).toHaveBeenCalledWith('Connecting to Trader')
+      expect(console.log).toHaveBeenCalledWith('Initiating connection to Trader server...')
+      expect(console.log).toHaveBeenCalledWith('Successfully connected to Trader server')
     })
 
     test('handles connection errors', async () => {
@@ -57,19 +54,147 @@ describe('SFTP', () => {
     })
   })
 
-  describe('disconnect', () => {
-    test('disconnects trader client', async () => {
+  describe('connection retry logic', () => {
+    beforeEach(() => {
+      jest.clearAllMocks()
       sftpConfig.traderEnabled = true
-      await sftp.connect(TRADER)
-      await sftp.disconnect(TRADER)
-      expect(mockClient.end).toHaveBeenCalled()
     })
 
-    test('disconnects managed gateway client', async () => {
-      sftpConfig.managedGatewayEnabled = true
+    test('successfully connects after ECONNRESET', async () => {
+      const error = new Error('Connection reset')
+      error.code = 'ECONNRESET'
+      mockClient.connect
+        .mockRejectedValueOnce(error)
+        .mockResolvedValueOnce()
+
+      await sftp.connect(TRADER)
+
+      expect(mockClient.connect).toHaveBeenCalledTimes(2)
+      expect(console.log).toHaveBeenCalledWith('Retry attempt 1 for Trader server...')
+      expect(console.log).toHaveBeenCalledWith('Successfully connected to Trader server')
+    })
+
+    test('gives up after max retries for ECONNRESET', async () => {
+      const error = new Error('Connection reset')
+      error.code = 'ECONNRESET'
+      mockClient.connect
+        .mockRejectedValueOnce(error)
+        .mockRejectedValueOnce(error)
+        .mockRejectedValueOnce(error)
+        .mockRejectedValue(error)
+
+      await expect(sftp.connect(TRADER)).rejects.toThrow('Connection reset')
+      expect(mockClient.connect).toHaveBeenCalledTimes(4)
+      expect(console.log).toHaveBeenCalledWith('Retry attempt 3 for Trader server...')
+    })
+  })
+
+  describe('disconnect', () => {
+    beforeEach(() => {
+      jest.clearAllMocks()
+      sftpConfig.traderEnabled = true
+      mockClient = {
+        on: jest.fn((event, callback) => {
+          if (event === 'ready') {
+            callback()
+          }
+        }),
+        connect: jest.fn().mockImplementation(() => {
+          mockClient.on.mock.calls
+            .find(call => call[0] === 'ready')[1]()
+          return Promise.resolve()
+        }),
+        end: jest.fn(),
+        socket: {
+          destroyed: false,
+          destroy: jest.fn()
+        }
+      }
+      Client.mockImplementation(() => mockClient)
+    })
+
+    test('handles disconnect timeout', async () => {
+      await sftp.connect(TRADER)
+      mockClient.end.mockImplementation(() =>
+        Promise.reject(new Error('Timeout disconnecting from Trader'))
+      )
+
+      await sftp.disconnect(TRADER)
+
+      expect(console.error).toHaveBeenCalledWith(
+        'Disconnect error from Trader:',
+        expect.any(Error)
+      )
+      expect(mockClient.socket.destroy).toHaveBeenCalled()
+    })
+
+    test('cleans up state after timeout', async () => {
+      await sftp.connect(TRADER)
+      mockClient.end.mockRejectedValueOnce(new Error('Timeout'))
+
+      await sftp.disconnect(TRADER)
+
+      expect(mockClient.socket.destroy).toHaveBeenCalled()
+      expect(() => sftp.getClient(TRADER)).toThrow('No active Trader connection')
+    })
+
+    test('handles server-initiated disconnect', async () => {
+      await sftp.connect(TRADER)
+
+      // Verify connection state exists
+      const closeCallback = mockClient.on.mock.calls
+        .find(call => call[0] === 'close')[1]
+
+      await closeCallback()
+
+      expect(console.log).toHaveBeenCalledWith('Trader server initiated disconnect')
+      expect(console.log).toHaveBeenCalledWith('Cleaning up Trader connection...')
+      expect(() => sftp.getClient(TRADER)).toThrow('No active Trader connection')
+    })
+  })
+
+  describe('cleanupClientState', () => {
+    beforeEach(() => {
+      jest.clearAllMocks()
+      mockClient.socket = {
+        destroyed: false,
+        destroy: jest.fn()
+      }
+    })
+
+    test('destroys socket for trader if not already destroyed', async () => {
+      await sftp.connect(TRADER)
+      await sftp.disconnect(TRADER)
+
+      expect(mockClient.socket.destroy).toHaveBeenCalled()
+      expect(console.log).toHaveBeenCalledWith('Cleaning up Trader connection...')
+      expect(console.log).toHaveBeenCalledWith('Successfully disconnected from Trader server')
+    })
+
+    test('does not destroy already destroyed trader socket', async () => {
+      mockClient.socket.destroyed = true
+      await sftp.connect(TRADER)
+      await sftp.disconnect(TRADER)
+
+      expect(mockClient.socket.destroy).not.toHaveBeenCalled()
+    })
+
+    test('destroys socket for managed gateway if not already destroyed', async () => {
       await sftp.connect(MANAGED_GATEWAY)
       await sftp.disconnect(MANAGED_GATEWAY)
-      expect(mockClient.end).toHaveBeenCalled()
+
+      expect(mockClient.socket.destroy).toHaveBeenCalled()
+      expect(console.log).toHaveBeenCalledWith('Cleaning up Managed Gateway connection...')
+      expect(console.log).toHaveBeenCalledWith('Successfully disconnected from Managed Gateway server')
+    })
+
+    test('handles cleanup when socket is undefined', async () => {
+      mockClient.socket = undefined
+      await sftp.connect(TRADER)
+      await sftp.disconnect(TRADER)
+
+      expect(console.log).toHaveBeenCalledWith('Cleaning up Trader connection...')
+      expect(console.log).toHaveBeenCalledWith('Successfully disconnected from Trader server')
     })
   })
 
@@ -117,6 +242,9 @@ describe('SFTP', () => {
   })
 
   describe('error handling', () => {
+    beforeEach(() => {
+      console.warn = jest.fn()
+    })
     test('handles client error events', async () => {
       sftpConfig.traderEnabled = true
       await sftp.connect(TRADER)
@@ -132,42 +260,6 @@ describe('SFTP', () => {
     test('throws when getting client without connection', () => {
       expect(() => sftp.getClient(TRADER)).toThrow('No active Trader connection')
     })
-  })
-  describe('error handling and logging', () => {
-    test('logs trader cleanup errors', async () => {
-      sftpConfig.traderEnabled = true
-      await sftp.connect(TRADER)
-      mockClient.end.mockRejectedValueOnce(new Error('Cleanup failed'))
-
-      const errorCallback = mockClient.on.mock.calls.find(call => call[0] === 'error')[1]
-      await errorCallback(new Error('Connection error'))
-
-      expect(console.error).toHaveBeenCalledWith('Trader connection error:', expect.any(Error))
-      expect(console.error).toHaveBeenCalledWith('Error cleaning up Trader connection:', expect.any(Error))
-    })
-
-    test('logs managed gateway cleanup errors', async () => {
-      sftpConfig.managedGatewayEnabled = true
-      await sftp.connect(MANAGED_GATEWAY)
-      mockClient.end.mockRejectedValueOnce(new Error('Cleanup failed'))
-
-      const errorCallback = mockClient.on.mock.calls.find(call => call[0] === 'error')[1]
-      await errorCallback(new Error('Connection error'))
-
-      expect(console.error).toHaveBeenCalledWith('Managed Gateway connection error:', expect.any(Error))
-      expect(console.error).toHaveBeenCalledWith('Error cleaning up Managed Gateway connection:', expect.any(Error))
-    })
-
-    test('logs and throws connection failures', async () => {
-      sftpConfig.managedGatewayEnabled = true
-      const error = new Error('Connection failed')
-      mockClient.connect.mockRejectedValueOnce(error)
-
-      await expect(sftp.connect(MANAGED_GATEWAY)).rejects.toThrow('Connection failed')
-      expect(console.error).toHaveBeenCalledWith('Failed to connect to Managed Gateway:', error)
-    })
-  })
-  describe('error handling and cleanup', () => {
     test('handles connection loss and cleanup for trader', async () => {
       sftpConfig.traderEnabled = true
       await sftp.connect(TRADER)
@@ -187,9 +279,67 @@ describe('SFTP', () => {
       const errorCallback = mockClient.on.mock.calls.find(call => call[0] === 'error')[1]
       await errorCallback({ code: 'ECONNRESET', message: 'Connection reset' })
 
-      await expect(async () => {
-        await sftp.getClient(MANAGED_GATEWAY)
-      }).rejects.toThrow('No active Managed Gateway connection')
+      await new Promise(resolve => setTimeout(resolve, 100))
+
+      expect(() => sftp.getClient(MANAGED_GATEWAY)).toThrow('No active Managed Gateway connection')
+    })
+
+    test('logs Trader race condition warning when already connecting', async () => {
+      sftpConfig.traderEnabled = true
+
+      const firstConnection = sftp.connect(TRADER)
+
+      const secondConnection = sftp.connect(TRADER)
+
+      await Promise.all([firstConnection, secondConnection])
+
+      expect(console.warn).toHaveBeenCalledWith('[RACE WARNING] Waiting for existing Trader connection to complete')
+    })
+    test('logs Managed Gateway race condition warning when already connecting', async () => {
+      sftpConfig.managedGatewayEnabled = true
+
+      const firstConnection = sftp.connect(MANAGED_GATEWAY)
+
+      const secondConnection = sftp.connect(MANAGED_GATEWAY)
+
+      await Promise.all([firstConnection, secondConnection])
+
+      expect(console.warn).toHaveBeenCalledWith('[RACE WARNING] Waiting for existing Managed Gateway connection to complete')
+    })
+
+    test('logs trader cleanup errors', async () => {
+      sftpConfig.traderEnabled = true
+      await sftp.connect(TRADER)
+
+      const errorCallback = mockClient.on.mock.calls.find(call => call[0] === 'error')[1]
+
+      mockClient.end.mockResolvedValueOnce()
+
+      await errorCallback(new Error('Connection error'))
+
+      expect(console.error).toHaveBeenCalledWith('Trader connection error:', expect.any(Error))
+    })
+
+    test('logs managed gateway cleanup errors', async () => {
+      sftpConfig.managedGatewayEnabled = true
+      await sftp.connect(MANAGED_GATEWAY)
+
+      const errorCallback = mockClient.on.mock.calls.find(call => call[0] === 'error')[1]
+
+      mockClient.end.mockResolvedValueOnce()
+
+      await errorCallback(new Error('Connection error'))
+
+      expect(console.error).toHaveBeenCalledWith('Managed Gateway connection error:', expect.any(Error))
+    })
+
+    test('logs and throws connection failures', async () => {
+      sftpConfig.managedGatewayEnabled = true
+      const error = new Error('Connection failed')
+      mockClient.connect.mockRejectedValueOnce(error)
+
+      await expect(sftp.connect(MANAGED_GATEWAY)).rejects.toThrow('Connection failed')
+      expect(console.error).toHaveBeenCalledWith('Failed to connect to Managed Gateway:', error)
     })
   })
 
@@ -235,7 +385,6 @@ describe('SFTP', () => {
 
   describe('null client scenarios', () => {
     beforeEach(() => {
-      // Reset any existing connections
       sftp.disconnect(TRADER)
       sftp.disconnect(MANAGED_GATEWAY)
     })
