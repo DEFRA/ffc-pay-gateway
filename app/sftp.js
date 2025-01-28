@@ -40,7 +40,7 @@ const withTimeout = (promise, ms, message) =>
 
 const handleError = async (newClient, type, err, retryCount, config) => {
   const state = connectionStates.get(newClient)
-  if (state && (state.isCleaningUp || !state.isConnected)) {
+  if (state?.isCleaningUp || !state?.isConnected) {
     return
   }
 
@@ -48,6 +48,7 @@ const handleError = async (newClient, type, err, retryCount, config) => {
   if (err.code === 'ECONNRESET' && type === TRADER && retryCount < MAX_RETRIES) {
     const delay = RETRY_DELAY * Math.pow(2, retryCount)
     console.log(logMessages.retry(type, retryCount + 1))
+    connectionStates.set(newClient, { ...state, isCleaningUp: true })
     await cleanupClientState(newClient, type)
     await sleep(delay)
     await createConnection(type, config, retryCount + 1)
@@ -55,7 +56,7 @@ const handleError = async (newClient, type, err, retryCount, config) => {
   }
 
   console.log(logMessages.disconnecting(type))
-  state.isCleaningUp = true
+  connectionStates.set(newClient, { ...state, isCleaningUp: true })
   try {
     await withTimeout(newClient.end(), TIMEOUT, `Timeout closing ${type} connection`)
   } catch (endError) {
@@ -76,8 +77,12 @@ const createConnection = (type, config, retryCount = 0) => {
   newClient.on('ready', () => {
     const state = connectionStates.get(newClient)
     if (state) {
-      state.isConnected = true
-      state.lastActivity = Date.now()
+      connectionStates.set(newClient,
+        {
+          ...state,
+          isConnected: false,
+          lastActivity: Date.now()
+        })
     }
   })
 
@@ -85,7 +90,7 @@ const createConnection = (type, config, retryCount = 0) => {
     const state = connectionStates.get(newClient)
     if (!state?.isCleaningUp) {
       console.log(logMessages.serverDisconnect(type))
-      state.isCleaningUp = true
+      connectionStates.set(newClient, { ...state, isCleaningUp: true })
       cleanupClientState(newClient, type)
     }
   })
@@ -170,7 +175,7 @@ const disconnect = async (server) => {
   }
 
   console.log(logMessages.disconnecting(server))
-  state.isCleaningUp = true
+  connectionStates.set(client, { ...state, isCleaningUp: true })
   try {
     await withTimeout(client.end(), TIMEOUT, `Timeout disconnecting from ${server}`)
   } catch (error) {
