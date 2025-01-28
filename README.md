@@ -73,7 +73,7 @@ arguments to the test script.
 Examples:
 
 ```
-# Run all tests
+# Run all tests.
 scripts/test
 
 # Run tests with file watch
