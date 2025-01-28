@@ -40,7 +40,7 @@ const withTimeout = (promise, ms, message) =>
 
 const handleError = async (newClient, type, err, retryCount, config) => {
   const state = connectionStates.get(newClient)
-  if (state && (state.isCleaningUp || !state.isConnected)) {
+  if (state?.isCleaningUp || !state?.isConnected) {
     return
   }
 
