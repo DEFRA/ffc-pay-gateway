@@ -1,5 +1,7 @@
 jest.mock('../../../app/transfer')
+jest.mock('../../../app/sftp')
 const { getActiveTransfers, transferInboundFiles, transferOutboundFiles } = require('../../../app/transfer')
+const { connect, disconnect } = require('../../../app/sftp')
 
 const { INBOUND, OUTBOUND } = require('../../../app/constants/directions')
 
@@ -9,6 +11,8 @@ describe('poll', () => {
   beforeEach(() => {
     jest.clearAllMocks()
     getActiveTransfers.mockReturnValue([])
+    connect.mockResolvedValue()
+    disconnect.mockResolvedValue()
   })
 
   test('should get active transfers', async () => {
@@ -66,5 +70,14 @@ describe('poll', () => {
     transferOutboundFiles.mockImplementationOnce(() => { throw new Error() })
     await poll()
     expect(transferOutboundFiles).toHaveBeenCalledTimes(2)
+  })
+
+  test('should continue to transfer files if disconnect throws error', async () => {
+    getActiveTransfers.mockReturnValueOnce([{ direction: INBOUND }, { direction: OUTBOUND }])
+    disconnect.mockImplementationOnce(() => { throw new Error() })
+    await poll()
+    expect(transferInboundFiles).toHaveBeenCalledTimes(1)
+    expect(transferOutboundFiles).toHaveBeenCalledTimes(1)
+    expect(disconnect).toHaveBeenCalledTimes(2)
   })
 })
