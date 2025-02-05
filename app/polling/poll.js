@@ -21,7 +21,11 @@ const poll = async () => {
     } catch (err) {
       console.error(err)
     } finally {
-      await disconnect(transfer.server)
+      try {
+        await disconnect(transfer.server)
+      } catch (disconnectError) {
+        console.error(`Disconnection from server ${transfer.server} failed: `, disconnectError)
+      }
     }
   }
 }
