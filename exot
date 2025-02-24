@@ -1,0 +1,47 @@
+[33m5a6c792[m[33m ([m[1;36mHEAD[m[33m -> [m[1;32mmain[m[33m)[m Commiting changes for v10 pipeline migration
+[33mde89c9a[m[33m ([m[1;33mtag: [m[1;33m1.4.27[m[33m, [m[1;31morigin/main[m[33m, [m[1;31morigin/HEAD[m[33m, [m[1;31morigin/DOC-1883-Pipeline-Migration-ffc-pay-gateway[m[33m, [m[1;32mDOC-1883-Pipeline-Migration-ffc-pay-gateway[m[33m)[m add try catch to disconnect method (#52)
+[33ma3ba331[m[33m ([m[1;33mtag: [m[1;33m1.4.26[m[33m)[m hot fix for isCleaningUp method (#51)
+[33m888c9aa[m[33m ([m[1;33mtag: [m[1;33m1.4.25[m[33m)[m Promise.race, standardized async/await and promises, added detailed s… (#49)
+[33m42cf1a8[m[33m ([m[1;33mtag: [m[1;33m1.4.24[m[33m)[m continue with scheme attempts on disconnect fail (#48)
+[33m6259e4e[m[33m ([m[1;33mtag: [m[1;33m1.4.23[m[33m)[m update readme, finalise version bump bot (#46)
+[33m4537c88[m[33m ([m[1;33mtag: [m[1;33m1.4.22[m[33m)[m update action for merging main (#47)
+[33mb31ece5[m[33m ([m[1;33mtag: [m[1;33m1.4.21[m[33m)[m changed sftp so connections use new connections, added error handling… (#45)
+[33m9694832[m[33m ([m[1;33mtag: [m[1;33m1.4.20[m[33m)[m Bump Version # on PR (#44)
+[33md60ffd2[m[33m ([m[1;33mtag: [m[1;33m1.4.19[m[33m)[m Altering all references of Callisto to Trader in gateway service (#43)
+[33md952d6d[m[33m ([m[1;33mtag: [m[1;33m1.4.18[m[33m)[m Commiting changes updating ssh2-sftp-client library from v9.1.0 to v1… (#37)
+[33m6f7e626[m[33m ([m[1;33mtag: [m[1;33m1.4.17[m[33m)[m kickstart gateway (#36)
+[33m1d2d18d[m[33m ([m[1;33mtag: [m[1;33m1.4.16[m[33m)[m update fileMask digits to wildcard (#35)
+[33mb908d04[m[33m ([m[1;33mtag: [m[1;33m1.4.15[m[33m)[m change trader file paths (#34)
+[33m3b0cd53[m[33m ([m[1;33mtag: [m[1;33m1.4.14[m[33m)[m change algorithm for trader server (#33)
+[33m1b9cac4[m[33m ([m[1;33mtag: [m[1;33m1.4.13[m[33m)[m fix casing of ESFIO path (#31)
+[33m5266e0d[m[33m ([m[1;33mtag: [m[1;33m1.4.12[m[33m)[m DOC-583 : updated azurite and application insights versions (#30)
+[33m80502f3[m[33m ([m[1;33mtag: [m[1;33m1.4.11[m[33m)[m DOC-670 : updated node version and jest version update (#28)
+[33m56b3184[m[33m ([m[1;33mtag: [m[1;33m1.4.10[m[33m)[m mask password and private key (#29)
+[33me1e861a[m[33m ([m[1;33mtag: [m[1;33m1.4.9[m[33m)[m DOC-1415 : moved command docker-compose to docker compose (#27)
+[33m79d8add[m[33m ([m[1;33mtag: [m[1;33m1.4.8[m[33m)[m amend behaviour for fc return files (#22)
+[33mde5f5df[m[33m ([m[1;33mtag: [m[1;33m1.4.7[m[33m)[m add sfi expanded offer (#21)
+[33m06de5d4[m[33m ([m[1;33mtag: [m[1;33m1.4.6[m[33m)[m amend folder path (#20)
+[33m7703502[m[33m ([m[1;33mtag: [m[1;33m1.4.5[m[33m)[m Add delinked payments (#19)
+[33mece61a9[m[33m ([m[1;33mtag: [m[1;33m1.4.4[m[33m)[m Update permissions on put (#18)
+[33me65b8e0[m[33m ([m[1;33mtag: [m[1;33m1.4.3[m[33m)[m amend file masks (#17)
+[33m8ef69cd[m[33m ([m[1;33mtag: [m[1;33m1.4.2[m[33m)[m amend regex pattern for genesis (#16)
+[33ma0cdb70[m[33m ([m[1;33mtag: [m[1;33m1.4.1[m[33m)[m increase jest timeout, add fdmr to config map (#15)
+[33mf0931c0[m[33m ([m[1;33mtag: [m[1;33m1.4.0[m[33m)[m amend connection behaviour (#13)
+[33m66064f2[m[33m ([m[1;33mtag: [m[1;33m1.3.3[m[33m)[m update paths (#12)
+[33m5b66d42[m[33m ([m[1;33mtag: [m[1;33m1.3.2[m[33m)[m Update connection cycle (#10)
+[33maae1d77[m[33m ([m[1;33mtag: [m[1;33m1.3.1[m[33m)[m Amend folder paths for schemes (#9)
+[33mc05d075[m[33m ([m[1;33mtag: [m[1;33m1.3.0[m[33m)[m Add dps integration (#8)
+[33m10df3e1[m[33m ([m[1;33mtag: [m[1;33m1.2.8[m[33m)[m Update Siti directory
+[33m44d1247[m[33m ([m[1;33mtag: [m[1;33m1.2.7[m[33m)[m Add algorithm
+[33ma0fe57b[m[33m ([m[1;33mtag: [m[1;33m1.2.6[m[33m)[m Add debug to client
+[33mc6c7d87[m[33m ([m[1;33mtag: [m[1;33m1.2.5[m[33m)[m Add debug to client
+[33m4af8d9a[m[33m ([m[1;33mtag: [m[1;33m1.2.4[m[33m)[m Support auth config
+[33m30f31a5[m[33m ([m[1;33mtag: [m[1;33m1.2.3[m[33m)[m Add debug to helm chart
+[33me44d600[m[33m ([m[1;33mtag: [m[1;33m1.2.2[m[33m)[m Use password in tests
+[33mee2d012[m Add debug mode (#7)
+[33mc0d57ac[m[33m ([m[1;33mtag: [m[1;33m1.2.0[m[33m)[m Refactor from PoC (#2)
+[33m1389c00[m[33m ([m[1;33mtag: [m[1;33m1.1.0[m[33m)[m Managed Gateway POC (#1)
+[33mb671a76[m Update content
+[33mb4bebab[m[33m ([m[1;33mtag: [m[1;33m1.0.0[m[33m)[m Set version number
+[33ma68e842[m Initial service creation
+[33m1188321[m Initial commit
