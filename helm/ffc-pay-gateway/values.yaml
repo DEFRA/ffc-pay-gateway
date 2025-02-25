@@ -74,7 +74,7 @@ container:
   delinkedEnabled: true
   sfiExpandedEnabled: true
 
-aadPodIdentity: true
+workloadIdentity: true
 
 azureIdentity:
   clientID: not-a-real-clientID

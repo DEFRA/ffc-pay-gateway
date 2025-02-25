@@ -9,7 +9,8 @@ const schema = Joi.object({
   returnFolder: Joi.string().default('return'),
   archiveFolder: Joi.string().default('archive'),
   useConnectionStr: Joi.boolean().default(false),
-  createContainers: Joi.boolean().default(false)
+  createContainers: Joi.boolean().default(false),
+  managedIdentityClientId: Joi.string().optional()
 })
 
 const config = {
@@ -21,7 +22,8 @@ const config = {
   returnFolder: process.env.AZURE_STORAGE_RETURN_FOLDER,
   archiveFolder: process.env.AZURE_STORAGE_ARCHIVE_FOLDER,
   useConnectionStr: process.env.AZURE_STORAGE_USE_CONNECTION_STRING,
-  createContainers: process.env.AZURE_STORAGE_CREATE_CONTAINERS
+  createContainers: process.env.AZURE_STORAGE_CREATE_CONTAINERS,
+  managedIdentityClientId: process.env.AZURE_CLIENT_ID
 }
 
 const result = schema.validate(config, {
