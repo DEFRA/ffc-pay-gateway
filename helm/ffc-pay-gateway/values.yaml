@@ -5,6 +5,8 @@ namespace: ffc-pay
 workstream: ffc-pay
 image: ffc-pay-gateway
 
+priorityClassName: high
+
 labels: {}
 
 appInsights:
