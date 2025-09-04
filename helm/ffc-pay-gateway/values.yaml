@@ -5,8 +5,6 @@ namespace: ffc-pay
 workstream: ffc-pay
 image: ffc-pay-gateway
 
-priorityClassName: high
-
 labels: {}
 
 appInsights:
@@ -19,7 +17,8 @@ containerSecret:
   name: ffc-pay-gateway-container-secret
   type: Opaque
 
-deployment: {}
+deployment:
+  priorityClassName: high
 
 container:
   requestMemory: 100Mi
