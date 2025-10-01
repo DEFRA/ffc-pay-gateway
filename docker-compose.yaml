@@ -34,6 +34,7 @@ services:
       DPS_OUTBOUND_DIRECTORY: local-directory/outbound
       DELINKED_INBOUND_DIRECTORY: local-directory/inbound
       COMBINED_OFFER_INBOUND_DIRECTORY: local-directory/inbound
+      COHT_CAPITAL_INBOUND_DIRECTORY: local-directory/inbound
 
   ffc-pay-batch-azurite:
     image: mcr.microsoft.com/azure-storage/azurite:3.32.0
