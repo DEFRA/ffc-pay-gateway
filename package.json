@@ -16,9 +16,9 @@
   "author": "Defra",
   "contributors": [
     "John Watson <john.watson1@defra.gov.uk>",
-    "Sam Plackett <samuel.plackett@eviden.com>",
-    "Leigh Godson <leigh.godson.external@eviden.com>",
-    "Oliver Lewington <oliver.lewington@eviden.com>"
+    "Sam Plackett <samuel.plackett@atos.net>",
+    "Leigh Godson <leigh.godson@atos.net>",
+    "Oliver Lewington <oliver.lewington@@atos.net>"
   ],
   "license": "OGL-UK-3.0",
   "dependencies": {
