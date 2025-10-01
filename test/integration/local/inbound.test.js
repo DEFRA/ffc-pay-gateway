@@ -80,7 +80,15 @@ const {
   COMBINED_OFFER_CHECKSUM_FILENAME,
   COMBINED_OFFER_CHECKSUM_CONTROL_FILENAME,
   COMBINED_OFFER_CHECKSUM_FILENAME_PENDING,
-  COMBINED_OFFER_CHECKSUM_CONTROL_FILENAME_PENDING
+  COMBINED_OFFER_CHECKSUM_CONTROL_FILENAME_PENDING,
+  COHT_CAPITAL_DATA_FILENAME,
+  COHT_CAPITAL_CONTROL_FILENAME,
+  COHT_CAPITAL_CHECKSUM_FILENAME,
+  COHT_CAPITAL_CHECKSUM_CONTROL_FILENAME,
+  COHT_CAPITAL_DATA_FILENAME_PENDING,
+  COHT_CAPITAL_CONTROL_FILENAME_PENDING,
+  COHT_CAPITAL_CHECKSUM_FILENAME_PENDING,
+  COHT_CAPITAL_CHECKSUM_CONTROL_FILENAME_PENDING
 } = require('../../mocks/filenames')
 
 const { BlobServiceClient } = require('@azure/storage-blob')
@@ -351,5 +359,26 @@ describe('process inbound files', () => {
     const fileList = await getBlobs()
     expect(fileList.find(x => x === COMBINED_OFFER_CHECKSUM_FILENAME_PENDING)).toBeDefined()
     expect(fileList.find(x => x === COMBINED_OFFER_CHECKSUM_CONTROL_FILENAME_PENDING)).toBeDefined()
+  })
+  test('should transfer combined offer offer data files to batch inbound location with pending filename', async () => {
+    await uploadFile(COHT_CAPITAL_DATA_FILENAME)
+    await uploadFile(COHT_CAPITAL_CONTROL_FILENAME)
+
+    await start()
+
+    const fileList = await getBlobs()
+    expect(fileList.find(x => x === COHT_CAPITAL_DATA_FILENAME_PENDING)).toBeDefined()
+    expect(fileList.find(x => x === COHT_CAPITAL_CONTROL_FILENAME_PENDING)).toBeDefined()
+  })
+
+  test('should transfer combined offer offer checksum files to batch inbound location with pending filename', async () => {
+    await uploadFile(COHT_CAPITAL_CHECKSUM_FILENAME)
+    await uploadFile(COHT_CAPITAL_CHECKSUM_CONTROL_FILENAME)
+
+    await start()
+
+    const fileList = await getBlobs()
+    expect(fileList.find(x => x === COHT_CAPITAL_CHECKSUM_FILENAME_PENDING)).toBeDefined()
+    expect(fileList.find(x => x === COHT_CAPITAL_CHECKSUM_CONTROL_FILENAME_PENDING)).toBeDefined()
   })
 })

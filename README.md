@@ -45,8 +45,8 @@ The schemes being served by the Gateway service are as follows:
   SFI23: Sustainable Farming Incentive 2023 offer,
   DPS: Deposit Protection Service,
   DELINKED: Delinked Payments, the evolution of BPS ,
-  COMBINED_OFFER: Combined Offer (revenue), a combination of SFI Expanded and CS Higher Tier schemes,
-  COHT_CAPITAL: Combined Offer (capital), a combination of SFI Expanded and CS Higher Tier schemes.
+  COMBINED_OFFER: Combined Offer, a combination of SFI Expanded and CS Higher Tier Revenue schemes,
+  COHT_CAPITAL: CS Higher Tier Capital.
 
 ## Running the application
 
