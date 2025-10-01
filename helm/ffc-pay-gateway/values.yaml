@@ -58,6 +58,7 @@ container:
   dpsOutboundDirectory: D:\app\DAX_interface\DPS\inbound
   delinkedInboundDirectory: /opt/cap_prod_data/DAX/out/Int_725
   combinedOfferInboundDirectory: /opt/cap_prod_data/DAX/out/Int_725
+  cohtCapitalInboundDirectory: /opt/cap_prod_data/DAX/out/Int_725
   sftpDebug: false
   sftpManagedGatewayEnabled: true
   sftpTraderEnabled: true
@@ -74,6 +75,7 @@ container:
   dpsEnabled: true
   delinkedEnabled: true
   combinedOfferEnabled: true
+  cohtCapitalEnabled: true
 
 workloadIdentity: true
 
