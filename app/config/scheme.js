@@ -1,5 +1,5 @@
 const Joi = require('joi')
-const { SFI, SFI_PILOT, LUMP_SUMS, CS, BPS, FDMR, ES, FC, IMPS, SFI23, DPS, DELINKED, SFI_EXPANDED } = require('../constants/schemes')
+const { SFI, SFI_PILOT, LUMP_SUMS, CS, BPS, FDMR, ES, FC, IMPS, SFI23, DPS, DELINKED, COMBINED_OFFER } = require('../constants/schemes')
 const { MANAGED_GATEWAY, TRADER } = require('../constants/servers')
 
 const schema = Joi.object({
@@ -143,8 +143,8 @@ const schema = Joi.object({
     }).required(),
     enabled: Joi.boolean().default(true)
   }).required(),
-  sfiExpanded: Joi.object({
-    name: Joi.string().default(SFI_EXPANDED),
+  combinedOffer: Joi.object({
+    name: Joi.string().default(COMBINED_OFFER),
     fileMasks: Joi.object({
       inbound: Joi.array().items(Joi.string()).default([/^CTL_ESFIO\d{4}_AP_\d*.dat$/, /^CTL_ESFIO\d{4}_AP_\d*.txt$/])
     }),
@@ -297,16 +297,16 @@ const config = {
     },
     enabled: process.env.DELINKED_ENABLED
   },
-  sfiExpanded: {
-    name: process.env.SFI_EXPANDED_NAME,
+  combinedOffer: {
+    name: process.env.COMBINED_OFFER_NAME,
     fileMasks: {
-      inbound: process.env.SFI_EXPANDED_FILE_INBOUND_MASKS
+      inbound: process.env.COMBINED_OFFER_FILE_INBOUND_MASKS
     },
-    server: process.env.SFI_EXPANDED_SERVER,
+    server: process.env.COMBINED_OFFER_SERVER,
     directories: {
-      inbound: process.env.SFI_EXPANDED_INBOUND_DIRECTORY
+      inbound: process.env.COMBINED_OFFER_INBOUND_DIRECTORY
     },
-    enabled: process.env.SFI_EXPANDED_ENABLED
+    enabled: process.env.COMBINED_OFFER_ENABLED
   }
 }
 

@@ -57,7 +57,7 @@ container:
   dpsInboundDirectory: D:\app\DAX_interface\DPS\outbound
   dpsOutboundDirectory: D:\app\DAX_interface\DPS\inbound
   delinkedInboundDirectory: /opt/cap_prod_data/DAX/out/Int_725
-  sfiExpandedInboundDirectory: /opt/cap_prod_data/DAX/out/Int_725
+  combinedOfferInboundDirectory: /opt/cap_prod_data/DAX/out/Int_725
   sftpDebug: false
   sftpManagedGatewayEnabled: true
   sftpTraderEnabled: true
@@ -73,7 +73,7 @@ container:
   sfi23Enabled: true
   dpsEnabled: true
   delinkedEnabled: true
-  sfiExpandedEnabled: true
+  combinedOfferEnabled: true
 
 workloadIdentity: true
 
