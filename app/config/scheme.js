@@ -157,7 +157,7 @@ const schema = Joi.object({
   cohtCapital: Joi.object({
     name: Joi.string().default(COHT_CAPITAL),
     fileMasks: Joi.object({
-      inbound: Joi.array().items(Joi.string()).default([/^CTL_COHTC\d{4}_AP_\d*.dat$/, /^CTL_COHTC\d{4}_AP_\d*.txt$/])
+      inbound: Joi.array().items(Joi.string()).default([/^CTL_SITICOHTC\d{4}_AP_\d*.dat$/, /^CTL_SITICOHTC\d{4}_AP_\d*.txt$/])
     }),
     server: Joi.string().default(MANAGED_GATEWAY),
     directories: Joi.object({
