@@ -3,7 +3,7 @@ const { INBOUND, OUTBOUND } = require('../constants/directions')
 const { MANAGED_GATEWAY, TRADER } = require('../constants/servers')
 const { getSchemeTransfers } = require('./get-scheme-transfers')
 
-function isWithinWindow (window) {
+function isWithinWindow(window) {
   if (!window) return true // No window set, always include
   const now = new Date()
   const [startH, startM] = window.start.split(':').map(Number)
@@ -16,22 +16,21 @@ function isWithinWindow (window) {
 }
 
 const getActiveTransfers = () => {
-  const activeServers = []
+  const allActiveServers = []
   if (sftpConfig.managedGatewayEnabled) {
-    activeServers.push(MANAGED_GATEWAY)
+    allActiveServers.push(MANAGED_GATEWAY)
   }
   if (sftpConfig.traderEnabled) {
-    activeServers.push(TRADER)
+    allActiveServers.push(TRADER)
   }
 
-  // Only include schemes for activeServers and within pollWindow (if set)
-  const filteredSchemeConfig = Object.values(schemeConfig)
-    .filter(cfg => activeServers.includes(cfg.server) && isWithinWindow(cfg.pollWindow))
+  const filteredServers = allActiveServers.filter(server => {
+    const cfg = schemeConfig[server]
+    return cfg && isWithinWindow(cfg.pollWindow)
+  })
 
-  const inboundTransfers = filteredSchemeConfig
-    .flatMap(cfg => getSchemeTransfers([cfg.server], INBOUND))
-  const outboundTransfers = filteredSchemeConfig
-    .flatMap(cfg => getSchemeTransfers([cfg.server], OUTBOUND))
+  const inboundTransfers = getSchemeTransfers(filteredServers, INBOUND)
+  const outboundTransfers = getSchemeTransfers(filteredServers, OUTBOUND)
 
   return inboundTransfers.concat(outboundTransfers)
 }
