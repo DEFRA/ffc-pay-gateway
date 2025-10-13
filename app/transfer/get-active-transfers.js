@@ -3,7 +3,7 @@ const { INBOUND, OUTBOUND } = require('../constants/directions')
 const { MANAGED_GATEWAY, TRADER } = require('../constants/servers')
 const { getSchemeTransfers } = require('./get-scheme-transfers')
 
-function isWithinWindow(window) {
+function isWithinWindow (window) {
   if (!window) return true // No window set, always include
   const now = new Date()
   const [startH, startM] = window.start.split(':').map(Number)

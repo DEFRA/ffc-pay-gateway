@@ -105,7 +105,7 @@ describe('get active transfers', () => {
   test('should include all schemes if pollWindow is not set', () => {
     schemeConfig[MANAGED_GATEWAY].pollWindow = undefined
     schemeConfig[TRADER].pollWindow = undefined
-  
+
     getActiveTransfers()
     expect(getSchemeTransfers).toHaveBeenCalledTimes(2)
     expect(getSchemeTransfers).toHaveBeenCalledWith([MANAGED_GATEWAY, TRADER], INBOUND)
