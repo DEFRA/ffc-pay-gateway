@@ -1,7 +1,7 @@
 jest.mock('../../../app/transfer/get-scheme-transfers')
 const { getSchemeTransfers } = require('../../../app/transfer/get-scheme-transfers')
 
-const { sftpConfig } = require('../../../app/config')
+const { sftpConfig, schemeConfig } = require('../../../app/config')
 
 const { INBOUND, OUTBOUND } = require('../../../app/constants/directions')
 const { MANAGED_GATEWAY, TRADER } = require('../../../app/constants/servers')
@@ -13,6 +13,18 @@ describe('get active transfers', () => {
     jest.clearAllMocks()
     sftpConfig.managedGatewayEnabled = true
     sftpConfig.traderEnabled = true
+
+    // Default schemeConfig for tests
+    schemeConfig[MANAGED_GATEWAY] = {
+      server: MANAGED_GATEWAY,
+      enabled: true,
+      pollWindow: undefined
+    }
+    schemeConfig[TRADER] = {
+      server: TRADER,
+      enabled: true,
+      pollWindow: undefined
+    }
 
     getSchemeTransfers.mockReturnValue([])
   })
@@ -38,12 +50,12 @@ describe('get active transfers', () => {
     expect(getSchemeTransfers).toHaveBeenCalledWith([], OUTBOUND)
   })
 
-  test('should get inbound scheme transfers with all severs if all active', () => {
+  test('should get inbound scheme transfers with all servers if all active', () => {
     getActiveTransfers()
     expect(getSchemeTransfers).toHaveBeenCalledWith([MANAGED_GATEWAY, TRADER], INBOUND)
   })
 
-  test('should get outbound scheme transfers with all severs if all active', () => {
+  test('should get outbound scheme transfers with all servers if all active', () => {
     getActiveTransfers()
     expect(getSchemeTransfers).toHaveBeenCalledWith([MANAGED_GATEWAY, TRADER], OUTBOUND)
   })
@@ -77,5 +89,26 @@ describe('get active transfers', () => {
     getSchemeTransfers.mockReturnValueOnce([{ direction: OUTBOUND }])
     const result = getActiveTransfers()
     expect(result).toEqual([{ direction: INBOUND }, { direction: OUTBOUND }])
+  })
+
+  test('should only include schemes within pollWindow if set', () => {
+    // Set pollWindow for MANAGED_GATEWAY to a window in the past
+    schemeConfig[MANAGED_GATEWAY].pollWindow = { start: '00:00', end: '01:00' }
+    schemeConfig[TRADER].pollWindow = undefined // always included
+
+    getActiveTransfers()
+    // Only TRADER should be included as MANAGED_GATEWAY is outside window
+    expect(getSchemeTransfers).toHaveBeenCalledWith([TRADER], INBOUND)
+    expect(getSchemeTransfers).toHaveBeenCalledWith([TRADER], OUTBOUND)
+  })
+
+  test('should include all schemes if pollWindow is not set', () => {
+    schemeConfig[MANAGED_GATEWAY].pollWindow = undefined
+    schemeConfig[TRADER].pollWindow = undefined
+  
+    getActiveTransfers()
+    expect(getSchemeTransfers).toHaveBeenCalledTimes(2)
+    expect(getSchemeTransfers).toHaveBeenCalledWith([MANAGED_GATEWAY, TRADER], INBOUND)
+    expect(getSchemeTransfers).toHaveBeenCalledWith([MANAGED_GATEWAY, TRADER], OUTBOUND)
   })
 })
