@@ -4,16 +4,16 @@ const { MANAGED_GATEWAY, TRADER } = require('../constants/servers')
 const { getSchemeTransfers } = require('./get-scheme-transfers')
 
 const getActiveTransfers = () => {
-  const allActiveServers = []
+  const activeServers = []
   if (sftpConfig.managedGatewayEnabled) {
-    allActiveServers.push(MANAGED_GATEWAY)
+    activeServers.push(MANAGED_GATEWAY)
   }
   if (sftpConfig.traderEnabled) {
-    allActiveServers.push(TRADER)
+    activeServers.push(TRADER)
   }
 
-  const inboundTransfers = getSchemeTransfers(allActiveServers, INBOUND)
-  const outboundTransfers = getSchemeTransfers(allActiveServers, OUTBOUND)
+  const inboundTransfers = getSchemeTransfers(activeServers, INBOUND)
+  const outboundTransfers = getSchemeTransfers(activeServers, OUTBOUND)
 
   return inboundTransfers.concat(outboundTransfers)
 }
