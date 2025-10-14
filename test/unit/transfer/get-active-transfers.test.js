@@ -1,7 +1,7 @@
 jest.mock('../../../app/transfer/get-scheme-transfers')
 const { getSchemeTransfers } = require('../../../app/transfer/get-scheme-transfers')
 
-const { sftpConfig, schemeConfig } = require('../../../app/config')
+const { sftpConfig } = require('../../../app/config')
 
 const { INBOUND, OUTBOUND } = require('../../../app/constants/directions')
 const { MANAGED_GATEWAY, TRADER } = require('../../../app/constants/servers')
@@ -13,20 +13,6 @@ describe('get active transfers', () => {
     jest.clearAllMocks()
     sftpConfig.managedGatewayEnabled = true
     sftpConfig.traderEnabled = true
-
-    // Default schemeConfig for tests
-    schemeConfig[MANAGED_GATEWAY] = {
-      server: MANAGED_GATEWAY,
-      enabled: true,
-      pollWindow: undefined,
-      pollDays: undefined
-    }
-    schemeConfig[TRADER] = {
-      server: TRADER,
-      enabled: true,
-      pollWindow: undefined,
-      pollDays: undefined
-    }
 
     getSchemeTransfers.mockReturnValue([])
   })
