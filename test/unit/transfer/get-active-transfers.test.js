@@ -18,12 +18,14 @@ describe('get active transfers', () => {
     schemeConfig[MANAGED_GATEWAY] = {
       server: MANAGED_GATEWAY,
       enabled: true,
-      pollWindow: undefined
+      pollWindow: undefined,
+      pollDays: undefined
     }
     schemeConfig[TRADER] = {
       server: TRADER,
       enabled: true,
-      pollWindow: undefined
+      pollWindow: undefined,
+      pollDays: undefined
     }
 
     getSchemeTransfers.mockReturnValue([])
@@ -128,6 +130,61 @@ describe('get active transfers', () => {
 
     // Set time to 10:00 (inside window)
     jest.setSystemTime(new Date('2025-10-14T10:00:00Z'))
+    getActiveTransfers()
+    expect(getSchemeTransfers).toHaveBeenCalledWith([MANAGED_GATEWAY, TRADER], INBOUND)
+    expect(getSchemeTransfers).toHaveBeenCalledWith([MANAGED_GATEWAY, TRADER], OUTBOUND)
+
+    jest.useRealTimers()
+  })
+
+  test('should exclude server when today is not in pollDays and include when it is', () => {
+    jest.useFakeTimers()
+
+    // Set pollDays for MANAGED_GATEWAY to only Monday
+    schemeConfig[MANAGED_GATEWAY].pollDays = ['Mon']
+    schemeConfig[TRADER].pollDays = undefined // always included
+
+    // Set system time to Sunday
+    jest.setSystemTime(new Date('2025-10-12T10:00:00Z')) // Sunday
+    getActiveTransfers()
+    expect(getSchemeTransfers).toHaveBeenCalledWith([TRADER], INBOUND)
+    expect(getSchemeTransfers).toHaveBeenCalledWith([TRADER], OUTBOUND)
+    jest.clearAllMocks()
+
+    // Set system time to Monday
+    jest.setSystemTime(new Date('2025-10-13T10:00:00Z')) // Monday
+    getActiveTransfers()
+    expect(getSchemeTransfers).toHaveBeenCalledWith([MANAGED_GATEWAY, TRADER], INBOUND)
+    expect(getSchemeTransfers).toHaveBeenCalledWith([MANAGED_GATEWAY, TRADER], OUTBOUND)
+
+    jest.useRealTimers()
+  })
+
+  test('should exclude server when both pollWindow and pollDays do not match', () => {
+    jest.useFakeTimers()
+
+    // Set pollWindow for MANAGED_GATEWAY to 09:00-17:00 and pollDays to only Monday
+    schemeConfig[MANAGED_GATEWAY].pollWindow = { start: '09:00', end: '17:00' }
+    schemeConfig[MANAGED_GATEWAY].pollDays = ['Mon']
+    schemeConfig[TRADER].pollWindow = undefined
+    schemeConfig[TRADER].pollDays = undefined
+
+    // Set system time to Sunday at 10:00 (outside pollDays)
+    jest.setSystemTime(new Date('2025-10-12T10:00:00Z')) // Sunday
+    getActiveTransfers()
+    expect(getSchemeTransfers).toHaveBeenCalledWith([TRADER], INBOUND)
+    expect(getSchemeTransfers).toHaveBeenCalledWith([TRADER], OUTBOUND)
+    jest.clearAllMocks()
+
+    // Set system time to Monday at 08:00 (inside pollDays, outside pollWindow)
+    jest.setSystemTime(new Date('2025-10-13T08:00:00Z')) // Monday
+    getActiveTransfers()
+    expect(getSchemeTransfers).toHaveBeenCalledWith([TRADER], INBOUND)
+    expect(getSchemeTransfers).toHaveBeenCalledWith([TRADER], OUTBOUND)
+    jest.clearAllMocks()
+
+    // Set system time to Monday at 10:00 (inside pollDays and pollWindow)
+    jest.setSystemTime(new Date('2025-10-13T10:00:00Z')) // Monday
     getActiveTransfers()
     expect(getSchemeTransfers).toHaveBeenCalledWith([MANAGED_GATEWAY, TRADER], INBOUND)
     expect(getSchemeTransfers).toHaveBeenCalledWith([MANAGED_GATEWAY, TRADER], OUTBOUND)

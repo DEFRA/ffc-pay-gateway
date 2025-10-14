@@ -107,11 +107,13 @@ const schema = Joi.object({
       outbound: Joi.string().required()
     }).required(),
     enabled: Joi.boolean().default(true),
-    pollFrequency: Joi.number().default(30000),
     pollWindow: Joi.object({
       start: Joi.string().default('00:00'),
       end: Joi.string().default('23:59')
-    }).default({ start: '00:00', end: '23:59' })
+    }).default({ start: '00:00', end: '23:59' }),
+    pollDays: Joi.array().items(
+      Joi.string().valid('Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat')
+    ).default(['Mon', 'Tue', 'Wed', 'Thu', 'Fri'])
   }).required(),
   sfi23: Joi.object({
     name: Joi.string().default(SFI23),
@@ -266,7 +268,6 @@ const config = {
       outbound: process.env.IMPS_OUTBOUND_DIRECTORY
     },
     enabled: process.env.IMPS_ENABLED,
-    pollFrequency: process.env.IMPS_POLL_FREQUENCY,
     pollWindow: process.env.IMPS_POLL_WINDOW
   },
   sfi23: {

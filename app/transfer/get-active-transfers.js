@@ -15,6 +15,13 @@ function isWithinWindow (window) {
   return now >= start && now <= end
 }
 
+function isPollDay (pollDays) {
+  if (!pollDays) return true // No days set, always include
+  const days = Array.isArray(pollDays) ? pollDays : []
+  const today = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'][new Date().getDay()]
+  return days.includes(today)
+}
+
 const getActiveTransfers = () => {
   const allActiveServers = []
   if (sftpConfig.managedGatewayEnabled) {
@@ -26,7 +33,7 @@ const getActiveTransfers = () => {
 
   const filteredServers = allActiveServers.filter(server => {
     const cfg = schemeConfig[server]
-    return isWithinWindow(cfg?.pollWindow)
+    return isWithinWindow(cfg?.pollWindow) && isPollDay(cfg?.pollDays)
   })
 
   const inboundTransfers = getSchemeTransfers(filteredServers, INBOUND)
