@@ -111,4 +111,27 @@ describe('get active transfers', () => {
     expect(getSchemeTransfers).toHaveBeenCalledWith([MANAGED_GATEWAY, TRADER], INBOUND)
     expect(getSchemeTransfers).toHaveBeenCalledWith([MANAGED_GATEWAY, TRADER], OUTBOUND)
   })
+
+  test('should exclude server when outside pollWindow and include when inside', () => {
+    jest.useFakeTimers()
+
+    // Set pollWindow for MANAGED_GATEWAY to 09:00-17:00
+    schemeConfig[MANAGED_GATEWAY].pollWindow = { start: '09:00', end: '17:00' }
+    schemeConfig[TRADER].pollWindow = undefined // always included
+
+    // Set time to 08:00 (outside window)
+    jest.setSystemTime(new Date('2025-10-14T08:00:00Z'))
+    getActiveTransfers()
+    expect(getSchemeTransfers).toHaveBeenCalledWith([TRADER], INBOUND)
+    expect(getSchemeTransfers).toHaveBeenCalledWith([TRADER], OUTBOUND)
+    jest.clearAllMocks()
+
+    // Set time to 10:00 (inside window)
+    jest.setSystemTime(new Date('2025-10-14T10:00:00Z'))
+    getActiveTransfers()
+    expect(getSchemeTransfers).toHaveBeenCalledWith([MANAGED_GATEWAY, TRADER], INBOUND)
+    expect(getSchemeTransfers).toHaveBeenCalledWith([MANAGED_GATEWAY, TRADER], OUTBOUND)
+
+    jest.useRealTimers()
+  })
 })
