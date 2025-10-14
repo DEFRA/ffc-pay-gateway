@@ -26,7 +26,9 @@ const getActiveTransfers = () => {
 
   const filteredServers = allActiveServers.filter(server => {
     const cfg = schemeConfig[server]
-    return cfg && isWithinWindow(cfg.pollWindow)
+    if (isWithinWindow(cfg?.pollWindow)) {
+      return server
+    }
   })
 
   const inboundTransfers = getSchemeTransfers(filteredServers, INBOUND)
