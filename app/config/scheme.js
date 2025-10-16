@@ -109,7 +109,7 @@ const schema = Joi.object({
     enabled: Joi.boolean().default(true),
     pollWindow: Joi.object({
       start: Joi.string().default('08:00'),
-      end: Joi.string().default('06:00')
+      end: Joi.string().default('18:00')
     }).default({ start: '08:00', end: '18:00' }),
     pollDays: Joi.array().items(
       Joi.string().valid('Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat')
@@ -137,7 +137,14 @@ const schema = Joi.object({
       inbound: Joi.string().required(),
       outbound: Joi.string().required()
     }).required(),
-    enabled: Joi.boolean().default(true)
+    enabled: Joi.boolean().default(true),
+    pollWindow: Joi.object({
+      start: Joi.string().default('08:00'),
+      end: Joi.string().default('18:00')
+    }).default({ start: '08:00', end: '18:00' }),
+    pollDays: Joi.array().items(
+      Joi.string().valid('Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat')
+    ).default(['Mon', 'Tue', 'Wed', 'Thu', 'Fri'])
   }).required(),
   delinked: Joi.object({
     name: Joi.string().default(DELINKED),
@@ -296,7 +303,12 @@ const config = {
       inbound: process.env.DPS_INBOUND_DIRECTORY,
       outbound: process.env.DPS_OUTBOUND_DIRECTORY
     },
-    enabled: process.env.DPS_ENABLED
+    enabled: process.env.DPS_ENABLED,
+    pollWindow: {
+      start: process.env.DPS_POLL_WINDOW_START,
+      end: process.env.DPS_POLL_WINDOW_END
+    },
+    pollDays: process.env.DPS_POLL_DAYS ? process.env.DPS_POLL_DAYS.split(',') : undefined
   },
   delinked: {
     name: process.env.DELINKED_NAME,
