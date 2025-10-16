@@ -295,17 +295,17 @@ describe('process inbound files', () => {
 
     schemeConfig.imps.pollWindow = { start: '08:00', end: '18:00' }
     schemeConfig.imps.pollDays = ['Mon', 'Tue', 'Wed', 'Thu', 'Fri']
-    
+
     await uploadFile(IMPS_DATA_FILENAME)
     await uploadFile(IMPS_CONTROL_FILENAME)
-  
+
     await start()
-  
+
     const fileList = await getBlobs()
     expect(fileList.find(x => x === IMPS_DATA_FILENAME_PENDING)).toBeDefined()
     expect(fileList.find(x => x === IMPS_CONTROL_FILENAME_PENDING)).toBeDefined()
-  
-     MockDate.reset();
+
+    MockDate.reset()
   })
 
   test('should transfer DPS data files to batch inbound location with pending filename', async () => {
