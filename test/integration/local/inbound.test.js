@@ -83,6 +83,8 @@ const {
   SFI_EXPANDED_CHECKSUM_CONTROL_FILENAME_PENDING
 } = require('../../mocks/filenames')
 
+const MockDate = require('mockdate')
+
 const { BlobServiceClient } = require('@azure/storage-blob')
 
 const { connect, disconnect, getClient } = require('../../../app/sftp')
@@ -119,6 +121,7 @@ const getBlobs = async () => {
 
 describe('process inbound files', () => {
   beforeEach(async () => {
+    jest.useRealTimers()
     await connect(MANAGED_GATEWAY)
     blobServiceClient = BlobServiceClient.fromConnectionString(storageConfig.connectionStr)
     batchContainer = blobServiceClient.getContainerClient(storageConfig.batchContainer)
@@ -288,21 +291,21 @@ describe('process inbound files', () => {
   })
 
   test('should transfer IMPS data files to batch inbound location with pending filename', async () => {
-    // Set system time to Monday 10:00 (inside default pollWindow and pollDays)
-    jest.useFakeTimers().setSystemTime(new Date('2025-10-13T10:00:00Z'))
+    MockDate.set('2025-10-13T10:00:00Z')
+
     schemeConfig.imps.pollWindow = { start: '08:00', end: '18:00' }
     schemeConfig.imps.pollDays = ['Mon', 'Tue', 'Wed', 'Thu', 'Fri']
-
+    
     await uploadFile(IMPS_DATA_FILENAME)
     await uploadFile(IMPS_CONTROL_FILENAME)
-
+  
     await start()
-
+  
     const fileList = await getBlobs()
     expect(fileList.find(x => x === IMPS_DATA_FILENAME_PENDING)).toBeDefined()
     expect(fileList.find(x => x === IMPS_CONTROL_FILENAME_PENDING)).toBeDefined()
-
-    jest.useRealTimers()
+  
+     MockDate.reset();
   })
 
   test('should transfer DPS data files to batch inbound location with pending filename', async () => {
