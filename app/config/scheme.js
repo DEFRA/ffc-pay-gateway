@@ -108,12 +108,12 @@ const schema = Joi.object({
     }).required(),
     enabled: Joi.boolean().default(true),
     pollWindow: Joi.object({
-      start: Joi.string().default('08:00'),
-      end: Joi.string().default('18:00')
-    }).default({ start: '08:00', end: '18:00' }),
+      start: Joi.string().default('00:00'),
+      end: Joi.string().default('23:59')
+    }).default({ start: '00:00', end: '23:59' }),
     pollDays: Joi.array().items(
       Joi.string().valid('Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat')
-    ).default(['Mon', 'Tue', 'Wed', 'Thu', 'Fri'])
+    ).default(['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'])
   }).required(),
   sfi23: Joi.object({
     name: Joi.string().default(SFI23),
@@ -139,12 +139,12 @@ const schema = Joi.object({
     }).required(),
     enabled: Joi.boolean().default(true),
     pollWindow: Joi.object({
-      start: Joi.string().default('08:00'),
-      end: Joi.string().default('18:00')
-    }).default({ start: '08:00', end: '18:00' }),
+      start: Joi.string().default('00:00'),
+      end: Joi.string().default('23:59')
+    }).default({ start: '00:00', end: '23:59' }),
     pollDays: Joi.array().items(
       Joi.string().valid('Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat')
-    ).default(['Mon', 'Tue', 'Wed', 'Thu', 'Fri'])
+    ).default(['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'])
   }).required(),
   delinked: Joi.object({
     name: Joi.string().default(DELINKED),
