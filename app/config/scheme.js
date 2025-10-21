@@ -106,7 +106,14 @@ const schema = Joi.object({
       inbound: Joi.string().required(),
       outbound: Joi.string().required()
     }).required(),
-    enabled: Joi.boolean().default(true)
+    enabled: Joi.boolean().default(true),
+    pollWindow: Joi.object({
+      start: Joi.string().default('00:00'),
+      end: Joi.string().default('23:59')
+    }).default({ start: '00:00', end: '23:59' }),
+    pollDays: Joi.array().items(
+      Joi.string().valid('Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat')
+    ).default(['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'])
   }).required(),
   sfi23: Joi.object({
     name: Joi.string().default(SFI23),
@@ -130,7 +137,14 @@ const schema = Joi.object({
       inbound: Joi.string().required(),
       outbound: Joi.string().required()
     }).required(),
-    enabled: Joi.boolean().default(true)
+    enabled: Joi.boolean().default(true),
+    pollWindow: Joi.object({
+      start: Joi.string().default('00:00'),
+      end: Joi.string().default('23:59')
+    }).default({ start: '00:00', end: '23:59' }),
+    pollDays: Joi.array().items(
+      Joi.string().valid('Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat')
+    ).default(['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'])
   }).required(),
   delinked: Joi.object({
     name: Joi.string().default(DELINKED),
@@ -260,7 +274,12 @@ const config = {
       inbound: process.env.IMPS_INBOUND_DIRECTORY,
       outbound: process.env.IMPS_OUTBOUND_DIRECTORY
     },
-    enabled: process.env.IMPS_ENABLED
+    enabled: process.env.IMPS_ENABLED,
+    pollWindow: {
+      start: process.env.IMPS_POLL_WINDOW_START,
+      end: process.env.IMPS_POLL_WINDOW_END
+    },
+    pollDays: process.env.IMPS_POLL_DAYS ? process.env.IMPS_POLL_DAYS.split(',') : undefined
   },
   sfi23: {
     name: process.env.SFI23_NAME,
@@ -284,7 +303,12 @@ const config = {
       inbound: process.env.DPS_INBOUND_DIRECTORY,
       outbound: process.env.DPS_OUTBOUND_DIRECTORY
     },
-    enabled: process.env.DPS_ENABLED
+    enabled: process.env.DPS_ENABLED,
+    pollWindow: {
+      start: process.env.DPS_POLL_WINDOW_START,
+      end: process.env.DPS_POLL_WINDOW_END
+    },
+    pollDays: process.env.DPS_POLL_DAYS ? process.env.DPS_POLL_DAYS.split(',') : undefined
   },
   delinked: {
     name: process.env.DELINKED_NAME,

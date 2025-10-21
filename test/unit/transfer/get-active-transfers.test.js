@@ -38,12 +38,12 @@ describe('get active transfers', () => {
     expect(getSchemeTransfers).toHaveBeenCalledWith([], OUTBOUND)
   })
 
-  test('should get inbound scheme transfers with all severs if all active', () => {
+  test('should get inbound scheme transfers with all servers if all active', () => {
     getActiveTransfers()
     expect(getSchemeTransfers).toHaveBeenCalledWith([MANAGED_GATEWAY, TRADER], INBOUND)
   })
 
-  test('should get outbound scheme transfers with all severs if all active', () => {
+  test('should get outbound scheme transfers with all servers if all active', () => {
     getActiveTransfers()
     expect(getSchemeTransfers).toHaveBeenCalledWith([MANAGED_GATEWAY, TRADER], OUTBOUND)
   })

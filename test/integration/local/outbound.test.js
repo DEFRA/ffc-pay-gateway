@@ -76,6 +76,11 @@ describe('process outbound files', () => {
   })
 
   test('should process IMPS outbound files', async () => {
+    // Set system time to Monday 10:00 (inside default pollWindow and pollDays)
+    jest.useFakeTimers().setSystemTime(new Date('2025-10-13T10:00:00Z'))
+    schemeConfig.imps.pollWindow = { start: '08:00', end: '18:00' }
+    schemeConfig.imps.pollDays = ['Mon', 'Tue', 'Wed', 'Thu', 'Fri']
+
     await uploadFile(IMPS_RETURN_FILENAME)
     await uploadFile(IMPS_RETURN_CONTROL_FILENAME)
 
@@ -85,6 +90,8 @@ describe('process outbound files', () => {
     const fileList = await getFiles(TRADER)
     expect(fileList.find(x => x.name === IMPS_RETURN_FILENAME)).toBeDefined()
     expect(fileList.find(x => x.name === IMPS_RETURN_CONTROL_FILENAME)).toBeDefined()
+
+    jest.useRealTimers()
   })
 
   test('should process DPS outbound files', async () => {

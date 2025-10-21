@@ -74,6 +74,12 @@ container:
   dpsEnabled: true
   delinkedEnabled: true
   sfiExpandedEnabled: true
+  impsPollWindowStart: "00:00"
+  impsPollWindowEnd: "23:59"
+  impsPollDays: "Sun,Mon,Tue,Wed,Thu,Fri,Sat"
+  dpsPollWindowStart: "23:59"
+  dpsPollWindowEnd: "18:00"
+  dpsPollDays: "Sun,Mon,Tue,Wed,Thu,Fri,Sat"
 
 workloadIdentity: true
 

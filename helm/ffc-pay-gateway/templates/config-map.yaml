@@ -14,6 +14,12 @@ data:
   SFPT_MANAGED_GATEWAY_PORT: {{ quote .Values.container.sftpManagedGatewayPort }}
   SFTP_TRADER_HOST: {{ quote .Values.container.sftpTraderHost }}
   SFTP_TRADER_PORT: {{ quote .Values.container.sftpTraderPort }}
+  IMPS_POLL_WINDOW_START: {{ quote .Values.container.impsPollWindowStart }}
+  IMPS_POLL_WINDOW_END: {{ quote .Values.container.impsPollWindowEnd }}
+  IMPS_POLL_DAYS: {{ quote .Values.container.impsPollDays }}
+  DPS_POLL_WINDOW_START: {{ quote .Values.container.dpsPollWindowStart }}
+  DPS_POLL_WINDOW_END: {{ quote .Values.container.dpsPollWindowEnd }}
+  DPS_POLL_DAYS: {{ quote .Values.container.dpsPollDays }}
   {{- if and (.Values.environmentCode) (eq (.Values.environmentCode | toString ) "prd") }}
   SFI_INBOUND_DIRECTORY: {{ quote .Values.container.sfiInboundDirectory }}
   SFI_PILOT_INBOUND_DIRECTORY: {{ quote .Values.container.sfiPilotInboundDirectory }}

@@ -21,6 +21,12 @@ services:
       AZURE_STORAGE_CONNECTION_STRING: DefaultEndpointsProtocol=http;AccountName=devstoreaccount1;AccountKey=Eby8vdM02xNOcqFlqUwJPLlmEtlCDXJ1OUzFT50uSRZ6IFsuFq2UVErCz4I6tq/K1SZFPTOtr/KBHBeksoGMGw==;BlobEndpoint=http://ffc-pay-batch-azurite:10000/devstoreaccount1;
       SFTP_MANAGED_GATEWAY_PASSWORD: password
       SFTP_TRADER_PASSWORD: password
+      IMPS_POLL_WINDOW_START: "08:00"
+      IMPS_POLL_WINDOW_END: "18:00"
+      IMPS_POLL_DAYS: "Mon,Tue,Wed,Thu,Fri"
+      DPS_POLL_WINDOW_START: "08:00"
+      DPS_POLL_WINDOW_END: "18:00"
+      DPS_POLL_DAYS: "Mon,Tue,Wed,Thu,Fri"
 
   ffc-pay-batch-azurite:
     labels:
