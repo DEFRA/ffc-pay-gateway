@@ -11,6 +11,7 @@ const getActiveTransfers = () => {
   if (sftpConfig.traderEnabled) {
     activeServers.push(TRADER)
   }
+
   const inboundTransfers = getSchemeTransfers(activeServers, INBOUND)
   const outboundTransfers = getSchemeTransfers(activeServers, OUTBOUND)
 

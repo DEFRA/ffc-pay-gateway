@@ -91,6 +91,8 @@ const {
   COHT_CAPITAL_CHECKSUM_CONTROL_FILENAME_PENDING
 } = require('../../mocks/filenames')
 
+const MockDate = require('mockdate')
+
 const { BlobServiceClient } = require('@azure/storage-blob')
 
 const { connect, disconnect, getClient } = require('../../../app/sftp')
@@ -127,6 +129,7 @@ const getBlobs = async () => {
 
 describe('process inbound files', () => {
   beforeEach(async () => {
+    jest.useRealTimers()
     await connect(MANAGED_GATEWAY)
     blobServiceClient = BlobServiceClient.fromConnectionString(storageConfig.connectionStr)
     batchContainer = blobServiceClient.getContainerClient(storageConfig.batchContainer)
@@ -296,6 +299,11 @@ describe('process inbound files', () => {
   })
 
   test('should transfer IMPS data files to batch inbound location with pending filename', async () => {
+    MockDate.set('2025-10-13T10:00:00Z')
+
+    schemeConfig.imps.pollWindow = { start: '08:00', end: '18:00' }
+    schemeConfig.imps.pollDays = ['Mon', 'Tue', 'Wed', 'Thu', 'Fri']
+
     await uploadFile(IMPS_DATA_FILENAME)
     await uploadFile(IMPS_CONTROL_FILENAME)
 
@@ -304,9 +312,34 @@ describe('process inbound files', () => {
     const fileList = await getBlobs()
     expect(fileList.find(x => x === IMPS_DATA_FILENAME_PENDING)).toBeDefined()
     expect(fileList.find(x => x === IMPS_CONTROL_FILENAME_PENDING)).toBeDefined()
+
+    MockDate.reset()
+  })
+
+  test('should NOT transfer IMPS data files to batch inbound location when outside poll window', async () => {
+    MockDate.set('2025-10-13T07:00:00Z')
+
+    schemeConfig.imps.pollWindow = { start: '08:00', end: '18:00' }
+    schemeConfig.imps.pollDays = ['Mon', 'Tue', 'Wed', 'Thu', 'Fri']
+
+    await uploadFile(IMPS_DATA_FILENAME)
+    await uploadFile(IMPS_CONTROL_FILENAME)
+
+    await start()
+
+    const fileList = await getBlobs()
+    expect(fileList.find(x => x === IMPS_DATA_FILENAME_PENDING)).toBeUndefined()
+    expect(fileList.find(x => x === IMPS_CONTROL_FILENAME_PENDING)).toBeUndefined()
+
+    MockDate.reset()
   })
 
   test('should transfer DPS data files to batch inbound location with pending filename', async () => {
+    MockDate.set('2025-10-13T10:00:00Z')
+
+    schemeConfig.dps.pollWindow = { start: '08:00', end: '18:00' }
+    schemeConfig.dps.pollDays = ['Mon', 'Tue', 'Wed', 'Thu', 'Fri']
+
     await uploadFile(DPS_DATA_FILENAME)
     await uploadFile(DPS_CONTROL_FILENAME)
 
@@ -315,6 +348,8 @@ describe('process inbound files', () => {
     const fileList = await getBlobs()
     expect(fileList.find(x => x === DPS_DATA_FILENAME_PENDING)).toBeDefined()
     expect(fileList.find(x => x === DPS_CONTROL_FILENAME_PENDING)).toBeDefined()
+
+    MockDate.reset()
   })
 
   test('should transfer delinked data files to batch inbound location with pending filename', async () => {
@@ -380,5 +415,41 @@ describe('process inbound files', () => {
     const fileList = await getBlobs()
     expect(fileList.find(x => x === COHT_CAPITAL_CHECKSUM_FILENAME_PENDING)).toBeDefined()
     expect(fileList.find(x => x === COHT_CAPITAL_CHECKSUM_CONTROL_FILENAME_PENDING)).toBeDefined()
+  })
+
+  test('should transfer DPS data files to batch inbound location with pending filename when inside poll window', async () => {
+    MockDate.set('2025-10-13T10:00:00Z')
+
+    schemeConfig.dps.pollWindow = { start: '08:00', end: '18:00' }
+    schemeConfig.dps.pollDays = ['Mon', 'Tue', 'Wed', 'Thu', 'Fri']
+
+    await uploadFile(DPS_DATA_FILENAME)
+    await uploadFile(DPS_CONTROL_FILENAME)
+
+    await start()
+
+    const fileList = await getBlobs()
+    expect(fileList.find(x => x === DPS_DATA_FILENAME_PENDING)).toBeDefined()
+    expect(fileList.find(x => x === DPS_CONTROL_FILENAME_PENDING)).toBeDefined()
+
+    MockDate.reset()
+  })
+
+  test('should NOT transfer DPS data files to batch inbound location when outside poll window', async () => {
+    MockDate.set('2025-10-13T07:00:00Z')
+
+    schemeConfig.dps.pollWindow = { start: '08:00', end: '18:00' }
+    schemeConfig.dps.pollDays = ['Mon', 'Tue', 'Wed', 'Thu', 'Fri']
+
+    await uploadFile(DPS_DATA_FILENAME)
+    await uploadFile(DPS_CONTROL_FILENAME)
+
+    await start()
+
+    const fileList = await getBlobs()
+    expect(fileList.find(x => x === DPS_DATA_FILENAME_PENDING)).toBeUndefined()
+    expect(fileList.find(x => x === DPS_CONTROL_FILENAME_PENDING)).toBeUndefined()
+
+    MockDate.reset()
   })
 })

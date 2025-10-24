@@ -35,6 +35,13 @@ services:
       DELINKED_INBOUND_DIRECTORY: local-directory/inbound
       COMBINED_OFFER_INBOUND_DIRECTORY: local-directory/inbound
       COHT_CAPITAL_INBOUND_DIRECTORY: local-directory/inbound
+      SFI_EXPANDED_INBOUND_DIRECTORY: local-directory/inbound
+      IMPS_POLL_WINDOW_START: ${IMPS_POLL_WINDOW_START}
+      IMPS_POLL_WINDOW_END: ${IMPS_POLL_WINDOW_END}
+      IMPS_POLL_DAYS: ${IMPS_POLL_DAYS}
+      DPS_POLL_WINDOW_START: ${DPS_POLL_WINDOW_START}
+      DPS_POLL_WINDOW_END: ${DPS_POLL_WINDOW_END}
+      DPS_POLL_DAYS: ${DPS_POLL_DAYS}
 
   ffc-pay-batch-azurite:
     image: mcr.microsoft.com/azure-storage/azurite:3.32.0
