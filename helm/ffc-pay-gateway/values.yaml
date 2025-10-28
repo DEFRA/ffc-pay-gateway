@@ -57,7 +57,8 @@ container:
   dpsInboundDirectory: D:\app\DAX_interface\DPS\outbound
   dpsOutboundDirectory: D:\app\DAX_interface\DPS\inbound
   delinkedInboundDirectory: /opt/cap_prod_data/DAX/out/Int_725
-  sfiExpandedInboundDirectory: /opt/cap_prod_data/DAX/out/Int_725
+  combinedOfferInboundDirectory: /opt/cap_prod_data/DAX/out/Int_725
+  cohtCapitalInboundDirectory: /opt/cap_prod_data/DAX/out/Int_725
   sftpDebug: false
   sftpManagedGatewayEnabled: true
   sftpTraderEnabled: true
@@ -73,6 +74,8 @@ container:
   sfi23Enabled: true
   dpsEnabled: true
   delinkedEnabled: true
+  combinedOfferEnabled: true
+  cohtCapitalEnabled: true
   sfiExpandedEnabled: true
   impsPollWindowStart: "00:00"
   impsPollWindowEnd: "23:59"

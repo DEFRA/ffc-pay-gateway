@@ -33,6 +33,8 @@ services:
       DPS_INBOUND_DIRECTORY: local-directory/inbound
       DPS_OUTBOUND_DIRECTORY: local-directory/outbound
       DELINKED_INBOUND_DIRECTORY: local-directory/inbound
+      COMBINED_OFFER_INBOUND_DIRECTORY: local-directory/inbound
+      COHT_CAPITAL_INBOUND_DIRECTORY: local-directory/inbound
       SFI_EXPANDED_INBOUND_DIRECTORY: local-directory/inbound
       IMPS_POLL_WINDOW_START: ${IMPS_POLL_WINDOW_START}
       IMPS_POLL_WINDOW_END: ${IMPS_POLL_WINDOW_END}

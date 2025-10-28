@@ -29,6 +29,25 @@ Optional:
 - Kubernetes
 - Helm
 
+## Nomenclature for schemes
+
+The schemes being served by the Gateway service are as follows:
+
+  SFI: Sustainable Farming Incentive,
+  SFI_PILOT: Sustainable Farming Incentive Pilot Scheme,
+  LUMP_SUMS: Lump Sums payments,
+  CS: Countryside Stewardship,
+  BPS: Basic Payment Scheme,
+  FDMR: Financial Discipline Mechanism Reimbursement,
+  ES: Environmental Stewardship,
+  FC: Forestry Commission,
+  IMPS: Internal Market Payment Scheme,
+  SFI23: Sustainable Farming Incentive 2023 offer,
+  DPS: Deposit Protection Service,
+  DELINKED: Delinked Payments, the evolution of BPS ,
+  COMBINED_OFFER: Combined Offer, a combination of SFI Expanded and CS Higher Tier Revenue schemes,
+  COHT_CAPITAL: CS Higher Tier Capital.
+
 ## Running the application
 
 The application is designed to run in containerised environments, using Docker Compose in development and Kubernetes in production.

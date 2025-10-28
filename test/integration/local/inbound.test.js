@@ -73,14 +73,22 @@ const {
   DELINKED_CHECKSUM_CONTROL_FILENAME,
   DELINKED_CHECKSUM_FILENAME_PENDING,
   DELINKED_CHECKSUM_CONTROL_FILENAME_PENDING,
-  SFI_EXPANDED_DATA_FILENAME,
-  SFI_EXPANDED_CONTROL_FILENAME,
-  SFI_EXPANDED_DATA_FILENAME_PENDING,
-  SFI_EXPANDED_CONTROL_FILENAME_PENDING,
-  SFI_EXPANDED_CHECKSUM_FILENAME,
-  SFI_EXPANDED_CHECKSUM_CONTROL_FILENAME,
-  SFI_EXPANDED_CHECKSUM_FILENAME_PENDING,
-  SFI_EXPANDED_CHECKSUM_CONTROL_FILENAME_PENDING
+  COMBINED_OFFER_DATA_FILENAME,
+  COMBINED_OFFER_CONTROL_FILENAME,
+  COMBINED_OFFER_DATA_FILENAME_PENDING,
+  COMBINED_OFFER_CONTROL_FILENAME_PENDING,
+  COMBINED_OFFER_CHECKSUM_FILENAME,
+  COMBINED_OFFER_CHECKSUM_CONTROL_FILENAME,
+  COMBINED_OFFER_CHECKSUM_FILENAME_PENDING,
+  COMBINED_OFFER_CHECKSUM_CONTROL_FILENAME_PENDING,
+  COHT_CAPITAL_DATA_FILENAME,
+  COHT_CAPITAL_CONTROL_FILENAME,
+  COHT_CAPITAL_CHECKSUM_FILENAME,
+  COHT_CAPITAL_CHECKSUM_CONTROL_FILENAME,
+  COHT_CAPITAL_DATA_FILENAME_PENDING,
+  COHT_CAPITAL_CONTROL_FILENAME_PENDING,
+  COHT_CAPITAL_CHECKSUM_FILENAME_PENDING,
+  COHT_CAPITAL_CHECKSUM_CONTROL_FILENAME_PENDING
 } = require('../../mocks/filenames')
 
 const MockDate = require('mockdate')
@@ -366,26 +374,47 @@ describe('process inbound files', () => {
     expect(fileList.find(x => x === DELINKED_CHECKSUM_CONTROL_FILENAME_PENDING)).toBeDefined()
   })
 
-  test('should transfer sfi expanded offer data files to batch inbound location with pending filename', async () => {
-    await uploadFile(SFI_EXPANDED_DATA_FILENAME)
-    await uploadFile(SFI_EXPANDED_CONTROL_FILENAME)
+  test('should transfer combined offer offer data files to batch inbound location with pending filename', async () => {
+    await uploadFile(COMBINED_OFFER_DATA_FILENAME)
+    await uploadFile(COMBINED_OFFER_CONTROL_FILENAME)
 
     await start()
 
     const fileList = await getBlobs()
-    expect(fileList.find(x => x === SFI_EXPANDED_DATA_FILENAME_PENDING)).toBeDefined()
-    expect(fileList.find(x => x === SFI_EXPANDED_CONTROL_FILENAME_PENDING)).toBeDefined()
+    expect(fileList.find(x => x === COMBINED_OFFER_DATA_FILENAME_PENDING)).toBeDefined()
+    expect(fileList.find(x => x === COMBINED_OFFER_CONTROL_FILENAME_PENDING)).toBeDefined()
   })
 
-  test('should transfer sfi expanded offer checksum files to batch inbound location with pending filename', async () => {
-    await uploadFile(SFI_EXPANDED_CHECKSUM_FILENAME)
-    await uploadFile(SFI_EXPANDED_CHECKSUM_CONTROL_FILENAME)
+  test('should transfer combined offer offer checksum files to batch inbound location with pending filename', async () => {
+    await uploadFile(COMBINED_OFFER_CHECKSUM_FILENAME)
+    await uploadFile(COMBINED_OFFER_CHECKSUM_CONTROL_FILENAME)
 
     await start()
 
     const fileList = await getBlobs()
-    expect(fileList.find(x => x === SFI_EXPANDED_CHECKSUM_FILENAME_PENDING)).toBeDefined()
-    expect(fileList.find(x => x === SFI_EXPANDED_CHECKSUM_CONTROL_FILENAME_PENDING)).toBeDefined()
+    expect(fileList.find(x => x === COMBINED_OFFER_CHECKSUM_FILENAME_PENDING)).toBeDefined()
+    expect(fileList.find(x => x === COMBINED_OFFER_CHECKSUM_CONTROL_FILENAME_PENDING)).toBeDefined()
+  })
+  test('should transfer COHTC offer data files to batch inbound location with pending filename', async () => {
+    await uploadFile(COHT_CAPITAL_DATA_FILENAME)
+    await uploadFile(COHT_CAPITAL_CONTROL_FILENAME)
+
+    await start()
+
+    const fileList = await getBlobs()
+    expect(fileList.find(x => x === COHT_CAPITAL_DATA_FILENAME_PENDING)).toBeDefined()
+    expect(fileList.find(x => x === COHT_CAPITAL_CONTROL_FILENAME_PENDING)).toBeDefined()
+  })
+
+  test('should transfer COHTC offer checksum files to batch inbound location with pending filename', async () => {
+    await uploadFile(COHT_CAPITAL_CHECKSUM_FILENAME)
+    await uploadFile(COHT_CAPITAL_CHECKSUM_CONTROL_FILENAME)
+
+    await start()
+
+    const fileList = await getBlobs()
+    expect(fileList.find(x => x === COHT_CAPITAL_CHECKSUM_FILENAME_PENDING)).toBeDefined()
+    expect(fileList.find(x => x === COHT_CAPITAL_CHECKSUM_CONTROL_FILENAME_PENDING)).toBeDefined()
   })
 
   test('should transfer DPS data files to batch inbound location with pending filename when inside poll window', async () => {
