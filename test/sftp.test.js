@@ -13,8 +13,11 @@ describe('SFTP', () => {
   let mockClient
 
   const connectServer = async (server) => {
-    if (server === TRADER) sftpConfig.traderEnabled = true
-    if (server === MANAGED_GATEWAY) sftpConfig.managedGatewayEnabled = true
+    if (server === TRADER) {
+      sftpConfig.traderEnabled = true
+    } else if (server === MANAGED_GATEWAY) {
+      sftpConfig.managedGatewayEnabled = true
+    }
     return sftp.connect(server)
   }
 
