@@ -1,10 +1,15 @@
 global.setTimeout = jest.fn()
 
 const { ES_RETURN_FILENAME, ES_RETURN_CONTROL_FILENAME, FC_RETURN_FILENAME, FC_RETURN_CONTROL_FILENAME, IMPS_RETURN_FILENAME, IMPS_RETURN_CONTROL_FILENAME, DPS_RETURN_FILENAME, DPS_RETURN_CONTROL_FILENAME } = require('../../mocks/filenames')
+
 const { BlobServiceClient } = require('@azure/storage-blob')
+
 const { connect, disconnect, getClient } = require('../../../app/sftp')
+
 const { storageConfig, schemeConfig } = require('../../../app/config')
+
 const { start } = require('../../../app/polling')
+
 const { MANAGED_GATEWAY, TRADER } = require('../../../app/constants/servers')
 
 let blobServiceClient
@@ -71,6 +76,7 @@ describe('process outbound files', () => {
   })
 
   test('should process IMPS outbound files', async () => {
+    // Set system time to Monday 10:00 (inside default pollWindow and pollDays)
     jest.useFakeTimers().setSystemTime(new Date('2025-10-13T10:00:00Z'))
     schemeConfig.imps.pollWindow = { start: '08:00', end: '18:00' }
     schemeConfig.imps.pollDays = ['Mon', 'Tue', 'Wed', 'Thu', 'Fri']
