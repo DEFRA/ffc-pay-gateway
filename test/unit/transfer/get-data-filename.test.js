@@ -1,25 +1,13 @@
 const { INBOUND, OUTBOUND } = require('../../../app/constants/directions')
-
 const { getDataFilename } = require('../../../app/transfer/get-data-filename')
 
-describe('get data filename', () => {
-  test('should return filename without prefix if control file prefix', () => {
-    const result = getDataFilename('CTL_test.txt')
-    expect(result).toBe('test.txt')
-  })
-
-  test('should return filename with .dat extension if GLOS control file', () => {
-    const result = getDataFilename('FCAP_test.ctl')
-    expect(result).toBe('FCAP_test.dat')
-  })
-
-  test('should return filename with .gne extension if inbound GENESIS control file', () => {
-    const result = getDataFilename('GENESIS_test.gne.ctl', INBOUND)
-    expect(result).toBe('GENESIS_test.gne')
-  })
-
-  test('should return filename with .gni extension if outbound GENESIS control file', () => {
-    const result = getDataFilename('GENESIS_test.ctl', OUTBOUND)
-    expect(result).toBe('GENESIS_test')
+describe('getDataFilename', () => {
+  test.each([
+    ['CTL_test.txt', undefined, 'test.txt', 'removes CTL_ prefix'],
+    ['FCAP_test.ctl', undefined, 'FCAP_test.dat', 'converts FCAP .ctl to .dat'],
+    ['GENESIS_test.gne.ctl', INBOUND, 'GENESIS_test.gne', 'inbound GENESIS keeps .gne'],
+    ['GENESIS_test.ctl', OUTBOUND, 'GENESIS_test', 'outbound GENESIS strips .ctl']
+  ])('%s → %s (%s)', (input, direction, expected) => {
+    expect(getDataFilename(input, direction)).toBe(expected)
   })
 })

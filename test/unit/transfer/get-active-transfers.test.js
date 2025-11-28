@@ -2,10 +2,8 @@ jest.mock('../../../app/transfer/get-scheme-transfers')
 const { getSchemeTransfers } = require('../../../app/transfer/get-scheme-transfers')
 
 const { sftpConfig } = require('../../../app/config')
-
 const { INBOUND, OUTBOUND } = require('../../../app/constants/directions')
 const { MANAGED_GATEWAY, TRADER } = require('../../../app/constants/servers')
-
 const { getActiveTransfers } = require('../../../app/transfer/get-active-transfers')
 
 describe('get active transfers', () => {
@@ -13,66 +11,35 @@ describe('get active transfers', () => {
     jest.clearAllMocks()
     sftpConfig.managedGatewayEnabled = true
     sftpConfig.traderEnabled = true
-
     getSchemeTransfers.mockReturnValue([])
   })
 
-  test('should return empty array if no active servers or schemes', () => {
+  test('returns empty array if no active servers', () => {
     sftpConfig.managedGatewayEnabled = false
     sftpConfig.traderEnabled = false
     const result = getActiveTransfers()
     expect(result).toEqual([])
   })
 
-  test('should get inbound scheme transfers with no active servers if no active servers', () => {
-    sftpConfig.managedGatewayEnabled = false
-    sftpConfig.traderEnabled = false
-    getActiveTransfers()
-    expect(getSchemeTransfers).toHaveBeenCalledWith([], INBOUND)
-  })
+  test.each([
+    { servers: [MANAGED_GATEWAY, TRADER], enabled: [true, true] },
+    { servers: [MANAGED_GATEWAY], enabled: [true, false] },
+    { servers: [TRADER], enabled: [false, true] },
+    { servers: [], enabled: [false, false] }
+  ])(
+    'gets inbound and outbound transfers with servers %o',
+    ({ servers, enabled }) => {
+      sftpConfig.managedGatewayEnabled = enabled[0]
+      sftpConfig.traderEnabled = enabled[1]
 
-  test('should get outbound scheme transfers with no active servers if no active servers', () => {
-    sftpConfig.managedGatewayEnabled = false
-    sftpConfig.traderEnabled = false
-    getActiveTransfers()
-    expect(getSchemeTransfers).toHaveBeenCalledWith([], OUTBOUND)
-  })
+      getActiveTransfers()
 
-  test('should get inbound scheme transfers with all servers if all active', () => {
-    getActiveTransfers()
-    expect(getSchemeTransfers).toHaveBeenCalledWith([MANAGED_GATEWAY, TRADER], INBOUND)
-  })
+      expect(getSchemeTransfers).toHaveBeenCalledWith(servers, INBOUND)
+      expect(getSchemeTransfers).toHaveBeenCalledWith(servers, OUTBOUND)
+    }
+  )
 
-  test('should get outbound scheme transfers with all servers if all active', () => {
-    getActiveTransfers()
-    expect(getSchemeTransfers).toHaveBeenCalledWith([MANAGED_GATEWAY, TRADER], OUTBOUND)
-  })
-
-  test('should get inbound scheme transfers with managed gateway if only managed gateway active', () => {
-    sftpConfig.traderEnabled = false
-    getActiveTransfers()
-    expect(getSchemeTransfers).toHaveBeenCalledWith([MANAGED_GATEWAY], INBOUND)
-  })
-
-  test('should get outbound scheme transfers with managed gateway if only managed gateway active', () => {
-    sftpConfig.traderEnabled = false
-    getActiveTransfers()
-    expect(getSchemeTransfers).toHaveBeenCalledWith([MANAGED_GATEWAY], OUTBOUND)
-  })
-
-  test('should get inbound scheme transfers with trader if only trader active', () => {
-    sftpConfig.managedGatewayEnabled = false
-    getActiveTransfers()
-    expect(getSchemeTransfers).toHaveBeenCalledWith([TRADER], INBOUND)
-  })
-
-  test('should get outbound scheme transfers with trader if only trader active', () => {
-    sftpConfig.managedGatewayEnabled = false
-    getActiveTransfers()
-    expect(getSchemeTransfers).toHaveBeenCalledWith([TRADER], OUTBOUND)
-  })
-
-  test('should return inbound and outbound transfers', () => {
+  test('returns both inbound and outbound transfers', () => {
     getSchemeTransfers.mockReturnValueOnce([{ direction: INBOUND }])
     getSchemeTransfers.mockReturnValueOnce([{ direction: OUTBOUND }])
     const result = getActiveTransfers()
