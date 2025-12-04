@@ -36,15 +36,15 @@ services:
       COMBINED_OFFER_INBOUND_DIRECTORY: local-directory/inbound
       COHT_CAPITAL_INBOUND_DIRECTORY: local-directory/inbound
       SFI_EXPANDED_INBOUND_DIRECTORY: local-directory/inbound
-      IMPS_POLL_WINDOW_START: ${IMPS_POLL_WINDOW_START}
-      IMPS_POLL_WINDOW_END: ${IMPS_POLL_WINDOW_END}
-      IMPS_POLL_DAYS: ${IMPS_POLL_DAYS}
-      DPS_POLL_WINDOW_START: ${DPS_POLL_WINDOW_START}
-      DPS_POLL_WINDOW_END: ${DPS_POLL_WINDOW_END}
-      DPS_POLL_DAYS: ${DPS_POLL_DAYS}
+      IMPS_POLL_WINDOW_START: "08:00"
+      IMPS_POLL_WINDOW_END: "18:00"
+      IMPS_POLL_DAYS: "Mon,Tue,Wed,Thu,Fri"
+      DPS_POLL_WINDOW_START: "08:00"
+      DPS_POLL_WINDOW_END: "18:00"
+      DPS_POLL_DAYS: "Mon,Tue,Wed,Thu,Fri"
 
   ffc-pay-batch-azurite:
-    image: mcr.microsoft.com/azure-storage/azurite:3.32.0
+    image: mcr.microsoft.com/azure-storage/azurite:3.35.0
     command: "azurite-blob --loose --blobHost 0.0.0.0"
     labels:
       com.docker.compose.pay.role: ffc-pay-batch-azurite
