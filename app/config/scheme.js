@@ -1,5 +1,5 @@
 const Joi = require('joi')
-const { SFI, SFI_PILOT, LUMP_SUMS, CS, BPS, FDMR, ES, FC, IMPS, SFI23, DPS, DELINKED, COMBINED_OFFER, COHT_CAPITAL } = require('../constants/schemes')
+const { SFI, SFI_PILOT, LUMP_SUMS, CS, BPS, ES, FC, IMPS, SFI23, DPS, DELINKED, COMBINED_OFFER, COHT_CAPITAL } = require('../constants/schemes')
 const { MANAGED_GATEWAY, TRADER } = require('../constants/servers')
 
 const schema = Joi.object({
@@ -57,17 +57,6 @@ const schema = Joi.object({
       inbound: Joi.string().required()
     }).required(),
     enabled: Joi.boolean().default(true)
-  }).required(),
-  fdmr: Joi.object({
-    name: Joi.string().default(FDMR),
-    fileMasks: Joi.object({
-      inbound: Joi.array().items(Joi.string()).default([/^CTL_FDMR_\d{4}_AP_\d*.dat$/])
-    }),
-    server: Joi.string().default(MANAGED_GATEWAY),
-    directories: Joi.object({
-      inbound: Joi.string().required()
-    }).required(),
-    enabled: Joi.boolean().default(false)
   }).required(),
   es: Joi.object({
     name: Joi.string().default(ES),
@@ -237,17 +226,7 @@ const config = {
     },
     enabled: process.env.BPS_ENABLED
   },
-  fdmr: {
-    name: process.env.FDMR_NAME,
-    fileMasks: {
-      inbound: process.env.FDMR_FILE_INBOUND_MASKS
-    },
-    server: process.env.FDMR_SERVER,
-    directories: {
-      inbound: process.env.FDMR_INBOUND_DIRECTORY
-    },
-    enabled: process.env.FDMR_ENABLED
-  },
+
   es: {
     name: process.env.ES_NAME,
     fileMasks: {
