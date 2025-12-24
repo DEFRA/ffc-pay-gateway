@@ -226,7 +226,6 @@ const config = {
     },
     enabled: process.env.BPS_ENABLED
   },
-
   es: {
     name: process.env.ES_NAME,
     fileMasks: {
