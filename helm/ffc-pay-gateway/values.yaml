@@ -48,7 +48,6 @@ container:
   bpsInboundDirectory: /opt/cap_prod_data/DAX/out/int_539
   esInboundDirectory: /opt/cap_prod_data/genesis/in/int_073
   esOutboundDirectory: /opt/cap_prod_data/genesis/out/int_072
-  fdmrInboundDirectory: /opt/cap_prod_data/DAX/out/int_539
   fcInboundDirectory: /opt/cap_prod_data/glos/in/int_230
   fcOutboundDirectory: /opt/cap_prod_data/glos/out/int_231
   impsInboundDirectory: D:\app\DAX_interface\CFI\outbound
@@ -67,7 +66,6 @@ container:
   lumpSumsEnabled: true
   csEnabled: true
   bpsEnabled: true
-  fdmrEnabled: false
   esEnabled: true
   fcEnabled: true
   impsEnabled: true

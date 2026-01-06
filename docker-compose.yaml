@@ -22,7 +22,6 @@ services:
       LUMP_SUMS_INBOUND_DIRECTORY: local-directory/inbound
       CS_INBOUND_DIRECTORY: local-directory/inbound
       BPS_INBOUND_DIRECTORY: local-directory/inbound
-      FDMR_INBOUND_DIRECTORY: local-directory/inbound
       ES_INBOUND_DIRECTORY: local-directory/inbound
       ES_OUTBOUND_DIRECTORY: local-directory/outbound
       FC_INBOUND_DIRECTORY: local-directory/inbound

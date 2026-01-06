@@ -38,7 +38,6 @@ The schemes being served by the Gateway service are as follows:
   LUMP_SUMS: Lump Sums payments,
   CS: Countryside Stewardship,
   BPS: Basic Payment Scheme,
-  FDMR: Financial Discipline Mechanism Reimbursement,
   ES: Environmental Stewardship,
   FC: Forestry Commission,
   IMPS: Internal Market Payment Scheme,
