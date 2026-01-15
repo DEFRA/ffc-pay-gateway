@@ -1,0 +1,56 @@
+---
+environment: production
+environmentCode: pre
+container:
+  sftpManagedGatewayEnabled: false
+  sftpTraderEnabled: false
+  azureStorageAccountName: preffcpayst1001
+  sfiEnabled: false
+  sfiPilotEnabled: false
+  lumpSumsEnabled: false
+  csEnabled: true
+  bpsEnabled: true
+  esEnabled: false
+  fcEnabled: false
+  impsEnabled: false
+  sfi23Enabled: false
+  dpsEnabled: false
+  delinkedEnabled: false
+  combinedOfferEnabled: false
+  cohtCapitalEnabled: false
+
+secretProviderClass:
+  azure:
+    keyvaultName: PREFFCINFKV1001
+    objects: # reading the secret from Azure Key Vault
+      - objectName: pre-ffcahwr-appinsights-connectionString
+        objectType: secret
+      - objectName: pre-ffc-pay-sftpManagedGatewayHost # to be created
+        objectType: secret
+      - objectName: pre-ffc-pay-sftpTraderHost # to be created
+        objectType: secret
+      - objectName: pre-ffc-pay-sftpManagedGatewayUsername # to be created
+        objectType: secret
+      - objectName: pre-ffc-pay-sftpTraderUsername # to be created
+        objectType: secret
+      - objectName: ffc-pay-managed-gateway-private-key
+        objectType: secret
+
+  secretObjects: # creating a kubernetes secret from the Azure Key Vault secrets
+    - secretName: ffc-pay-gateway
+      type: Opaque
+      data:
+        - objectName: pre-ffcahwr-appInsights-connectionString
+          key: APPINSIGHTS_CONNECTIONSTRING
+        - objectName: pre-ffc-pay-sftpManagedGatewayHost
+          key: SFTP_MANAGED_GATEWAY_HOST
+        - objectName: pre-ffc-pay-sftpTraderHost
+          key: SFTP_TRADER_HOST
+        - objectName: pre-ffc-pay-sftpManagedGatewayUsername
+          key: SFTP_MANAGED_GATEWAY_USERNAME
+        - objectName: pre-ffc-pay-sftpTraderUsername
+          key: SFTP_TRADER_USERNAME
+        - objectName: ffc-pay-managed-gateway-private-key
+          key: SFTP_TRADER_PASSWORD
+        - objectName: ffc-pay-managed-gateway-private-key
+          key: SFTP_MANAGED_GATEWAY_PRIVATE_KEY
