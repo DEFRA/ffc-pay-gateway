@@ -87,3 +87,10 @@ workloadIdentity: true
 azureIdentity:
   clientID: not-a-real-clientID
   resourceID: not-a-real-resourceID
+
+  secretObjects: # creating a kubernetes secret from the Azure Key Vault secrets
+    - secretName: ffc-pay-gateway
+      type: Opaque
+      data:
+        - objectName: appInsights-connectionString
+          key: APPINSIGHTS_CONNECTIONSTRING
