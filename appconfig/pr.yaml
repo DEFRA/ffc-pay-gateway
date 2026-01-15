@@ -1,0 +1,21 @@
+---
+environment: production
+environmentCode: snd
+container:
+  sftpDebug: true
+  sftpManagedGatewayEnabled: false
+  sftpTraderEnabled: false
+  azureStorageAccountName: sndffcpayst2001
+  sfiEnabled: true
+  sfiPilotEnabled: true
+  lumpSumsEnabled: true
+  csEnabled: true
+  bpsEnabled: true
+  esEnabled: true
+  fcEnabled: true
+  impsEnabled: true
+  sfi23Enabled: true
+  dpsEnabled: false
+  delinkedEnabled: true
+  combinedOfferEnabled: true
+  cohtCapitalEnabled: true
