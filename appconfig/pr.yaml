@@ -5,7 +5,7 @@ container:
   sftpDebug: true
   sftpManagedGatewayEnabled: false
   sftpTraderEnabled: false
-  azureStorageAccountName: sndffcpayst2001
+  azureStorageAccountName: snd2ffcpayst2001
   sfiEnabled: true
   sfiPilotEnabled: true
   lumpSumsEnabled: true
