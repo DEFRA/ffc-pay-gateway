@@ -12,8 +12,10 @@ data:
   SFTP_DEBUG: {{ quote .Values.container.sftpDebug }}
   SFTP_MANAGED_GATEWAY_HOST: {{ quote .Values.container.sftpManagedGatewayHost }}
   SFPT_MANAGED_GATEWAY_PORT: {{ quote .Values.container.sftpManagedGatewayPort }}
+  SFTP_MANAGED_GATEWAY_USERNAME: {{ quote .Values.container.sftpManagedGatewayUsername }}
   SFTP_TRADER_HOST: {{ quote .Values.container.sftpTraderHost }}
   SFTP_TRADER_PORT: {{ quote .Values.container.sftpTraderPort }}
+  SFTP_TRADER_USERNAME: {{ quote .Values.container.sftpTraderUsername }}
   IMPS_POLL_WINDOW_START: {{ quote .Values.container.impsPollWindowStart }}
   IMPS_POLL_WINDOW_END: {{ quote .Values.container.impsPollWindowEnd }}
   IMPS_POLL_DAYS: {{ quote .Values.container.impsPollDays }}
