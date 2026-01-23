@@ -2,28 +2,10 @@
 environment: production
 environmentCode: prd
 container:
-  sftpManagedGatewayEnabled: true
-  sftpTraderEnabled: true
+  sftpDebug: false
   azureStorageAccountName: prdffcpayst1001
-  sfiEnabled: true
-  sfiPilotEnabled: true
-  lumpSumsEnabled: true
-  csEnabled: true
-  bpsEnabled: true
-  esEnabled: true
-  fcEnabled: true
-  impsEnabled: true
-  sfi23Enabled: true
-  dpsEnabled: true
-  delinkedEnabled: true
-  combinedOfferEnabled: true
-  cohtCapitalEnabled: false
-  sftpManagedGatewayHost: placeholder-tbc
   sftpManagedGatewayPort: 22
-  sftpManagedGatewayUsername: placeholder-tbc
-  sftpTraderHost: placeholder-tbc
   sftpTraderPort: 22
-  sftpTraderUsername: placeholder-tbc
   sfiInboundDirectory: /opt/cap_prod_data/DAX/out/Int_725
   sfiPilotInboundDirectory: /opt/cap_prod_data/DAX/out/Int_725
   lumpSumsInboundDirectory: /opt/cap_prod_data/DAX/out/Int_725

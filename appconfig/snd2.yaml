@@ -3,28 +3,9 @@ environment: production
 environmentCode: snd
 container:
   sftpDebug: true
-  sftpManagedGatewayEnabled: false
-  sftpTraderEnabled: false
   azureStorageAccountName: snd2ffcpayst2001
-  sfiEnabled: true
-  sfiPilotEnabled: true
-  lumpSumsEnabled: true
-  csEnabled: true
-  bpsEnabled: true
-  esEnabled: true
-  fcEnabled: true
-  impsEnabled: true
-  sfi23Enabled: true
-  dpsEnabled: false
-  delinkedEnabled: true
-  combinedOfferEnabled: true
-  cohtCapitalEnabled: true
-  sftpManagedGatewayHost: placeholder-tbc
   sftpManagedGatewayPort: 22
-  sftpManagedGatewayUsername: placeholder-tbc
-  sftpTraderHost: placeholder-tbc
   sftpTraderPort: 22
-  sftpTraderUsername: placeholder-tbc
   sfiInboundDirectory: /opt/cap_test_data/DAX/out/Int_725
   sfiPilotInboundDirectory: /opt/cap_test_data/DAX/out/Int_725
   lumpSumsInboundDirectory: /opt/cap_test_data/DAX/out/Int_725
