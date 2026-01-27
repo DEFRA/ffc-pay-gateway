@@ -14,7 +14,7 @@ containerConfigMap:
   name: ffc-pay-gateway-config-map
 
 containerSecret:
-  name: ffc-pay-gateway-container-secret
+  name: ffc-pay-gateway
   type: Opaque
 
 deployment:
