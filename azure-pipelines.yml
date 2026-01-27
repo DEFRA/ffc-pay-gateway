@@ -46,121 +46,121 @@ extends:
     # failOnThreshold: moderate
     variableGroupName: ffc-pay-gateway-env-var
     pr_params:
-      sftpManagedGatewayEnabled: $(pr_sftpManagedGatewayEnabled)
-      sftpTraderEnabled: $(pr_sftpTraderEnabled)
-      sfiEnabled: $(pr_sfiEnabled)
-      sfiPilotEnabled: $(pr_sfiPilotEnabled)
-      lumpSumsEnabled: $(pr_lumpSumsEnabled)
-      csEnabled: $(pr_csEnabled)
-      bpsEnabled: $(pr_bpsEnabled)
-      esEnabled: $(pr_esEnabled)
-      fcEnabled: $(pr_fcEnabled)
-      impsEnabled: $(pr_impsEnabled)
-      sfi23Enabled: $(pr_sfi23Enabled)
-      dpsEnabled: $(pr_dpsEnabled)
-      delinkedEnabled: $(pr_delinkedEnabled)
-      combinedOfferEnabled: $(pr_combinedOfferEnabled)
-      cohtCapitalEnabled: $(pr_cohtCapitalEnabled)
+      sftpManagedGatewayEnabled: ${{ eq(variables['pr_sftpManagedGatewayEnabled'], 'true') }}
+      sftpTraderEnabled: ${{ eq(variables['pr_sftpTraderEnabled'], 'true') }}
+      sfiEnabled: ${{ eq(variables['pr_sfiEnabled'], 'true') }}
+      sfiPilotEnabled: ${{ eq(variables['pr_sfiPilotEnabled'], 'true') }}
+      lumpSumsEnabled: ${{ eq(variables['pr_lumpSumsEnabled'], 'true') }}
+      csEnabled: ${{ eq(variables['pr_csEnabled'], 'true') }}
+      bpsEnabled: ${{ eq(variables['pr_bpsEnabled'], 'true') }}
+      esEnabled: ${{ eq(variables['pr_esEnabled'], 'true') }}
+      fcEnabled: ${{ eq(variables['pr_fcEnabled'], 'true') }}
+      impsEnabled: ${{ eq(variables['pr_impsEnabled'], 'true') }}
+      sfi23Enabled: ${{ eq(variables['pr_sfi23Enabled'], 'true') }}
+      dpsEnabled: ${{ eq(variables['pr_dpsEnabled'], 'true') }}
+      delinkedEnabled: ${{ eq(variables['pr_delinkedEnabled'], 'true') }}
+      combinedOfferEnabled: ${{ eq(variables['pr_combinedOfferEnabled'], 'true') }}
+      cohtCapitalEnabled: ${{ eq(variables['pr_cohtCapitalEnabled'], 'true') }}
       sftpManagedGatewayHost: $(pr_sftpManagedGatewayHost)
       sftpManagedGatewayUsername: $(pr_sftpManagedGatewayUsername)
       sftpTraderHost: $(pr_sftpTraderHost)
       sftpTraderUsername: $(pr_sftpTraderUsername)
     snd2_params:
-      sftpManagedGatewayEnabled: $(snd2_sftpManagedGatewayEnabled)
-      sftpTraderEnabled: $(snd2_sftpTraderEnabled)
-      sfiEnabled: $(snd2_sfiEnabled)
-      sfiPilotEnabled: $(snd2_sfiPilotEnabled)
-      lumpSumsEnabled: $(snd2_lumpSumsEnabled)
-      csEnabled: $(snd2_csEnabled)
-      bpsEnabled: $(snd2_bpsEnabled)
-      esEnabled: $(snd2_esEnabled)
-      fcEnabled: $(snd2_fcEnabled)
-      impsEnabled: $(snd2_impsEnabled)
-      sfi23Enabled: $(snd2_sfi23Enabled)
-      dpsEnabled: $(snd2_dpsEnabled)
-      delinkedEnabled: $(snd2_delinkedEnabled)
-      combinedOfferEnabled: $(snd2_combinedOfferEnabled)
-      cohtCapitalEnabled: $(snd2_cohtCapitalEnabled)
+      sftpManagedGatewayEnabled: ${{ eq(variables['snd2_sftpManagedGatewayEnabled'], 'true') }}
+      sftpTraderEnabled: ${{ eq(variables['snd2_sftpTraderEnabled'], 'true') }}
+      sfiEnabled: ${{ eq(variables['snd2_sfiEnabled'], 'true') }}
+      sfiPilotEnabled: ${{ eq(variables['snd2_sfiPilotEnabled'], 'true') }}
+      lumpSumsEnabled: ${{ eq(variables['snd2_lumpSumsEnabled'], 'true') }}
+      csEnabled: ${{ eq(variables['snd2_csEnabled'], 'true') }}
+      bpsEnabled: ${{ eq(variables['snd2_bpsEnabled'], 'true') }}
+      esEnabled: ${{ eq(variables['snd2_esEnabled'], 'true') }}
+      fcEnabled: ${{ eq(variables['snd2_fcEnabled'], 'true') }}
+      impsEnabled: ${{ eq(variables['snd2_impsEnabled'], 'true') }}
+      sfi23Enabled: ${{ eq(variables['snd2_sfi23Enabled'], 'true') }}
+      dpsEnabled: ${{ eq(variables['snd2_dpsEnabled'], 'true') }}
+      delinkedEnabled: ${{ eq(variables['snd2_delinkedEnabled'], 'true') }}
+      combinedOfferEnabled: ${{ eq(variables['snd2_combinedOfferEnabled'], 'true') }}
+      cohtCapitalEnabled: ${{ eq(variables['snd2_cohtCapitalEnabled'], 'true') }}
       sftpManagedGatewayHost: $(snd2_sftpManagedGatewayHost)
       sftpManagedGatewayUsername: $(snd2_sftpManagedGatewayUsername)
       sftpTraderHost: $(snd2_sftpTraderHost)
       sftpTraderUsername: $(snd2_sftpTraderUsername)
     dev_params:
-      sftpManagedGatewayEnabled: $(dev_sftpManagedGatewayEnabled)
-      sftpTraderEnabled: $(dev_sftpTraderEnabled)
-      sfiEnabled: $(dev_sfiEnabled)
-      sfiPilotEnabled: $(dev_sfiPilotEnabled)
-      lumpSumsEnabled: $(dev_lumpSumsEnabled)
-      csEnabled: $(dev_csEnabled)
-      bpsEnabled: $(dev_bpsEnabled)
-      esEnabled: $(dev_esEnabled)
-      fcEnabled: $(dev_fcEnabled)
-      impsEnabled: $(dev_impsEnabled)
-      sfi23Enabled: $(dev_sfi23Enabled)
-      dpsEnabled: $(dev_dpsEnabled)
-      delinkedEnabled: $(dev_delinkedEnabled)
-      combinedOfferEnabled: $(dev_combinedOfferEnabled)
-      cohtCapitalEnabled: $(dev_cohtCapitalEnabled)
+      sftpManagedGatewayEnabled: ${{ eq(variables['dev_sftpManagedGatewayEnabled'], 'true') }}
+      sftpTraderEnabled: ${{ eq(variables['dev_sftpTraderEnabled'], 'true') }}
+      sfiEnabled: ${{ eq(variables['dev_sfiEnabled'], 'true') }}
+      sfiPilotEnabled: ${{ eq(variables['dev_sfiPilotEnabled'], 'true') }}
+      lumpSumsEnabled: ${{ eq(variables['dev_lumpSumsEnabled'], 'true') }}
+      csEnabled: ${{ eq(variables['dev_csEnabled'], 'true') }}
+      bpsEnabled: ${{ eq(variables['dev_bpsEnabled'], 'true') }}
+      esEnabled: ${{ eq(variables['dev_esEnabled'], 'true') }}
+      fcEnabled: ${{ eq(variables['dev_fcEnabled'], 'true') }}
+      impsEnabled: ${{ eq(variables['dev_impsEnabled'], 'true') }}
+      sfi23Enabled: ${{ eq(variables['dev_sfi23Enabled'], 'true') }}
+      dpsEnabled: ${{ eq(variables['dev_dpsEnabled'], 'true') }}
+      delinkedEnabled: ${{ eq(variables['dev_delinkedEnabled'], 'true') }}
+      combinedOfferEnabled: ${{ eq(variables['dev_combinedOfferEnabled'], 'true') }}
+      cohtCapitalEnabled: ${{ eq(variables['dev_cohtCapitalEnabled'], 'true') }}
       sftpManagedGatewayHost: $(dev_sftpManagedGatewayHost)
       sftpManagedGatewayUsername: $(dev_sftpManagedGatewayUsername)
       sftpTraderHost: $(dev_sftpTraderHost)
       sftpTraderUsername: $(dev_sftpTraderUsername)
     test_params:
-      sftpManagedGatewayEnabled: $(test_sftpManagedGatewayEnabled)
-      sftpTraderEnabled: $(test_sftpTraderEnabled)
-      sfiEnabled: $(test_sfiEnabled)
-      sfiPilotEnabled: $(test_sfiPilotEnabled)
-      lumpSumsEnabled: $(test_lumpSumsEnabled)
-      csEnabled: $(test_csEnabled)
-      bpsEnabled: $(test_bpsEnabled)
-      esEnabled: $(test_esEnabled)
-      fcEnabled: $(test_fcEnabled)
-      impsEnabled: $(test_impsEnabled)
-      sfi23Enabled: $(test_sfi23Enabled)
-      dpsEnabled: $(test_dpsEnabled)
-      delinkedEnabled: $(test_delinkedEnabled)
-      combinedOfferEnabled: $(test_combinedOfferEnabled)
-      cohtCapitalEnabled: $(test_cohtCapitalEnabled)
+      sftpManagedGatewayEnabled: ${{ eq(variables['test_sftpManagedGatewayEnabled'], 'true') }}
+      sftpTraderEnabled: ${{ eq(variables['test_sftpTraderEnabled'], 'true') }}
+      sfiEnabled: ${{ eq(variables['test_sfiEnabled'], 'true') }}
+      sfiPilotEnabled: ${{ eq(variables['test_sfiPilotEnabled'], 'true') }}
+      lumpSumsEnabled: ${{ eq(variables['test_lumpSumsEnabled'], 'true') }}
+      csEnabled: ${{ eq(variables['test_csEnabled'], 'true') }}
+      bpsEnabled: ${{ eq(variables['test_bpsEnabled'], 'true') }}
+      esEnabled: ${{ eq(variables['test_esEnabled'], 'true') }}
+      fcEnabled: ${{ eq(variables['test_fcEnabled'], 'true') }}
+      impsEnabled: ${{ eq(variables['test_impsEnabled'], 'true') }}
+      sfi23Enabled: ${{ eq(variables['test_sfi23Enabled'], 'true') }}
+      dpsEnabled: ${{ eq(variables['test_dpsEnabled'], 'true') }}
+      delinkedEnabled: ${{ eq(variables['test_delinkedEnabled'], 'true') }}
+      combinedOfferEnabled: ${{ eq(variables['test_combinedOfferEnabled'], 'true') }}
+      cohtCapitalEnabled: ${{ eq(variables['test_cohtCapitalEnabled'], 'true') }}
       sftpManagedGatewayHost: $(test_sftpManagedGatewayHost)
       sftpManagedGatewayUsername: $(test_sftpManagedGatewayUsername)
       sftpTraderHost: $(test_sftpTraderHost)
       sftpTraderUsername: $(test_sftpTraderUsername)
     pre_params:
-      sftpManagedGatewayEnabled: $(pre_sftpManagedGatewayEnabled)
-      sftpTraderEnabled: $(pre_sftpTraderEnabled)
-      sfiEnabled: $(pre_sfiEnabled)
-      sfiPilotEnabled: $(pre_sfiPilotEnabled)
-      lumpSumsEnabled: $(pre_lumpSumsEnabled)
-      csEnabled: $(pre_csEnabled)
-      bpsEnabled: $(pre_bpsEnabled)
-      esEnabled: $(pre_esEnabled)
-      fcEnabled: $(pre_fcEnabled)
-      impsEnabled: $(pre_impsEnabled)
-      sfi23Enabled: $(pre_sfi23Enabled)
-      dpsEnabled: $(pre_dpsEnabled)
-      delinkedEnabled: $(pre_delinkedEnabled)
-      combinedOfferEnabled: $(pre_combinedOfferEnabled)
-      cohtCapitalEnabled: $(pre_cohtCapitalEnabled)
+      sftpManagedGatewayEnabled: ${{ eq(variables['pre_sftpManagedGatewayEnabled'], 'true') }}
+      sftpTraderEnabled: ${{ eq(variables['pre_sftpTraderEnabled'], 'true') }}
+      sfiEnabled: ${{ eq(variables['pre_sfiEnabled'], 'true') }}
+      sfiPilotEnabled: ${{ eq(variables['pre_sfiPilotEnabled'], 'true') }}
+      lumpSumsEnabled: ${{ eq(variables['pre_lumpSumsEnabled'], 'true') }}
+      csEnabled: ${{ eq(variables['pre_csEnabled'], 'true') }}
+      bpsEnabled: ${{ eq(variables['pre_bpsEnabled'], 'true') }}
+      esEnabled: ${{ eq(variables['pre_esEnabled'], 'true') }}
+      fcEnabled: ${{ eq(variables['pre_fcEnabled'], 'true') }}
+      impsEnabled: ${{ eq(variables['pre_impsEnabled'], 'true') }}
+      sfi23Enabled: ${{ eq(variables['pre_sfi23Enabled'], 'true') }}
+      dpsEnabled: ${{ eq(variables['pre_dpsEnabled'], 'true') }}
+      delinkedEnabled: ${{ eq(variables['pre_delinkedEnabled'], 'true') }}
+      combinedOfferEnabled: ${{ eq(variables['pre_combinedOfferEnabled'], 'true') }}
+      cohtCapitalEnabled: ${{ eq(variables['pre_cohtCapitalEnabled'], 'true') }}
       sftpManagedGatewayHost: $(pre_sftpManagedGatewayHost)
       sftpManagedGatewayUsername: $(pre_sftpManagedGatewayUsername)
       sftpTraderHost: $(pre_sftpTraderHost)
       sftpTraderUsername: $(pre_sftpTraderUsername)
     prd_params:
-      sftpManagedGatewayEnabled: $(prd_sftpManagedGatewayEnabled)
-      sftpTraderEnabled: $(prd_sftpTraderEnabled)
-      sfiEnabled: $(prd_sfiEnabled)
-      sfiPilotEnabled: $(prd_sfiPilotEnabled)
-      lumpSumsEnabled: $(prd_lumpSumsEnabled)
-      csEnabled: $(prd_csEnabled)
-      bpsEnabled: $(prd_bpsEnabled)
-      esEnabled: $(prd_esEnabled)
-      fcEnabled: $(prd_fcEnabled)
-      impsEnabled: $(prd_impsEnabled)
-      sfi23Enabled: $(prd_sfi23Enabled)
-      dpsEnabled: $(prd_dpsEnabled)
-      delinkedEnabled: $(prd_delinkedEnabled)
-      combinedOfferEnabled: $(prd_combinedOfferEnabled)
-      cohtCapitalEnabled: $(prd_cohtCapitalEnabled)
+      sftpManagedGatewayEnabled: ${{ eq(variables['prd_sftpManagedGatewayEnabled'], 'true') }}
+      sftpTraderEnabled: ${{ eq(variables['prd_sftpTraderEnabled'], 'true') }}
+      sfiEnabled: ${{ eq(variables['prd_sfiEnabled'], 'true') }}
+      sfiPilotEnabled: ${{ eq(variables['prd_sfiPilotEnabled'], 'true') }}
+      lumpSumsEnabled: ${{ eq(variables['prd_lumpSumsEnabled'], 'true') }}
+      csEnabled: ${{ eq(variables['prd_csEnabled'], 'true') }}
+      bpsEnabled: ${{ eq(variables['prd_bpsEnabled'], 'true') }}
+      esEnabled: ${{ eq(variables['prd_esEnabled'], 'true') }}
+      fcEnabled: ${{ eq(variables['prd_fcEnabled'], 'true') }}
+      impsEnabled: ${{ eq(variables['prd_impsEnabled'], 'true') }}
+      sfi23Enabled: ${{ eq(variables['prd_sfi23Enabled'], 'true') }}
+      dpsEnabled: ${{ eq(variables['prd_dpsEnabled'], 'true') }}
+      delinkedEnabled: ${{ eq(variables['prd_delinkedEnabled'], 'true') }}
+      combinedOfferEnabled: ${{ eq(variables['prd_combinedOfferEnabled'], 'true') }}
+      cohtCapitalEnabled: ${{ eq(variables['prd_cohtCapitalEnabled'], 'true') }}
       sftpManagedGatewayHost: $(prd_sftpManagedGatewayHost)
       sftpManagedGatewayUsername: $(prd_sftpManagedGatewayUsername)
       sftpTraderHost: $(prd_sftpTraderHost)
