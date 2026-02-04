@@ -22,7 +22,6 @@ data:
   DPS_POLL_WINDOW_START: {{ quote .Values.container.dpsPollWindowStart }}
   DPS_POLL_WINDOW_END: {{ quote .Values.container.dpsPollWindowEnd }}
   DPS_POLL_DAYS: {{ quote .Values.container.dpsPollDays }}
-  {{- if and (.Values.environmentCode) (eq (.Values.environmentCode | toString ) "prd") }}
   SFI_INBOUND_DIRECTORY: {{ quote .Values.container.sfiInboundDirectory }}
   SFI_PILOT_INBOUND_DIRECTORY: {{ quote .Values.container.sfiPilotInboundDirectory }}
   LUMP_SUMS_INBOUND_DIRECTORY: {{ quote .Values.container.lumpSumsInboundDirectory }}
@@ -36,21 +35,6 @@ data:
   DELINKED_INBOUND_DIRECTORY: {{ quote .Values.container.delinkedInboundDirectory }}
   COMBINED_OFFER_INBOUND_DIRECTORY: {{ quote .Values.container.combinedOfferInboundDirectory }}
   COHT_CAPITAL_INBOUND_DIRECTORY: {{ quote .Values.container.cohtCapitalInboundDirectory }}
-  {{ else }}
-  SFI_INBOUND_DIRECTORY: {{ .Values.container.sfiInboundDirectory | replace "cap_prod_data" "cap_test_data" }}
-  SFI_PILOT_INBOUND_DIRECTORY: {{ .Values.container.sfiPilotInboundDirectory | replace "cap_prod_data" "cap_test_data" }}
-  LUMP_SUMS_INBOUND_DIRECTORY: {{ .Values.container.lumpSumsInboundDirectory | replace "cap_prod_data" "cap_test_data" }}
-  CS_INBOUND_DIRECTORY: {{ .Values.container.csInboundDirectory | replace "cap_prod_data" "cap_test_data" }}
-  BPS_INBOUND_DIRECTORY: {{ .Values.container.bpsInboundDirectory | replace "cap_prod_data" "cap_test_data" }}
-  ES_INBOUND_DIRECTORY: {{ .Values.container.esInboundDirectory | replace "cap_prod_data" "cap_test_data" }}
-  ES_OUTBOUND_DIRECTORY: {{ .Values.container.esOutboundDirectory | replace "cap_prod_data" "cap_test_data" }}
-  FC_INBOUND_DIRECTORY: {{ .Values.container.fcInboundDirectory | replace "cap_prod_data" "cap_test_data" }}
-  FC_OUTBOUND_DIRECTORY: {{ .Values.container.fcOutboundDirectory | replace "cap_prod_data" "cap_test_data" }}
-  SFI23_INBOUND_DIRECTORY: {{ .Values.container.sfi23InboundDirectory | replace "cap_prod_data" "cap_test_data" }}
-  DELINKED_INBOUND_DIRECTORY: {{ .Values.container.delinkedInboundDirectory | replace "cap_prod_data" "cap_test_data" }}
-  COMBINED_OFFER_INBOUND_DIRECTORY: {{ quote .Values.container.combinedOfferInboundDirectory | replace "cap_prod_data" "cap_test_data" }}
-  COHT_CAPITAL_INBOUND_DIRECTORY: {{ quote .Values.container.cohtCapitalInboundDirectory | replace "cap_prod_data" "cap_test_data" }}
-  {{- end }}
   IMPS_INBOUND_DIRECTORY: {{ quote .Values.container.impsInboundDirectory }}
   IMPS_OUTBOUND_DIRECTORY: {{ quote .Values.container.impsOutboundDirectory }}
   DPS_INBOUND_DIRECTORY: {{ quote .Values.container.dpsInboundDirectory }}
