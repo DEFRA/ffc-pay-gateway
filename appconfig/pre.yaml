@@ -1,0 +1,50 @@
+---
+environment: production
+environmentCode: pre
+container:
+  sftpDebug: false
+  azureStorageAccountName: preffcpayst1001
+  sftpManagedGatewayPort: 22
+  sftpTraderPort: 22
+  sfiInboundDirectory: /opt/cap_test_data/DAX/out/Int_725
+  sfiPilotInboundDirectory: /opt/cap_test_data/DAX/out/Int_725
+  lumpSumsInboundDirectory: /opt/cap_test_data/DAX/out/Int_725
+  csInboundDirectory: /opt/cap_test_data/DAX/out/int_716
+  bpsInboundDirectory: /opt/cap_test_data/DAX/out/int_539
+  esInboundDirectory: /opt/cap_test_data/genesis/in/int_073
+  esOutboundDirectory: /opt/cap_test_data/genesis/out/int_072
+  fcInboundDirectory: /opt/cap_test_data/glos/in/int_230
+  fcOutboundDirectory: /opt/cap_test_data/glos/out/int_231
+  impsInboundDirectory: D:\app\DAX_interface\CFI\outbound
+  impsOutboundDirectory: D:\app\DAX_interface\CFI\inbound
+  sfi23InboundDirectory: /opt/cap_test_data/DAX/out/Int_725
+  dpsInboundDirectory: D:\app\DAX_interface\DPS\outbound
+  dpsOutboundDirectory: D:\app\DAX_interface\DPS\inbound
+  delinkedInboundDirectory: /opt/cap_test_data/DAX/out/Int_725
+  combinedOfferInboundDirectory: /opt/cap_test_data/DAX/out/Int_725
+  cohtCapitalInboundDirectory: /opt/cap_test_data/DAX/out/Int_725
+  impsPollWindowStart: "00:00"
+  impsPollWindowEnd: "23:59"
+  impsPollDays: "Sun,Mon,Tue,Wed,Thu,Fri,Sat"
+  dpsPollWindowStart: "00:00"
+  dpsPollWindowEnd: "23:59"
+  dpsPollDays: "Sun,Mon,Tue,Wed,Thu,Fri,Sat"
+secretProviderClass:
+  azure:
+    keyvaultName: PREFFCINFKV1001
+    objects: # reading the secret from Azure Key Vault
+      - objectName: pre-ffcahwr-appinsights-connectionString
+        objectType: secret
+      - objectName: ffc-pay-managed-gateway-private-key
+        objectType: secret
+
+  secretObjects: # creating a kubernetes secret from the Azure Key Vault secrets
+    - secretName: ffc-pay-gateway
+      type: Opaque
+      data:
+        - objectName: pre-ffcahwr-appInsights-connectionString
+          key: APPINSIGHTS_CONNECTIONSTRING
+        - objectName: ffc-pay-managed-gateway-private-key
+          key: SFTP_TRADER_PASSWORD
+        - objectName: ffc-pay-managed-gateway-private-key
+          key: SFTP_MANAGED_GATEWAY_PRIVATE_KEY

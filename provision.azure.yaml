@@ -1,2 +1,10 @@
 resources:
   identity: pay-gateway
+  storage_accounts:
+    - name: pay
+      containers:
+        - name: batch
+          roles:
+            - name: blobContributor
+      roles:
+        - name: storageAccountContributor
