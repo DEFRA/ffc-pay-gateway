@@ -48,7 +48,7 @@ extends:
     pr_params:
       container.sftpManagedGatewayEnabled: $(pr_sftpManagedGatewayEnabled)
       container.sftpTraderEnabled: ${{ eq(variables['pr_sftpTraderEnabled'], 'true') }}
-      container.sfiEnabled: ${{ eq(variables['pr_sfiEnabled'], 'true') }}
+      container.sfiEnabled: $(pr_sfiEnabled)
       container.sfiPilotEnabled: ${{ eq(variables['pr_sfiPilotEnabled'], 'true') }}
       container.lumpSumsEnabled: ${{ eq(variables['pr_lumpSumsEnabled'], 'true') }}
       container.csEnabled: ${{ eq(variables['pr_csEnabled'], 'true') }}
