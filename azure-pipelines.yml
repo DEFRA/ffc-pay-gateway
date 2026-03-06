@@ -46,7 +46,7 @@ extends:
     sndDeployment: ${{ parameters.sndDeployment }}
     variableGroupName: ffc-pay-gateway-env-var
     pr_params:
-      container.sftpManagedGatewayEnabled: ${{ eq(variables['pr_sftpManagedGatewayEnabled'], 'true') }}
+      container.sftpManagedGatewayEnabled: $(pr_sftpManagedGatewayEnabled)
       container.sftpTraderEnabled: ${{ eq(variables['pr_sftpTraderEnabled'], 'true') }}
       container.sfiEnabled: ${{ eq(variables['pr_sfiEnabled'], 'true') }}
       container.sfiPilotEnabled: ${{ eq(variables['pr_sfiPilotEnabled'], 'true') }}
