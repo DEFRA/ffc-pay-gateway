@@ -1,0 +1,10 @@
+# historic secrets-baseline entries, no longer used but found in scan results, so we ignore them here
+a68e84234a24edb488478b47d0ef9ea223066d45:.secrets.baseline:generic-api-key:156
+a68e84234a24edb488478b47d0ef9ea223066d45:.secrets.baseline:generic-api-key:147
+a68e84234a24edb488478b47d0ef9ea223066d45:.secrets.baseline:generic-api-key:138
+a68e84234a24edb488478b47d0ef9ea223066d45:.secrets.baseline:generic-api-key:131
+a68e84234a24edb488478b47d0ef9ea223066d45:.secrets.baseline:generic-api-key:122
+a68e84234a24edb488478b47d0ef9ea223066d45:.secrets.baseline:generic-api-key:115
+1389c0063e086156bc63ede3b955dc235bfa0fe7:.secrets.baseline:generic-api-key:147
+c6c7d87559245074de6bd3386a3a3b53a8d48c82:.secrets.baseline:generic-api-key:115
+c0d57ac40e7faf620cdd79a493cca3b5d6082dc8:.secrets.baseline:generic-api-key:156
