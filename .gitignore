@@ -5,3 +5,4 @@ helm/**/*.lock
 .vscode
 local-directory/
 .ssh
+.gitleaks-shared/
