@@ -33,7 +33,7 @@ secretProviderClass:
   azure:
     keyvaultName: PREFFCINFKV1001
     objects: # reading the secret from Azure Key Vault
-      - objectName: pre-ffcahwr-appinsights-connectionString
+      - objectName: pre-ffcahwr-appInsights-connectionString
         objectType: secret
       - objectName: ffc-pay-managed-gateway-private-key
         objectType: secret

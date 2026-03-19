@@ -33,7 +33,7 @@ secretProviderClass:
   azure:
     keyvaultName: PRDFFCINFKV1001
     objects: # reading the secret from Azure Key Vault
-      - objectName: prd-ffcahwr-appinsights-connectionString
+      - objectName: prd-ffcahwr-appInsights-connectionString
         objectType: secret
       - objectName: ffc-pay-callisto-password
         objectType: secret
