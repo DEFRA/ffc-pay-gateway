@@ -44,7 +44,7 @@ secretProviderClass:
     - secretName: ffc-pay-gateway
       type: Opaque
       data:
-        - objectName: prd-ffcahwr-appInsights-connectionString
+        - objectName: prd-ffcahwr-appinsights-connectionString
           key: APPINSIGHTS_CONNECTIONSTRING
         - objectName: ffc-pay-callisto-password
           key: SFTP_TRADER_PASSWORD
