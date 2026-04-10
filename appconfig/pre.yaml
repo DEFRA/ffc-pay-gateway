@@ -33,7 +33,7 @@ secretProviderClass:
   azure:
     keyvaultName: PREFFCINFKV1001
     objects: # reading the secret from Azure Key Vault
-      - objectName: pre-ffcahwr-appInsights-connectionString
+      - objectName: pre-ffcahwr-appinsights-connectionString
         objectType: secret
       - objectName: ffc-pay-managed-gateway-private-key
         objectType: secret
@@ -42,7 +42,7 @@ secretProviderClass:
     - secretName: ffc-pay-gateway
       type: Opaque
       data:
-        - objectName: pre-ffcahwr-appInsights-connectionString
+        - objectName: pre-ffcahwr-appinsights-connectionString
           key: APPINSIGHTS_CONNECTIONSTRING
         - objectName: ffc-pay-managed-gateway-private-key
           key: SFTP_TRADER_PASSWORD
