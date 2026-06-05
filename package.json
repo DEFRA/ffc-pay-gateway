@@ -1,6 +1,6 @@
 {
   "name": "ffc-pay-gateway",
-  "version": "1.4.44",
+  "version": "1.4.45",
   "description": "Managed Gateway integration",
   "homepage": "https://github.com/DEFRA/ffc-pay-gateway",
   "main": "app/index.js",
@@ -14,7 +14,7 @@
     "start:watch": "nodemon --inspect=0.0.0.0 --ext js --legacy-watch app/index.js",
     "start:debug": "nodemon --inspect-brk=0.0.0.0 --ext js --legacy-watch app/index.js",
     "prepare": "node --eval \"const fs=require('fs'),cp=require('child_process');if(fs.existsSync('.git')&&!process.env.CI&&!process.env.TF_BUILD)cp.execSync('husky',{stdio:'inherit'})\""
-    },
+  },
   "author": "Defra",
   "contributors": [
     "John Watson <john.watson1@defra.gov.uk>",
@@ -44,5 +44,8 @@
     "ignore": [
       "**/test-output/**"
     ]
+  },
+  "overrides": {
+    "uuid": "11.1.1"
   }
 }

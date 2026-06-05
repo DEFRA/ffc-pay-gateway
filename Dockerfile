@@ -1,4 +1,4 @@
-ARG PARENT_VERSION=2.3.0-node20.15.0
+ARG PARENT_VERSION=3.0.8-node22.22.2
 ARG PORT_DEBUG=9229
 
 # Development
@@ -12,7 +12,7 @@ ENV PORT ${PORT}
 EXPOSE ${PORT} ${PORT_DEBUG}
 
 COPY --chown=node:node package*.json ./
-RUN npm install
+RUN npm ci
 COPY --chown=node:node . .
 CMD [ "npm", "run", "start:watch" ]
 
@@ -27,5 +27,5 @@ EXPOSE ${PORT}
 
 COPY --from=development /home/node/app/ ./app/
 COPY --from=development /home/node/package*.json ./
-RUN husky=0 npm ci
+RUN husky=0 npm ci --ignore-scripts
 CMD [ "node", "app" ]
