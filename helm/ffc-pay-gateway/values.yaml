@@ -29,7 +29,7 @@ container:
   azureStorageConnectionString: dummy
   azureStorageUseConnectionString: false
   azureStorageCreateContainers: false
-  pollingInterval: 10000
+  pollingInterval: 60000
   pollingActive: true
   sftpManagedGatewayHost: managed-gateway
   sftpManagedGatewayPort: 22

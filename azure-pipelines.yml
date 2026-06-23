@@ -65,6 +65,8 @@ extends:
       container.sftpManagedGatewayUsername: $(pr_sftpManagedGatewayUsername)
       container.sftpTraderHost: $(pr_sftpTraderHost)
       container.sftpTraderUsername: $(pr_sftpTraderUsername)
+      container.pollingInterval: $(pr_pollingInterval)
+      container.pollingActive: $(pr_pollingActive)
     snd2_params:
       container.sftpManagedGatewayEnabled: $(snd2_sftpManagedGatewayEnabled)
       container.sftpTraderEnabled: $(snd2_sftpTraderEnabled)
@@ -85,6 +87,8 @@ extends:
       container.sftpManagedGatewayUsername: $(snd2_sftpManagedGatewayUsername)
       container.sftpTraderHost: $(snd2_sftpTraderHost)
       container.sftpTraderUsername: $(snd2_sftpTraderUsername)
+      container.pollingInterval: $(snd2_pollingInterval)
+      container.pollingActive: $(snd2_pollingActive)
     dev_params:
       container.sftpManagedGatewayEnabled: $(dev_sftpManagedGatewayEnabled)
       container.sftpTraderEnabled: $(dev_sftpTraderEnabled)
@@ -105,6 +109,8 @@ extends:
       container.sftpManagedGatewayUsername: $(dev_sftpManagedGatewayUsername)
       container.sftpTraderHost: $(dev_sftpTraderHost)
       container.sftpTraderUsername: $(dev_sftpTraderUsername)
+      container.pollingInterval: $(dev_pollingInterval)
+      container.pollingActive: $(dev_pollingActive)
     test_params:
       container.sftpManagedGatewayEnabled: $(test_sftpManagedGatewayEnabled)
       container.sftpTraderEnabled: $(test_sftpTraderEnabled)
@@ -125,6 +131,8 @@ extends:
       container.sftpManagedGatewayUsername: $(test_sftpManagedGatewayUsername)
       container.sftpTraderHost: $(test_sftpTraderHost)
       container.sftpTraderUsername: $(test_sftpTraderUsername)
+      container.pollingInterval: $(test_pollingInterval)
+      container.pollingActive: $(test_pollingActive)
     pre_params:
       container.sftpManagedGatewayEnabled: $(pre_sftpManagedGatewayEnabled)
       container.sftpTraderEnabled: $(pre_sftpTraderEnabled)
@@ -145,6 +153,8 @@ extends:
       container.sftpManagedGatewayUsername: $(pre_sftpManagedGatewayUsername)
       container.sftpTraderHost: $(pre_sftpTraderHost)
       container.sftpTraderUsername: $(pre_sftpTraderUsername)
+      container.pollingInterval: $(pre_pollingInterval)
+      container.pollingActive: $(pre_pollingActive)
     prd_params:
       container.sftpManagedGatewayEnabled: $(prd_sftpManagedGatewayEnabled)
       container.sftpTraderEnabled: $(prd_sftpTraderEnabled)
@@ -165,3 +175,5 @@ extends:
       container.sftpManagedGatewayUsername: $(prd_sftpManagedGatewayUsername)
       container.sftpTraderHost: $(prd_sftpTraderHost)
       container.sftpTraderUsername: $(prd_sftpTraderUsername)
+      container.pollingInterval: $(prd_pollingInterval)
+      container.pollingActive: $(prd_pollingActive)
