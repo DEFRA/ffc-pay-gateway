@@ -81,6 +81,7 @@ container:
   dpsPollWindowStart: "00:00"
   dpsPollWindowEnd: "23:59"
   dpsPollDays: "Sun,Mon,Tue,Wed,Thu,Fri,Sat"
+  azureLogLevel: error
 
 workloadIdentity: true
 
