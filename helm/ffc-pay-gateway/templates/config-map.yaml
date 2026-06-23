@@ -54,4 +54,5 @@ data:
   DELINKED_ENABLED: {{ quote .Values.container.delinkedEnabled }}
   COMBINED_OFFER_ENABLED: {{ quote .Values.container.combinedOfferEnabled }}
   COHT_CAPITAL_ENABLED: {{ quote .Values.container.cohtCapitalEnabled }}
+  AZURE_LOG_LEVEL: {{ quote .Values.container.azureLogLevel }}
 {{- end -}}
