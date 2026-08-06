@@ -1,42 +1,69 @@
-describe('Application Insights', () => {
-  const DEFAULT_ENV = process.env
-  let applicationInsights
+const mockUseAzureMonitor = jest.fn()
+
+jest.mock('@azure/monitor-opentelemetry', () => ({
+  useAzureMonitor: mockUseAzureMonitor
+}))
+
+const insights = require('../../app/insights')
+
+describe('OpenTelemetry setup', () => {
+  const originalConnectionString = process.env.APPINSIGHTS_CONNECTIONSTRING
+  let consoleLogSpy
 
   beforeEach(() => {
-    // important to clear the cache when mocking environment variables
-    jest.resetModules()
-    jest.mock('applicationinsights', () => {
-      return {
-        setup: jest.fn().mockReturnThis(),
-        setAutoCollectDependencies: jest.fn().mockReturnThis(),
-        start: jest.fn(),
-        defaultClient: {
-          context: {
-            keys: [],
-            tags: []
-          }
-        }
-      }
+    consoleLogSpy = jest.spyOn(console, 'log').mockImplementation(() => { })
+  })
+
+  afterEach(() => {
+    jest.clearAllMocks()
+    process.env.APPINSIGHTS_CONNECTIONSTRING = originalConnectionString
+  })
+
+  describe('When process.env.APPINSIGHTS_CONNECTIONSTRING exists', () => {
+    test('should call useAzureMonitor once', () => {
+      process.env.APPINSIGHTS_CONNECTIONSTRING = 'InstrumentationKey=test-key'
+
+      insights.setup()
+
+      expect(mockUseAzureMonitor).toHaveBeenCalledTimes(1)
     })
-    applicationInsights = require('applicationinsights')
-    process.env = { ...DEFAULT_ENV }
+
+    test('should call useAzureMonitor with azureMonitorExporterOptions.connectionString', () => {
+      process.env.APPINSIGHTS_CONNECTIONSTRING = 'InstrumentationKey=test-key'
+
+      insights.setup()
+
+      expect(mockUseAzureMonitor).toHaveBeenCalledWith({
+        azureMonitorExporterOptions: {
+          connectionString: process.env.APPINSIGHTS_CONNECTIONSTRING
+        }
+      })
+    })
+
+    test('should log that Azure Monitor OpenTelemetry is running', () => {
+      process.env.APPINSIGHTS_CONNECTIONSTRING = 'InstrumentationKey=test-key'
+
+      insights.setup()
+
+      expect(consoleLogSpy).toHaveBeenCalledWith('Azure Monitor (OpenTelemetry) Running')
+    })
   })
 
-  afterAll(() => {
-    process.env = DEFAULT_ENV
-  })
+  describe('When process.env.APPINSIGHTS_CONNECTIONSTRING does not exist', () => {
+    test('should not call useAzureMonitor', () => {
+      delete process.env.APPINSIGHTS_CONNECTIONSTRING
 
-  test('does not setup application insights if no connection string present', () => {
-    const appInsights = require('../../app/insights')
-    process.env.APPINSIGHTS_CONNECTIONSTRING = undefined
-    appInsights.setup()
-    expect(applicationInsights.setup.mock.calls.length).toBe(0)
-  })
+      insights.setup()
 
-  test('does setup application insights if connection string present', () => {
-    const appInsights = require('../../app/insights')
-    process.env.APPINSIGHTS_CONNECTIONSTRING = 'test-key'
-    appInsights.setup()
-    expect(applicationInsights.setup.mock.calls.length).toBe(1)
+      expect(mockUseAzureMonitor).not.toHaveBeenCalled()
+    })
+
+    test('should log that Azure Monitor is not running', () => {
+      delete process.env.APPINSIGHTS_CONNECTIONSTRING
+
+      insights.setup()
+
+      expect(consoleLogSpy).toHaveBeenCalledWith('Azure Monitor Not Running!')
+    })
   })
 })
