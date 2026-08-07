@@ -6,23 +6,23 @@ container:
   azureStorageAccountName: testffcpayst1001
   sftpManagedGatewayPort: 22
   sftpTraderPort: 22
-  sfiInboundDirectory: mgspymtsvc/mgs031/outbound
-  sfiPilotInboundDirectory: mgspymtsvc/mgs031/outbound
-  lumpSumsInboundDirectory: mgspymtsvc/mgs031/outbound
-  csInboundDirectory: mgspymtsvc/mgs025/outbound
-  bpsInboundDirectory: mgspymtsvc/mgs018/outbound
-  esInboundDirectory: mgspymtsvc/mgs033/outbound
-  esOutboundDirectory: mgspymtsvc/mgs034/inbound
-  fcInboundDirectory: mgspymtsvc/mgs008/outbound
-  fcOutboundDirectory: mgspymtsvc/mgs006/inbound
+  sfiInboundDirectory: ../mgs031/outbound
+  sfiPilotInboundDirectory: ../mgs031/outbound
+  lumpSumsInboundDirectory: ../mgs031/outbound
+  csInboundDirectory: ../mgs025/outbound
+  bpsInboundDirectory: ../mgs018/outbound
+  esInboundDirectory: ../mgs033/outbound
+  esOutboundDirectory: ../mgs034/inbound
+  fcInboundDirectory: ../mgs008/outbound
+  fcOutboundDirectory: ../mgs006/inbound
   impsInboundDirectory: D:\app\DAX_interface\CFI\outbound
   impsOutboundDirectory: D:\app\DAX_interface\CFI\inbound
-  sfi23InboundDirectory: mgspymtsvc/mgs031/outbound
+  sfi23InboundDirectory: ../mgs031/outbound
   dpsInboundDirectory: D:\app\DAX_interface\DPS\outbound
   dpsOutboundDirectory: D:\app\DAX_interface\DPS\inbound
-  delinkedInboundDirectory: mgspymtsvc/mgs031/outbound
-  combinedOfferInboundDirectory: mgspymtsvc/mgs031/outbound
-  cohtCapitalInboundDirectory: mgspymtsvc/mgs031/outbound
+  delinkedInboundDirectory: ../mgs031/outbound
+  combinedOfferInboundDirectory: ../mgs031/outbound
+  cohtCapitalInboundDirectory: ../mgs031/outbound
   impsPollWindowStart: "00:00"
   impsPollWindowEnd: "23:59"
   impsPollDays: "Sun,Mon,Tue,Wed,Thu,Fri,Sat"
