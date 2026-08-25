@@ -6,23 +6,23 @@ container:
   azureStorageAccountName: prdffcpayst1001
   sftpManagedGatewayPort: 22
   sftpTraderPort: 22
-  sfiInboundDirectory: /opt/cap_prod_data/DAX/out/Int_725
-  sfiPilotInboundDirectory: /opt/cap_prod_data/DAX/out/Int_725
-  lumpSumsInboundDirectory: /opt/cap_prod_data/DAX/out/Int_725
-  csInboundDirectory: /opt/cap_prod_data/DAX/out/int_716
-  bpsInboundDirectory: /opt/cap_prod_data/DAX/out/int_539
-  esInboundDirectory: /opt/cap_prod_data/genesis/in/int_073
-  esOutboundDirectory: /opt/cap_prod_data/genesis/out/int_072
-  fcInboundDirectory: /opt/cap_prod_data/glos/in/int_230
-  fcOutboundDirectory: /opt/cap_prod_data/glos/out/int_231
+  sfiInboundDirectory: ../mgs031/outbound
+  sfiPilotInboundDirectory: ../mgs031/outbound
+  lumpSumsInboundDirectory: ../mgs031/outbound
+  csInboundDirectory: ../mgs025/outbound
+  bpsInboundDirectory: ../mgs018/outbound
+  esInboundDirectory: ../mgs033/outbound
+  esOutboundDirectory: ../mgs034/inbound
+  fcInboundDirectory: ../mgs008/outbound
+  fcOutboundDirectory: ../mgs006/inbound
   impsInboundDirectory: D:\app\DAX_interface\CFI\outbound
   impsOutboundDirectory: D:\app\DAX_interface\CFI\inbound
-  sfi23InboundDirectory: /opt/cap_prod_data/DAX/out/Int_725
+  sfi23InboundDirectory: ../mgs031/outbound
   dpsInboundDirectory: D:\app\DAX_interface\DPS\outbound
   dpsOutboundDirectory: D:\app\DAX_interface\DPS\inbound
-  delinkedInboundDirectory: /opt/cap_prod_data/DAX/out/Int_725
-  combinedOfferInboundDirectory: /opt/cap_prod_data/DAX/out/Int_725
-  cohtCapitalInboundDirectory: /opt/cap_prod_data/DAX/out/Int_725
+  delinkedInboundDirectory: ../mgs031/outbound
+  combinedOfferInboundDirectory: ../mgs031/outbound
+  cohtCapitalInboundDirectory: ../mgs031/outbound
   impsPollWindowStart: "00:00"
   impsPollWindowEnd: "23:59"
   impsPollDays: "Sun,Mon,Tue,Wed,Thu,Fri,Sat"
