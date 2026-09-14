@@ -88,7 +88,15 @@ const {
   COHT_CAPITAL_DATA_FILENAME_PENDING,
   COHT_CAPITAL_CONTROL_FILENAME_PENDING,
   COHT_CAPITAL_CHECKSUM_FILENAME_PENDING,
-  COHT_CAPITAL_CHECKSUM_CONTROL_FILENAME_PENDING
+  COHT_CAPITAL_CHECKSUM_CONTROL_FILENAME_PENDING,
+  SFI26_DATA_FILENAME,
+  SFI26_CONTROL_FILENAME,
+  SFI26_CHECKSUM_FILENAME,
+  SFI26_CHECKSUM_CONTROL_FILENAME,
+  SFI26_DATA_FILENAME_PENDING,
+  SFI26_CONTROL_FILENAME_PENDING,
+  SFI26_CHECKSUM_FILENAME_PENDING,
+  SFI26_CHECKSUM_CONTROL_FILENAME_PENDING
 } = require('../../mocks/filenames')
 
 const MockDate = require('mockdate')
@@ -415,6 +423,28 @@ describe('process inbound files', () => {
     const fileList = await getBlobs()
     expect(fileList.find(x => x === COHT_CAPITAL_CHECKSUM_FILENAME_PENDING)).toBeDefined()
     expect(fileList.find(x => x === COHT_CAPITAL_CHECKSUM_CONTROL_FILENAME_PENDING)).toBeDefined()
+  })
+
+  test('should transfer sfi26 offer data files to batch inbound location with pending filename', async () => {
+    await uploadFile(SFI26_DATA_FILENAME)
+    await uploadFile(SFI26_CONTROL_FILENAME)
+
+    await start()
+
+    const fileList = await getBlobs()
+    expect(fileList.find(x => x === SFI26_DATA_FILENAME_PENDING)).toBeDefined()
+    expect(fileList.find(x => x === SFI26_CONTROL_FILENAME_PENDING)).toBeDefined()
+  })
+
+  test('should transfer sfi26 offer checksum files to batch inbound location with pending filename', async () => {
+    await uploadFile(SFI26_CHECKSUM_FILENAME)
+    await uploadFile(SFI26_CHECKSUM_CONTROL_FILENAME)
+
+    await start()
+
+    const fileList = await getBlobs()
+    expect(fileList.find(x => x === SFI26_CHECKSUM_FILENAME_PENDING)).toBeDefined()
+    expect(fileList.find(x => x === SFI26_CHECKSUM_CONTROL_FILENAME_PENDING)).toBeDefined()
   })
 
   test('should transfer DPS data files to batch inbound location with pending filename when inside poll window', async () => {
