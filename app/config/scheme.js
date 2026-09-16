@@ -1,6 +1,8 @@
+const { getSchemeNames } = require('ffc-pay-schemes')
 const Joi = require('joi')
-const { SFI, SFI_PILOT, LUMP_SUMS, CS, BPS, ES, FC, IMPS, SFI23, DPS, DELINKED, COMBINED_OFFER, COHT_CAPITAL } = require('../constants/schemes')
 const { MANAGED_GATEWAY, TRADER } = require('../constants/servers')
+
+const { SFI, SFI_PILOT, LUMP_SUMS, CS, BPS, ES, FC, IMPS, SFI23, DELINKED, SFI_EXPANDED, COHT_CAPITAL } = getSchemeNames()
 
 const schema = Joi.object({
   sfi: Joi.object({
@@ -116,7 +118,7 @@ const schema = Joi.object({
     enabled: Joi.boolean().default(true)
   }).required(),
   dps: Joi.object({
-    name: Joi.string().default(DPS),
+    name: Joi.string().default('Data Processing System'),
     fileMasks: Joi.object({
       inbound: Joi.array().items(Joi.string()).default([/^CTL_BGAN.*.OUT$/]),
       outbound: Joi.array().items(Joi.string()).default([/^CTL_BGAN.*.ack$/])
@@ -147,7 +149,7 @@ const schema = Joi.object({
     enabled: Joi.boolean().default(true)
   }).required(),
   combinedOffer: Joi.object({
-    name: Joi.string().default(COMBINED_OFFER),
+    name: Joi.string().default(SFI_EXPANDED),
     fileMasks: Joi.object({
       inbound: Joi.array().items(Joi.string()).default([/^CTL_ESFIO\d{4}_AP_\d*.dat$/, /^CTL_ESFIO\d{4}_AP_\d*.txt$/])
     }),
