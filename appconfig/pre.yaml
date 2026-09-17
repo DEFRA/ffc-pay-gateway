@@ -23,6 +23,7 @@ container:
   delinkedInboundDirectory: /opt/cap_test_data/DAX/out/Int_725
   combinedOfferInboundDirectory: /opt/cap_test_data/DAX/out/Int_725
   cohtCapitalInboundDirectory: /opt/cap_test_data/DAX/out/Int_725
+  sfi26InboundDirectory: /opt/cap_test_data/DAX/out/Int_725
   impsPollWindowStart: "00:00"
   impsPollWindowEnd: "23:59"
   impsPollDays: "Sun,Mon,Tue,Wed,Thu,Fri,Sat"

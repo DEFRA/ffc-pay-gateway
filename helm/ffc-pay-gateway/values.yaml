@@ -58,6 +58,7 @@ container:
   delinkedInboundDirectory: /opt/cap_prod_data/DAX/out/Int_725
   combinedOfferInboundDirectory: /opt/cap_prod_data/DAX/out/Int_725
   cohtCapitalInboundDirectory: /opt/cap_prod_data/DAX/out/Int_725
+  sfi26InboundDirectory: /opt/cap_prod_data/DAX/out/Int_725
   sftpDebug: false
   sftpManagedGatewayEnabled: true
   sftpTraderEnabled: true
@@ -75,6 +76,7 @@ container:
   combinedOfferEnabled: true
   cohtCapitalEnabled: true
   sfiExpandedEnabled: true
+  sfi26Enabled: true
   impsPollWindowStart: "00:00"
   impsPollWindowEnd: "23:59"
   impsPollDays: "Sun,Mon,Tue,Wed,Thu,Fri,Sat"

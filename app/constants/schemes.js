@@ -11,5 +11,6 @@ module.exports = {
   DPS: 'DPS',
   DELINKED: 'Delinked',
   COMBINED_OFFER: 'Combined Offer',
-  COHT_CAPITAL: 'COHT Capital'
+  COHT_CAPITAL: 'COHT Capital',
+  SFI26: 'SFI26'
 }

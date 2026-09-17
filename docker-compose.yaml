@@ -35,6 +35,7 @@ services:
       COMBINED_OFFER_INBOUND_DIRECTORY: local-directory/inbound
       COHT_CAPITAL_INBOUND_DIRECTORY: local-directory/inbound
       SFI_EXPANDED_INBOUND_DIRECTORY: local-directory/inbound
+      SFI26_INBOUND_DIRECTORY: local-directory/inbound
       IMPS_POLL_WINDOW_START: "08:00"
       IMPS_POLL_WINDOW_END: "18:00"
       IMPS_POLL_DAYS: "Mon,Tue,Wed,Thu,Fri"

@@ -37,6 +37,7 @@ data:
   COMBINED_OFFER_INBOUND_DIRECTORY: {{ quote .Values.container.combinedOfferInboundDirectory }}
   COHT_CAPITAL_INBOUND_DIRECTORY: {{ quote .Values.container.cohtCapitalInboundDirectory }}
   IMPS_INBOUND_DIRECTORY: {{ quote .Values.container.impsInboundDirectory }}
+  SFI26_INBOUND_DIRECTORY: {{ quote .Values.container.sfi26InboundDirectory }}
   IMPS_OUTBOUND_DIRECTORY: {{ quote .Values.container.impsOutboundDirectory }}
   DPS_INBOUND_DIRECTORY: {{ quote .Values.container.dpsInboundDirectory }}
   DPS_OUTBOUND_DIRECTORY: {{ quote .Values.container.dpsOutboundDirectory }}
@@ -55,5 +56,6 @@ data:
   DELINKED_ENABLED: {{ quote .Values.container.delinkedEnabled }}
   COMBINED_OFFER_ENABLED: {{ quote .Values.container.combinedOfferEnabled }}
   COHT_CAPITAL_ENABLED: {{ quote .Values.container.cohtCapitalEnabled }}
+  SFI26_ENABLED: {{ quote .Values.container.sfi26Enabled }}
   AZURE_LOG_LEVEL: {{ quote .Values.container.azureLogLevel }}
 {{- end -}}
