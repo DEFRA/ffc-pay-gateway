@@ -2,7 +2,7 @@ const { getSchemeNames } = require('ffc-pay-schemes')
 const Joi = require('joi')
 const { MANAGED_GATEWAY, TRADER } = require('../constants/servers')
 
-const { SFI, SFI_PILOT, LUMP_SUMS, CS, BPS, ES, FC, IMPS, SFI23, DELINKED, SFI_EXPANDED, COHT_CAPITAL } = getSchemeNames()
+const { SFI, SFI_PILOT, LUMP_SUMS, CS, BPS, ES, FC, IMPS, SFI23, DELINKED, SFI_EXPANDED, COHT_CAPITAL, SFI26 } = getSchemeNames()
 
 const schema = Joi.object({
   sfi: Joi.object({
@@ -163,6 +163,17 @@ const schema = Joi.object({
     name: Joi.string().default(COHT_CAPITAL),
     fileMasks: Joi.object({
       inbound: Joi.array().items(Joi.string()).default([/^CTL_SITICOHTC\d{4}_AP_\d*.dat$/, /^CTL_SITICOHTC\d{4}_AP_\d*.txt$/])
+    }),
+    server: Joi.string().default(MANAGED_GATEWAY),
+    directories: Joi.object({
+      inbound: Joi.string().required()
+    }).required(),
+    enabled: Joi.boolean().default(true)
+  }).required(),
+  sfi26: Joi.object({
+    name: Joi.string().default(SFI26),
+    fileMasks: Joi.object({
+      inbound: Joi.array().items(Joi.string()).default([/^CTL_SITISFI26\d{4}_AP_\d*.dat$/, /^CTL_SITISFI26\d{4}_AP_\d*.txt$/])
     }),
     server: Joi.string().default(MANAGED_GATEWAY),
     directories: Joi.object({
@@ -333,6 +344,17 @@ const config = {
       inbound: process.env.COHT_CAPITAL_INBOUND_DIRECTORY
     },
     enabled: process.env.COHT_CAPITAL_ENABLED
+  },
+  sfi26: {
+    name: process.env.SFI26_NAME,
+    fileMasks: {
+      inbound: process.env.SFI26_FILE_INBOUND_MASKS
+    },
+    server: process.env.SFI26_SERVER,
+    directories: {
+      inbound: process.env.SFI26_INBOUND_DIRECTORY
+    },
+    enabled: process.env.SFI26_ENABLED
   }
 }
 

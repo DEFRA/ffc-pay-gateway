@@ -23,6 +23,7 @@ container:
   delinkedInboundDirectory: ../mgs031/outbound
   combinedOfferInboundDirectory: ../mgs031/outbound
   cohtCapitalInboundDirectory: ../mgs031/outbound
+  sfi26InboundDirectory: ../mgs031/outbound
   impsPollWindowStart: "00:00"
   impsPollWindowEnd: "23:59"
   impsPollDays: "Sun,Mon,Tue,Wed,Thu,Fri,Sat"
