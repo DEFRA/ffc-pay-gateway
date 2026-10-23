@@ -31,8 +31,12 @@ describe('polling', () => {
   })
 
   test('should restart polling after polling interval if polling throws error', async () => {
-    poll.mockImplementation(() => { throw new Error() })
+    const consoleErrorSpy = jest.spyOn(console, 'error').mockImplementation(() => {})
+    const error = new Error()
+    poll.mockImplementation(() => { throw error })
     await start()
+    expect(consoleErrorSpy).toHaveBeenCalledWith(error)
     expect(setTimeout).toHaveBeenLastCalledWith(expect.any(Function), transferConfig.pollingInterval)
+    consoleErrorSpy.mockRestore()
   })
 })
