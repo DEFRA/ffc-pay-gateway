@@ -41,7 +41,7 @@ const schema = Joi.object({
   cs: Joi.object({
     name: Joi.string().default(CS),
     fileMasks: Joi.object({
-      inbound: Joi.array().items(Joi.string()).default([/^CTL_SITICS\d{4}_AP_\d*.dat$/, /^CTL_SITICS\d{4}_AP_\d*.txt$/])
+      inbound: Joi.array().items(Joi.string()).default([/^CTL_SITICS\d{4,5}_AP_\d*.dat$/, /^CTL_SITICS\d{4,5}_AP_\d*.txt$/])
     }),
     server: Joi.string().default(MANAGED_GATEWAY),
     directories: Joi.object({
